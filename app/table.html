@@ -1,0 +1,130 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Mana</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/table.css" />
+  </head>
+
+  <body>
+  <header>
+    <h1><a href="index.html">Mana</a></h1>
+      <nav>
+        <ul>
+      	  <li><a href="index.html">Home</a></li>
+        </ul>
+      </nav>
+    </header>
+  <article>
+      <h2>Personal Data</h2>
+      <section>
+<form method="post" action="http://www.randyconnolly.com/tests/process.php">
+    <fieldset>
+      <div id="search">
+        <input type="search" name="search" placeholder="Search titles" list="keywords">
+        <input type="submit" value="Search">
+        <datalist id="keywords">
+          <option>Ferris, John MD</option>
+          <option>Medicare</option>
+          <option>Lab Diagnostics Inc</option>
+          <option>bill</option>
+          <option>prescription</option>
+          <option>reimbursement</option>
+        </datalist>
+      </div>
+      <div id="actions-filter">
+        <select name="actions">
+          <option value="-1">Actions</option>
+          <option value="0">Archive</option>
+          <option value="1">Delete</option>
+        </section>
+        <input type="button" value="Apply">
+        <select name="filter">
+          <option value="-1">Type</option>
+          <option value="0">Health Record</option>
+          <option value="1">Receipt</option>
+          <option value="2">Images</option>
+          <option value="3">Laboratory</option>
+          <option value="4">Messages</option>
+        </select>
+        <input type="button" value="Filter">
+      </div>
+      <div id="table">
+        <table>
+          <caption>Data</caption>
+          <thead>
+            <th></th>
+            <th scope="col">File</th>
+            <th scope="col">Type</th>
+            <th scope="col">Subject</th>
+            <th scope="col">From</th>
+            <th scope="col">Date</th>
+            <th></th>
+          </thead>
+          <tfoot>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" name="index[0]" value="file33"></td>
+              <td>File33</td>
+              <td>Receipt 1</td>
+              <td><a href="#">Bill for consultation on 2019-03-02 10:15</a></td>
+              <td>Ferris, John MD</td>
+              <td><time>2019-03-11 13:21</time></td>
+              <td><button><a href="#"><span class="edit"></span>Edit</a></button></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="index[2]" value="file32"></td>
+              <td>File32</td>
+              <td>Laboratory</td>
+              <td><a href="#"> Lab results ordered by Ferris, John MD</a></td>
+              <td>Lab Diagnostics Inc</td>
+              <td>2019-03-03 17:56</td>
+              <td><button><a href="#"><span class="edit"></span>Edit</a></button></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="index[1]" value="file31"></td>
+              <td>File31</td>
+              <td>Health Record</td>
+              <td><a href="#">Electronic prescription</a></td>
+              <td>Ferris, John MD</td>
+              <td>2019-03-02 10:11</td>
+              <td><button><a href="#"><span class="edit"></span>Edit</a></button></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="index[3]" value="file30"></td>
+              <td>File30</td>
+              <td>Reimbursement</td>
+              <td><a href="#">Reimbursement of bill 02031230</a></td>
+              <td>Medicare</td>
+              <td>2019-02-26</td>
+              <td><button><a href="#"><span class="edit"></span>Edit</a></button></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="index[4]" value="file29"></td>
+              <td>File29</td>
+              <td>Recipt02</td>
+              <td><a href="#">Bill for consultation on 2018-11-15 11:00</a></td>
+              <td>Ferris, John MD</td>
+              <td>2018-11-30 19:22</td>
+              <td><button><a href="#"><span class="edit"></span>Edit</a></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </fieldset>
+  </form>
+      </section>
+    </article>
+    <footer>
+      <p>
+        <a href="#">The Project Mana</a> |
+        <a href="http://www.mi.fu-berlin.de/">University</a> |
+        <a href="http://www.mi.fu-berlin.de/en/inf/groups/ag-db/members/Staff/n_lehmann.html">Supervisor</a> |
+         <a href="#">About me</a> 
+      </p>
+      <p><em>Copyright &copy; 2019 Mana</em></p>
+    </footer>
+  </body>
+</html>

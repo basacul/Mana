@@ -1,0 +1,50 @@
+form {
+  display: inline-block;
+}
+
+fieldset {
+  border: none;
+}
+
+span.edit {
+  display: inline-block;
+  background: url("../img/edit16.png") no-repeat;
+  width: 14px;
+  height: 14px;
+  padding-right: 5px;
+}
+
+div {
+  border: solid 1px hsla(202, 100%, 46%, 0.6);
+  background-color: hsla(179, 100%, 86%, 0.4);
+  
+}
+
+div#table {
+  background-color:hsla(179, 100%, 86%, 0.2);
+}
+table caption {
+  background-color:  hsla(202, 100%, 46%, 0.7);
+  padding: 0.5em;
+}
+
+td {
+  padding: 0.1em;
+  font-style: italic;
+}
+
+th {
+  padding: 0.2em;
+}
+thead {
+    background-color:  hsla(202, 100%, 46%, 0.1);
+}
+table {
+  border-collapse: collapse;
+}
+tr {
+    border-top: solid 2px hsla(202, 100%, 46%, 0.7) ;
+    width: 100%;
+}
+
+

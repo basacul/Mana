@@ -11,11 +11,30 @@ h1, h2, h3 {
 }
 
 h1 {
-  padding: 0.5em;
+  padding: 0.5em 0;
   text-align: center;
   font-size: 24px;
   font-size: 2rem;
 }
+
+h1 a {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  color: white;
+}
+
+h1 a:link {
+  text-decoration: none;
+  color: white;
+}
+
+h1 a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+
 
 h2 {
   text-align: center;
@@ -37,7 +56,7 @@ h3 {
 }
 
 h4 {
-  font-size: 15px:
+  font-size: 15px;
   font-size: 1.08rem;
   margin-bottom: 0.5em;
 }
@@ -63,62 +82,33 @@ section {
 
 a:link {
   font-weight: bold;
-  color: #47B3D7;
+  color: #BB78FF;;
 }
+
 
 a:visited {
   color: #BB78FF;
 }
 
-a:hover {
+nav a:hover {
   background-color: #FFFF99;
 }
+
 nav {
   background-color: #728B96;
-  padding: 0.25em;
+  padding: 0.25em 0.1em;
 }
 
 nav a {
-  padding: 0.25em;
+  padding: 0.25em 0.1em;
 }
 
 nav ul li {
   list-style: none;
   display: inline;
-  margin: 1em;
+  padding: 0.3em;
 }
 
-figure a img{
-  border: solid 1pt black;
-  padding: 0.2em;
-}
-
-figure div {
-  margin-top: 0.25em;
-  font-size: 80%;
-  padding: 0.5em;
-  width: 495px;
-  background-color: #9FAAB0;
-  border: solid 1px #999999;
-  border-radius: 4px;
-  background: linear-gradient(to bottom, #cedce7 0%,#596a72 100%)
-}
-
-.first, figcaption, h4+p {
-  font-size: 12px;
-  font-size : 0.9rem;
-  color: gray;
-  font-style: italic;
-}
-
-span.share {
-  display: inline-block;
-  background: url(../images/glyphicons-halflings.png) no-repeat;
-  width: 14px;
-  height: 14px;
-  background-position: -120px -72px;
-  padding-right: 5px;
-}
 
 footer {
   padding: 0.5em;
@@ -126,4 +116,13 @@ footer {
 
 footer p {
   margin-bottom: 0.3em;
+}
+
+/*needs to be deleted when a more accessible design choice is implemented*/
+td{
+  padding: 0.2em;
+}
+
+.temporary {
+  width: 100%;
 }
