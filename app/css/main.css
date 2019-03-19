@@ -1,0 +1,129 @@
+/* stylesheet for chapter03-project01.html */
+
+header, footer {
+  color: white;
+  background-color: #3D6271;
+  margin: 0em 2em 0.5em 2em;
+}
+
+h1, h2, h3 {
+  font-family: "Trebuchet MS", "Lucida Grande", Tahoma, sans-serif;
+}
+
+h1 {
+  padding: 0.5em;
+  text-align: center;
+  font-size: 24px;
+  font-size: 2rem;
+}
+
+h2 {
+  text-align: center;
+  color: navy;
+  font-style: bold;
+  font-size: 18px;
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-size: 16px;
+  font-size: 1.2rem;
+  text-align: center;
+  color: white;
+  padding: 0.4em 0.3em;
+  margin: 0.3em 0 0.5em 0;
+  background-color: #3D6271;
+  border: 1px solid gray;
+}
+
+h4 {
+  font-size: 15px:
+  font-size: 1.08rem;
+  margin-bottom: 0.5em;
+}
+
+
+body {
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 100%;
+  background-color: #00111A; /*more or less*/
+}
+
+article {
+  margin: 0.5em 2em;
+  background-color: white;
+  padding: 0.2em 0.5em 1em 0.5em;
+}
+
+
+section {
+  margin: 1em 0.5em;
+}
+
+
+a:link {
+  font-weight: bold;
+  color: #47B3D7;
+}
+
+a:visited {
+  color: #BB78FF;
+}
+
+a:hover {
+  background-color: #FFFF99;
+}
+nav {
+  background-color: #728B96;
+  padding: 0.25em;
+}
+
+nav a {
+  padding: 0.25em;
+}
+
+nav ul li {
+  list-style: none;
+  display: inline;
+  margin: 1em;
+}
+
+figure a img{
+  border: solid 1pt black;
+  padding: 0.2em;
+}
+
+figure div {
+  margin-top: 0.25em;
+  font-size: 80%;
+  padding: 0.5em;
+  width: 495px;
+  background-color: #9FAAB0;
+  border: solid 1px #999999;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, #cedce7 0%,#596a72 100%)
+}
+
+.first, figcaption, h4+p {
+  font-size: 12px;
+  font-size : 0.9rem;
+  color: gray;
+  font-style: italic;
+}
+
+span.share {
+  display: inline-block;
+  background: url(../images/glyphicons-halflings.png) no-repeat;
+  width: 14px;
+  height: 14px;
+  background-position: -120px -72px;
+  padding-right: 5px;
+}
+
+footer {
+  padding: 0.5em;
+}
+
+footer p {
+  margin-bottom: 0.3em;
+}
