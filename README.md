@@ -5,7 +5,7 @@ The frontend is built using html5, css and javascript. With the library web3.js 
 
 The [frontend application](https://github.com/basacul/Mana/blob/master/app/index.html) is based on web technologies such as html5, css and javascript. The features of the application Mana are progressively enhanced along the many iterations. 
 
-The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_7.pdf) for my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
+The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_8.pdf) for my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
 
 
 The name for this project will be Mana coming from the Polynesian belief, that Mana is an impersonal supernatural power which can be transmitted or inherited.
