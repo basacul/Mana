@@ -82,7 +82,7 @@ section {
 
 a:link {
   font-weight: bold;
-  color: #BB78FF;;
+  color: #47B3D7;
 }
 
 
@@ -115,8 +115,18 @@ footer {
 }
 
 footer p {
+  clear: left;
   margin-bottom: 0.3em;
 }
+
+
+.u-photo{
+  float: left;
+  margin: 0.2em;
+  width: 50px;
+}
+
+
 
 /*needs to be deleted when a more accessible design choice is implemented*/
 td{
