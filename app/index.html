@@ -44,43 +44,41 @@
             <legend>Data Exchange User Interface - for now</legend>
             <input type="hidden" name="datetime" value="current datetime">
             <input type="hidden" name="sender" value="hashvalue-sender">
-            <table class="temporary">
-              <tr>
-                <!-- user can only choose from a given set of contacts such that data can be send to those, who are known. Aka Ripple style -->
-                <td><label for="f-recipient">Recipient: </label></td>
-                <td><input class="temporary" type="search" name="recipient" id="f-recipient" list="recipients" required>
+            <div class="row">
+              <!-- user can only choose from a given set of contacts such that data can be send to those, who are known. Aka Ripple style -->
+              <label for="f-recipient">Recipient: </label>
+              <input class="temporary" type="search" name="recipient" id="f-recipient" list="recipients" required>
+
                 <!-- value would be the respective ethereum id-->
-                <datalist id="recipients">
-                  <option value="hashvalue-p1">Patient 1</option>
-                  <option value="hashvalue-p2">Patient 2</option>
-                  <option value="hashvalue-h1">Healthcare Professional 1</option>
-                  <option value="hashvalue-h2">Healthcare Professional 2</option>
-                  <option value="hashvalue-i1">Insurance Company 1</option>
-                  <option value="hashvalue-i2">Insurance Company 2</option>
-                </datalist></td>
-              </tr>
-              <tr>
-                <td><label for="f-subject">Subject: </label></td>
-                <td> <input class="temporary" type="text" name="subject" id="f-subject" required></td>
-              </tr>
-              <tr>
-                <td><label for="f-message">Message: </label></td>
-                <td><textarea class="temporary" rows="3" name="message" id="f-message"></textarea></td>
-              </tr>
-              <tr>
-                <td><label for="f-data">Data: </label></td>
-                <td><input type="file" name="data" id="f-data" required></td>
-              </tr>
-              <tr>
-                  <!-- sometimes the data owner needs to be notified when sharing its respective data, but in that case this will checked automatically and invisible. Otherwise it is optional - like reimbursements, etc -->
-                <td><label for="f-notify">Notify data owner: </label></td>
-                <td><input type="checkbox" name="notifiy" id="f-notify"></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td> <input type="submit" ></td>                
-              </tr>
-            </table>
+              <datalist id="recipients">
+                <option value="hashvalue-p1">Patient 1</option>
+                <option value="hashvalue-p2">Patient 2</option>
+                <option value="hashvalue-h1">Healthcare Professional 1</option>
+                <option value="hashvalue-h2">Healthcare Professional 2</option>
+                <option value="hashvalue-i1">Insurance Company 1</option>
+                <option value="hashvalue-i2">Insurance Company 2</option>
+              </datalist>
+            </div>
+            <div class="row">
+              <label for="f-subject">Subject: </label>
+              <input class="temporary" type="text" name="subject" id="f-subject" required>
+            </div>
+            <div class="row">
+              <label for="f-message">Message: </label>
+              <textarea class="temporary" rows="3" name="message" id="f-message"></textarea>
+            </div>
+            <div class="row">
+              <label for="f-data">Data: </label>
+              <input type="file" name="data" id="f-data" required>
+            </div>
+            <div class="row">
+              <!-- sometimes the data owner needs to be notified when sharing its respective data, but in that case this will checked automatically and invisible. Otherwise it is optional - like reimbursements, etc -->
+              <label for="f-notify">Notify data owner: </label>
+              <input type="checkbox" name="notifiy" id="f-notify">
+            </div>
+            <div class="row">
+              <input type="submit" >
+            </div>
           </fieldset>
         </form>
       </section>
@@ -108,7 +106,7 @@
       <p class="h-card">
         <img class="u-photo" src="img/AGDB_logo_small.png" alt="Logo of AGDB" />
         <a class="p-name u-url" href="http://www.mi.fu-berlin.de/en/inf/groups/ag-db">AGDB</a><br>
-        <a class="u-email" href="mailto:eckart@inf.fu-berlin.de">eckart@inf.fu-berlin.de</a><br> 
+        <a class="u-email" href="mailto:eckart@inf.fu-berlin.de">Contact Us</a><br> 
         <a class="p-tel" href="tel:+493083875100">+493083875100</a><br>
         <span class="p-locality">Berlin</span>,
         <span class="p-country-name">Germany</span>
@@ -116,7 +114,7 @@
       <p class="h-card">
         <img class="u-photo" src="img/ohc_logo.png" alt="Logo of Openhealth.care" />
         <a class="p-name u-url" href="http://openhealth.care">Openhealth.care</a><br>
-        <a class="u-email" href="mailto:antelo.lucas@outlook.com">Contact us</a><br> 
+        <a class="u-email" href="mailto:antelo.lucas@outlook.com">Contact Us</a><br> 
         <a class="p-tel" href="tel:+4915784569198">+4915784569198</a><br>
         <span class="p-locality">Berlin</span>,
         <span class="p-country-name">Germany</span>

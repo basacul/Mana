@@ -79,6 +79,35 @@ section {
   margin: 1em 0.5em;
 }
 
+.row {
+  overflow:auto;
+}
+label {
+  float: left;
+  width: 20%;
+  min-width: 80px;
+
+}
+
+input {
+  float: left;
+  width: 80%;
+}
+
+input[type="checkbox"] {
+  width: 1.5em;
+  height: 1.5em;
+  margin-top: 0.5em;
+  
+}
+
+input[type="submit"] {
+  margin-left: 20%;
+}
+.row textarea {
+  float:left;
+  width: 80%;
+}
 
 a:link {
   font-weight: bold;
@@ -138,13 +167,3 @@ footer p {
 
 
 
-
-
-/*needs to be deleted when a more accessible design choice is implemented*/
-td{
-  padding: 0.2em;
-}
-
-.temporary {
-  width: 100%;
-}
