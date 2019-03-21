@@ -112,19 +112,31 @@ nav ul li {
 
 footer {
   padding: 0.5em;
+  overflow: auto;
 }
 
+#copyright {
+  clear:both;
+  text-align: center;
+  font-size: 1.25em;
+}
 footer p {
-  clear: left;
   margin-bottom: 0.3em;
 }
-
+.h-card {
+  float: right;
+  width: 350px;
+  margin-left: 0.3em;
+}
 
 .u-photo{
   float: left;
   margin: 0.2em;
-  width: 50px;
+  width: 55px;
 }
+
+
+
 
 
 
