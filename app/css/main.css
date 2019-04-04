@@ -1,5 +1,7 @@
 /* stylesheet for index.html */
 
+
+/*
 header, footer {
   color: white;
   background-color: #00111A;
@@ -78,12 +80,12 @@ h4 {
 body {
   font-family: Georgia, Cambria, "Times New Roman", serif;
   font-size: 100%;
-  background-color: black; /*hsla(179, 100%, 86%, 0.2); /*#3D6271; /*#00111A; /*more or less*/
+  background-color: black; /*hsla(179, 100%, 86%, 0.2);
 }
 
 article {
   margin: 0.5em 2em;
-  background-color: hsla(179, 100%, 86%, 0.9);/* white;*/
+  background-color: hsla(179, 100%, 86%, 0.9);
   padding: 0.2em 0.5em 1em 0.5em;
 }
 
@@ -137,7 +139,7 @@ nav a:hover {
 }
 
 nav {
-  background-color: black; /*#728B96;*/
+  background-color: black; 
   padding: 0.25em 0.1em;
 }
 
@@ -165,18 +167,31 @@ footer {
 footer p {
   margin-bottom: 0.3em;
 }
+
+
+*/
+footer {
+   margin-top: 1em;
+   padding-top: 1em;
+   background-color: #E7E7E7;
+}
+
 .h-card {
-  float: right;
-  width: 350px;
+  width: 500px;
   margin-left: 0.3em;
 }
+
 
 .u-photo{
   float: left;
   margin: 0.2em;
-  width: 55px;
+  width: 68px;
 }
 
-
-
+#copyrightRow { 
+  background-color: #3A3A3A; 
+  padding: 0.75em 0 0.75em 0; 
+  margin-top: 5px;
+  color: white;
+}
 
