@@ -1,7 +1,8 @@
-html {
+body {
   background-color: #1b1b1b;
   background-image: url(../img/welcome_bg1.png);
-  background-size: auto;
+
+  background-size: cover;
 }
 
 /* ---- container and log in form ---- */

@@ -6,62 +6,86 @@
   <!-- <script type="text/javascript" src="js/prettyPrint.js"></script> -->
   <script type="text/javascript" src="js/faker.min.js"></script>
   <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/bootstrap-4.3.1-dist/bootstrap.css">
   <link rel="stylesheet" href="css/main.css" />
   <link rel="stylesheet" href="css/table.css" />
 </head>
 
 <body>
   <header>
-    <div class="row image">
-      <img src="img/mana_white.png" alt="Logo of the project Mana">
-      <h1><a href="home.html">Mana</a></h1>
-    </div>
-
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-      </ul>
-    </nav>
-  </header>
-  <article>
-    <h2>Personal Data</h2>
-    <section>
-      <form method="post" action="http://www.randyconnolly.com/tests/process.php">
-        <fieldset>
-          <div id="search">
-            <input type="search" name="search" placeholder="Search titles" list="keywords">
-            <input type="submit" value="Search">
-            <datalist id="keywords">
-              <option>Ferris, John MD</option>
-              <option>Medicare</option>
-              <option>Lab Diagnostics Inc</option>
-              <option>bill</option>
-              <option>prescription</option>
-              <option>reimbursement</option>
-            </datalist>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <span class="d-none d-lg-inline"><img src="img/mana.png" alt="Logo of the project Mana" id="logo"></span>
+      <div class="container" id="topHeader">
+        <div class="collapse navbar-collapse">
+          <div class="navbar-nav">
+            <!--<a class="nav-item nav-link">Login or Create new account</a>-->
+            <!-- only when not logged in-->
+            <a class="nav-item nav-link">E-Record</a>
+            <a class="nav-item nav-link">Tools</a>
           </div>
-          <div id="actions-filter">
-            <select name="actions">
-              <option value="-1">Actions</option>
-              <option value="0">Archive</option>
-              <option value="1">Delete</option>
-    </section>
-    <input type="button" value="Apply">
-    <select name="filter">
-      <option value="-1">Type</option>
-      <option value="0">Health Record</option>
-      <option value="1">Receipt</option>
-      <option value="2">Images</option>
-      <option value="3">Laboratory</option>
-      <option value="4">Messages</option>
-    </select>
-    <input type="button" value="Filter">
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="#"><span class="glyphicon glyphicon-user"></span> My
+                Account</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><span class="glyphicon glyphicon-envelope"></span>
+                Messages</a></li>
+            <li class="nav-item"><a class="nav-link" href="personalData.html"><span
+                  class="glyphicon glyphicon-folder-open"></span> Personal Data</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-question-sign"></span> Help
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">
+                  <span class="glyphicon glyphicon-earphone"></span> Contact Us
+                </a>
+                <a class="dropdown-item" href="#">
+                  <span class="glyphicon glyphicon-info-sign"></span> FAQ
+                </a>
+              </div>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="index.html"><span class="glyphicon glyphicon-log-out"></span>
+                Checkout</a></li>
+          </ul>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-block" id="second_navbar">
+      <div class="container" id="mainNavigation">
+
+        <form class="nav-link" method="post" action="http://www.randyconnolly.com/tests/process.php">
+          <fieldset>
+            <div id="search">
+              <label for="f-search" class="sr-only"></label>
+              <input type="search" name="search" placeholder="Search titles" list="keywords">
+              <input type="submit" value="Search">
+              <datalist id="keywords">
+                <option>Ferris, John MD</option>
+                <option>Medicare</option>
+                <option>Lab Diagnostics Inc</option>
+                <option>bill</option>
+                <option>prescription</option>
+                <option>reimbursement</option>
+              </datalist>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </nav>
     </div>
+    </div>
+  </header>
+  <div class="container">
+
     <div id="table">
       <table>
-        <caption>Data</caption>
         <thead>
-          <th></th>
+          <th> </th>
           <th scope="col">File</th>
           <th scope="col">Type</th>
           <th scope="col">Subject</th>
@@ -120,18 +144,66 @@
         </tbody>
       </table>
     </div>
-    </fieldset>
-    </form>
-    </section>
-  </article>
+  </div>
   <footer>
-    <p>
-      <a href="#">The Project Mana</a> |
-      <a href="http://www.mi.fu-berlin.de/">University</a> |
-      <a href="http://www.mi.fu-berlin.de/en/inf/groups/ag-db/members/Staff/n_lehmann.html">Supervisor</a> |
-      <a href="#">About me</a>
-    </p>
-    <p><em>Copyright &copy; 2019 Mana</em></p>
+    <div class="container">
+      <!-- http://microformats.org/wiki/h-card -->
+      <div class="row">
+        <div class="col-md-6 col-lg-3">
+          <p class="h-card">
+            <img class="u-photo" src="img/AGDB_logo_small.png" alt="Logo of AGDB" />
+            <a class="p-name u-url" href="http://www.mi.fu-berlin.de/en/inf/groups/ag-db">AGDB</a><br>
+            <a class="u-email" href="mailto:eckart@inf.fu-berlin.de">Contact Us</a><br>
+            <a class="p-tel" href="tel:+493083875100">+493083875100</a><br>
+            <span class="p-locality">Berlin</span>,
+            <span class="p-country-name">Germany</span>
+          </p>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <p class="h-card">
+            <img class="u-photo" src="img/ohc_logo.png" alt="Logo of Openhealth.care" />
+            <a class="p-name u-url" href="http://openhealth.care">Openhealth.care</a><br>
+            <a class="u-email" href="mailto:antelo.lucas@outlook.com">Contact Us</a><br>
+            <a class="p-tel" href="tel:+4915784569198">+4915784569198</a><br>
+            <span class="p-locality">Berlin</span>,
+            <span class="p-country-name">Germany</span>
+          </p>
+        </div>
+
+
+        <div class="col-md-6 col-lg-3">
+          <p class="h-card">
+            <img class="u-photo" src="img/lucas_small.png" alt="Picture of Lucas Antelo" />
+            <a class="p-name u-url" href="http://openhealth.care/about_me">Lucas Antelo</a><br>
+            <a class="u-email" href="mailto:antelo.lucas@outlook.com">Contact Me</a><br>
+            <a class="p-tel" href="tel:+4915784569198">+4915784569198</a><br>
+            <span class="p-locality">Hangover</span>,
+            <span class="p-country-name">Germany</span>
+          </p>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <p class="h-card">
+            <img class="u-photo" src="img/nicolas_small.jpg" alt="Picture of Nicolas Lehmann" />
+            <a class="p-name u-url" href="http://nicolaslehmann.de/">Nicolas Lehmann</a><br>
+            <a class="u-email" href="mailto:nicolas.lehmann@fu-berlin.de">Contact Me</a><br>
+            <a class="p-tel" href="tel:+493083875120">+493083875120</a><br>
+            <span class="p-locality">Berlin</span>,
+            <span class="p-country-name">Germany</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <div id="copyrightRow">
+      <div class="container">
+        <p class="text-left">
+          All images are copyright to their owners. This is just a hypothetical site
+          <span class="pull-right">&copy; 2019 Copyright Mana</span>
+        </p>
+      </div>
+    </div>
   </footer>
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap-4.3.1-dist/bootstrap.js"></script>

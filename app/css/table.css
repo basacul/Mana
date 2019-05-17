@@ -15,20 +15,14 @@ span.edit {
   height: 14px;
   padding-right: 5px;
 }
-
-div {
-  border: solid 1px hsla(202, 100%, 46%, 0.6);
-  background-color: hsla(179, 100%, 86%, 0.4);
-  
+article{
+  margin: 0 auto;
 }
-
-
 div#table {
-  background-color:hsla(179, 100%, 86%, 0.2);
-}
-table caption {
-  background-color:  hsla(202, 100%, 46%, 0.7);
-  padding: 0.5em;
+
+  /* background-color: #141a20; */
+  color: black;
+  margin: 2em 0;
 }
 
 td {
@@ -39,15 +33,28 @@ td {
 th {
   padding: 0.2em;
 }
+
+
+
 thead {
-    background-color:  hsla(202, 100%, 46%, 0.1);
+    background-color:  black;
 }
 table {
   border-collapse: collapse;
+  border: 2px solid black;
 }
 tr {
-    border-top: solid 2px hsla(202, 100%, 46%, 0.7) ;
+    border-top: solid 2px black;
     width: 100%;
 }
+/* 
+tr:nth-child(even) {
+  background-color: #242a30;
+} */
 
-
+tr:hover {
+  color: white;
+  background-color: rgb(104, 104, 103);
+  height: 100%;
+}
+*/
