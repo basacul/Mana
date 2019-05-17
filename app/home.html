@@ -32,7 +32,7 @@
                 Account</a></li>
             <li class="nav-item"><a class="nav-link" href="#"><span class="glyphicon glyphicon-envelope"></span>
                 Messages</a></li>
-            <li class="nav-item"><a class="nav-link" href="table.html"><span
+            <li class="nav-item"><a class="nav-link" href="personalData.html"><span
                   class="glyphicon glyphicon-folder-open"></span> Personal Data</a></li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -130,8 +130,8 @@
                 <!-- user can only choose from a given set of contacts such that data can be send to those, who are known. Aka Ripple style -->
                 <div class="input-group mb-3">
                   <label for="f-recipient" class="sr-only">Recipient: </label>
-                  <input class="temporary form-control" type="search" name="recipient" id="f-recipient"
-                    list="recipients" required placeholder="Enter recipient...">
+                  <input class="form-control" type="search" name="recipient" id="f-recipient" list="recipients" required
+                    placeholder="Enter recipient...">
 
                   <!-- value would be the respective ethereum id-->
                   <datalist id="recipients">
@@ -146,13 +146,13 @@
 
                 <div class="input-group mb-3">
                   <label for="f-subject" class="sr-only">Subject: </label>
-                  <input class="temporary form-control" type="text" name="subject" id="f-subject" required
+                  <input class="form-control" type="text" name="subject" id="f-subject" required
                     placeholder="Enter subject...">
                 </div>
 
                 <div class="input-group mb-3">
                   <label for="f-message" class="sr-only">Message: </label>
-                  <textarea class="temporary" rows="3" name="message" id="f-message"
+                  <textarea class="form-control" rows="3" name="message" id="f-message"
                     placeholder="Enter a message..."></textarea>
                 </div>
                 <div class="input-group mb-3">
@@ -165,7 +165,7 @@
                   <p><input type="checkbox" name="notifiy" id="f-notify"> Notify data owner</p>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="submit">
+                  <input class="btn" type="submit">
                 </div>
               </fieldset>
             </form>

@@ -1,7 +1,11 @@
+body {
+  background-color: #343a40;
+  color:  rgba(255, 255, 255, 0.5);
+}
 footer {
    margin-top: 1em;
    padding-top: 1em;
-   background-color: #E7E7E7;
+   background-color: #C7C7C7;
 }
 
 .h-card {
@@ -17,7 +21,7 @@ footer {
 }
 
 #copyrightRow { 
-  background-color: #3A3A3A; 
+  background-color: #343a40; 
   padding: 0.75em 0 0.75em 0; 
   margin-top: 5px;
   color: white;
@@ -25,4 +29,23 @@ footer {
 
 #logo {
   margin-right: -8em;
+}
+
+.form-control {
+  background-color: rgb(44, 44, 43);
+}
+.form-control:focus {
+  color: black;
+  background-color: rgb(104, 104, 103);
+}
+
+.btn{
+  color: #6c757d;
+  background-color:  rgb(44, 44, 43);
+  width: 100px;
+}
+
+.btn:hover{
+  color: black;
+  background-color: rgb(104, 104, 103);
 }
