@@ -2,10 +2,11 @@
 // ==========
 // SETUP
 // ==========
-let express = require('express');
-let bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
+const port = 3000;
 
-let app = express();
+const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -58,8 +59,8 @@ app.get("/checkout", function (req, res) {
     res.render("login");
 })
 
-app.listen(3000, function () {
-    console.log("Running at https://localhost:3000");
+app.listen(port, function () {
+    console.log(`Running at https://localhost:${port}`);
 });
 
 function authenticated(user, password) {
