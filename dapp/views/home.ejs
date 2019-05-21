@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= title %>
+    </title>
+    <script type="text/javascript" src="js/faker.min.js"></script>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/bootstrap-4.3.1-dist/bootstrap.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <span class="d-none d-lg-inline"><a href="/home"><img src="img/mana.png" alt="Logo of the project Mana"
+                        id="logo"></a></span>
+            <div class="container" id="topHeader">
+                <div class="collapse navbar-collapse">
+                    <div class="navbar-nav">
+                        <!--<a class="nav-item nav-link">Login or Create new account</a>-->
+                        <!-- only when not logged in-->
+                        <a class="nav-item nav-link" href="/e-record">E-Record</a>
+                        <a class="nav-item nav-link" href="/tools">Tools</a>
+                        <a class="nav-item nav-link" href="/documentation">Documentation</a>
+                    </div>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="/account"><span
+                                    class="glyphicon glyphicon-user"></span>
+                                My
+                                Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/messages"><span
+                                    class="glyphicon glyphicon-envelope"></span>
+                                Messages</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/data"><span
+                                    class="glyphicon glyphicon-folder-open"></span> Personal Data</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-question-sign"></span> Help
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/contact">
+                                    <span class="glyphicon glyphicon-earphone"></span> Contact Us
+                                </a>
+                                <a class="dropdown-item" href="/faq">
+                                    <span class="glyphicon glyphicon-info-sign"></span> FAQ
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/"><span
+                                    class="glyphicon glyphicon-log-out"></span>
+                                Checkout</a></li>
+                    </ul>
+                </div>
+        </nav>
+        </div>
+        </div>
+
+    </header>
+
+    <%- include(path) %>
+
+    <footer>
+        <div class="container">
+            <!-- http://microformats.org/wiki/h-card -->
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <p class="h-card">
+                        <img class="u-photo" src="img/AGDB_logo_small.png" alt="Logo of AGDB" />
+                        <a class="p-name u-url" href="http://www.mi.fu-berlin.de/en/inf/groups/ag-db">AGDB</a><br>
+                        <a class="u-email" href="mailto:eckart@inf.fu-berlin.de">Contact Us</a><br>
+                        <a class="p-tel" href="tel:+493083875100">+493083875100</a><br>
+                        <span class="p-locality">Berlin</span>,
+                        <span class="p-country-name">Germany</span>
+                    </p>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <p class="h-card">
+                        <img class="u-photo" src="img/ohc_logo.png" alt="Logo of Openhealth.care" />
+                        <a class="p-name u-url" href="http://openhealth.care">Openhealth.care</a><br>
+                        <a class="u-email" href="mailto:antelo.lucas@outlook.com">Contact Us</a><br>
+                        <a class="p-tel" href="tel:+4915784569198">+4915784569198</a><br>
+                        <span class="p-locality">Berlin</span>,
+                        <span class="p-country-name">Germany</span>
+                    </p>
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+                    <p class="h-card">
+                        <img class="u-photo" src="img/lucas_small.png" alt="Picture of Lucas Antelo" />
+                        <a class="p-name u-url" href="http://openhealth.care/about_me">Lucas Antelo</a><br>
+                        <a class="u-email" href="mailto:antelo.lucas@outlook.com">Contact Me</a><br>
+                        <a class="p-tel" href="tel:+4915784569198">+4915784569198</a><br>
+                        <span class="p-locality">Hangover</span>,
+                        <span class="p-country-name">Germany</span>
+                    </p>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <p class="h-card">
+                        <img class="u-photo" src="img/nicolas_small.jpg" alt="Picture of Nicolas Lehmann" />
+                        <a class="p-name u-url" href="http://nicolaslehmann.de/">Nicolas Lehmann</a><br>
+                        <a class="u-email" href="mailto:nicolas.lehmann@fu-berlin.de">Contact Me</a><br>
+                        <a class="p-tel" href="tel:+493083875120">+493083875120</a><br>
+                        <span class="p-locality">Berlin</span>,
+                        <span class="p-country-name">Germany</span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <div id="copyrightRow">
+            <div class="container">
+                <p class="text-left">
+                    All images are copyright to their owners. This is just a hypothetical site
+                    <span class="pull-right">&copy; 2019 Copyright Mana</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap-4.3.1-dist/bootstrap.js"></script>
+    <script type="text/javascript" src="js/personalData.js"></script>
+</body>
+
+</html>

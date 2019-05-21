@@ -1,0 +1,16 @@
+{
+  "name": "dapp",
+  "version": "1.0.0",
+  "description": "[Download](https://nodejs.org/en/download/), install nodejs, and in windows set PATH variable. Then\r ```python\r > mkdir dapp\r > cd dapp\r > npm init\r > touch app.js\r > npm install express --save # instead of index.js --> app.js\r > npm install ejs --save\r > npm install nodemon # restarts server after each saved change\r > mkdir views\r > mkdir views/partials\r > mkdir public\r > mkdir public/css\r > mkdir public/js\r > mkdir public/img\r ```",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.1",
+    "express": "^4.17.0"
+  }
+}

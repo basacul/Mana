@@ -1,0 +1,146 @@
+body {
+  /* ;#1e1e1e; */
+  background-color: #1e1e1e;
+  color:  rgba(255, 255, 255, 0.5);
+}
+footer {
+   margin-top: 1em;
+   padding-top: 1em;
+   /* background-color: #C7C7C7; */
+   /* background-color: #333333; */
+   background-color: #3c4043;
+   /* background-color: #252526; */
+}
+
+.h-card {
+  width: 500px;
+  margin-left: 0.3em;
+}
+
+
+.u-photo{
+  float: left;
+  margin: 0.2em;
+  width: 68px;
+}
+
+#copyrightRow { 
+  /* background-color: #343a40;  */
+  background-color: #1e1e1e;
+  padding: 0.75em 0 0.75em 0; 
+  margin-top: 5px;
+  color: white;
+  border-top: 2px solid #1e1e1e;
+  box-shadow: 0 -5px 5px -5px #111111;
+}
+
+#logo {
+  margin-right: -8em;
+}
+
+.form-control {
+  background-color: rgb(44, 44, 43);
+}
+
+.dropdown-menu {
+  margin: 0;
+  padding: 0;
+}
+.dropdown-menu, .dropdown-item {
+  color: rgba(255, 255, 255, 0.5);
+  background-color: #343a40; 
+}
+
+.dropdown-item:hover {
+  color: white;
+  background-color: rgb(104, 104, 103);
+  height: 100%;
+}
+.form-control:focus {
+  color: black;
+  background-color: rgb(104, 104, 103);
+}
+
+.btn{
+  color: #6c757d;
+  background-color:  rgb(44, 44, 43);
+  width: 100px;
+}
+
+.btn:hover{
+  color: black;
+  background-color: rgb(104, 104, 103);
+}
+
+a.nav-link:hover {
+  cursor: pointer;
+}
+
+#second_navbar {
+  height: 4em;
+  background-color: #333333;
+  /* background-color: #3c4043 !important; */
+  /* box-shadow: 0 -5px 5px -5px #252526;
+  box-shadow: 0 5px 5px -5px #333333; */
+}
+
+/*stylesheet for table.html*/
+
+form {
+  display: inline-block;
+}
+
+fieldset {
+  border: none;
+}
+
+span.edit {
+  display: inline-block;
+  background: url("../img/edit16.png") no-repeat;
+  width: 14px;
+  height: 14px;
+  padding-right: 5px;
+}
+article{
+  margin: 0 auto;
+}
+div#table {
+
+  background-color: #333333; 
+  color: black;
+  margin: 2em 0;
+}
+
+td {
+  padding: 0.1em;
+  font-style: italic;
+}
+
+th {
+  padding: 0.2em;
+}
+
+
+
+thead {
+    background-color:  black;
+    color: white;
+}
+table {
+  border-collapse: collapse;
+  border: 2px solid black;
+}
+tr {
+    border-top: solid 2px black;
+    width: 100%;
+}
+/* 
+tr:nth-child(even) {
+  background-color: #242a30;
+} */
+
+tbody tr:hover {
+  color: white;
+  background-color: rgb(104, 104, 103);
+  height: 100%;
+}
