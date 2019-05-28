@@ -120,8 +120,9 @@ function createContractInstance() {
  */
 function interact() {
     let instance = createContractInstance();
-    let input = document.querySelector('input');
+    let input = document.querySelector('#message_interact input');
     let value = input.value;
+    console.log(value);
     input.value = "";
 
     // console.log("Message equals ", value);
@@ -140,7 +141,6 @@ function interact() {
     instance.interact.sendTransaction(value, txnObject, function (error, result) {
         if (error) {
             alert(error);
-
         } else {
             prependElement(value, result);
         }

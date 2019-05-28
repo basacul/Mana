@@ -86,7 +86,7 @@ a.nav-link:hover {
 
 /*stylesheet for table.html*/
 
-form {
+form, #message_interact {
   display: inline-block;
 }
 
@@ -153,7 +153,7 @@ input:focus{
   
 }
 
-#mainNavigation form{
+#mainNavigation form, #message_interact{
   margin-top: 0.3em;
   padding:0;
   width: 100%;
@@ -192,4 +192,13 @@ button:focus, input:focus {
   content:url(../img/waiting.gif);
   width:5%;
   margin-left:2px
+}
+
+button#description {
+  width: 100%;
+  border: none;
+}
+
+pre {
+  color: white;
 }

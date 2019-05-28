@@ -39,28 +39,66 @@ app.post("/login", function (req, res) {
     }
 });
 
+app.get("/home", function (req, res) {
+    res.render("home");
+});
+
+app.get("/e-record", function (req, res) {
+    res.render("e-record");
+});
+
+app.get("/tools", function (req, res) {
+    res.render("tools");
+});
+
+app.get("/documentation", function (req, res) {
+    res.render("documentation");
+});
+
+app.get("/dapp", function (req, res) {
+    res.render("dapp");
+});
+
+app.get("/account", function (req, res) {
+    res.render("account");
+});
+
+app.get("/messages", function (req, res) {
+    res.render("messages");
+});
+
+app.get("/personal", function (req, res) {
+    res.render("personal");
+});
+
+app.get("/contact", function (req, res) {
+    res.render("contact");
+});
+
+app.get("/faq", function (req, res) {
+    res.render("faq");
+});
+
 
 app.get("/checkout", function (req, res) {
     res.render("login");
 });
 
+// app.post("/:template", function (req, res) {
+//     let template = `/${req.params.template}`;
+//     res.redirect(template);
+// });
 
+// app.get("/:template", function (req, res) {
+//     let template = req.params.template;
+//     templat = template === "login" ? "home" : template;
+//     let path = `partials/${template}`;
 
-app.post("/:template", function (req, res) {
-    let template = `/${req.params.template}`;
-    res.redirect(template);
-});
-
-app.get("/:template", function (req, res) {
-    let template = req.params.template;
-    templat = template === "login" ? "home" : template;
-    let path = `partials/${template}`;
-
-    res.render("home", {
-        path: path,
-        title: template.toUpperCase()
-    });
-});
+//     res.render("home", {
+//         path: path,
+//         title: template.toUpperCase()
+//     });
+// });
 
 
 
