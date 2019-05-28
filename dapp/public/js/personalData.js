@@ -1,5 +1,3 @@
-initializeTable();
-
 /**
  * TR EXAMPLE
  *      <tr>
@@ -14,6 +12,7 @@ initializeTable();
  */
 
 
+initializeTable();
 
 function initializeTable() {
 

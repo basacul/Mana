@@ -105,11 +105,11 @@ article{
   margin: 0 auto;
 }
 div#table {
-
   background-color: #333333; 
   color: black;
   margin: 2em 0;
 }
+
 
 td {
   padding: 0.1em;
@@ -127,6 +127,8 @@ thead {
     color: white;
 }
 table {
+  width: 100%;
+  margin: 0 auto;
   border-collapse: collapse;
   border: 2px solid black;
 }
@@ -143,4 +145,51 @@ tbody tr:hover {
   color: white;
   background-color: rgb(104, 104, 103);
   height: 100%;
+}
+
+input:focus{
+  outline: 0 0 0 0  !important;
+  box-shadow: 0 0 0 0 !important;
+  
+}
+
+#mainNavigation form{
+  margin-top: 0.3em;
+  padding:0;
+  width: 100%;
+}
+
+
+input, button {
+  background-color:  rgb(44, 44, 43);
+  border: 0;
+  margin: 0;
+  padding: 0.4em;
+  color: #6c757d;
+}
+
+input[type="submit"], button{
+  margin-left: -5px;
+  border-left: 1px solid black;
+}
+
+nav input[type="text"]:focus {
+  outline: 0 0 0 0  !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+button:focus, input:focus {
+  color: black;
+  background-color: rgb(104, 104, 103);
+  outline: none;
+}
+
+.hide {
+  display: none;
+}
+
+.waiting{
+  content:url(../img/waiting.gif);
+  width:5%;
+  margin-left:2px
 }

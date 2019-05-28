@@ -33,16 +33,23 @@ app.post("/login", function (req, res) {
 
     // TODO: Implement authentication service
     if (authenticated(user, password)) {
-        res.redirect("/home")
+        res.redirect("/home");
     } else {
-        res.redirect("/")
+        res.redirect("/");
     }
 });
 
+
+app.get("/checkout", function (req, res) {
+    res.render("login");
+});
+
+
+
 app.post("/:template", function (req, res) {
     let template = `/${req.params.template}`;
-    res.redirect(template)
-})
+    res.redirect(template);
+});
 
 app.get("/:template", function (req, res) {
     let template = req.params.template;
@@ -55,9 +62,7 @@ app.get("/:template", function (req, res) {
     });
 });
 
-app.get("/checkout", function (req, res) {
-    res.render("login");
-})
+
 
 app.listen(port, function () {
     console.log(`Running at https://localhost:${port}`);
