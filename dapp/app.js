@@ -84,6 +84,7 @@ app.get("/checkout", function (req, res) {
     res.render("login");
 });
 
+
 // app.post("/:template", function (req, res) {
 //     let template = `/${req.params.template}`;
 //     res.redirect(template);
