@@ -1,9 +1,11 @@
 
-// ==========
+// =============================================================================================
 // SETUP
-// ==========
+// =============================================================================================
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 const port = 3000;
 
 const app = express();
@@ -11,13 +13,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-// ==========
-// DB STUFF
-// ==========
 
-// ==========
+
+// =============================================================================================
+// DB STUFF
+// =============================================================================================
+
+/* 
+ * IMPORTANT: MongoDB needs to be running!!
+ * check docs at https://mongoosejs.com/
+ */
+mongoose.connect("mongodb://localhost:27017/cat_app", { useNewUrlParser: true });
+
+const accessSchema = new mongoose.Schema({
+    name: String,
+    url: String,
+    token: String,
+    authorized: Boolean,
+    shared: Boolean,
+    txHash: String
+});
+
+const Access = mongoose.model("Access", accessSchema);
+
+// =============================================================================================
 // ROUTES
-// ==========
+// =============================================================================================
 app.get("/", function (req, res) {
     let attention = "";
     if (req && req.params.attention) {
@@ -79,34 +100,17 @@ app.get("/faq", function (req, res) {
     res.render("faq");
 });
 
-
 app.get("/checkout", function (req, res) {
     res.render("login");
 });
 
-
-// app.post("/:template", function (req, res) {
-//     let template = `/${req.params.template}`;
-//     res.redirect(template);
-// });
-
-// app.get("/:template", function (req, res) {
-//     let template = req.params.template;
-//     templat = template === "login" ? "home" : template;
-//     let path = `partials/${template}`;
-
-//     res.render("home", {
-//         path: path,
-//         title: template.toUpperCase()
-//     });
-// });
-
-
-
-app.listen(port, function () {
+app.listen(port, () => {
     console.log(`Running at https://localhost:${port}`);
 });
 
+// =============================================================================================
+// FUNCTIONS
+// =============================================================================================
 function authenticated(user, password) {
     return user === "user" && password === "pass";
 }
