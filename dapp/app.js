@@ -23,18 +23,17 @@ app.set("view engine", "ejs");
  * IMPORTANT: MongoDB needs to be running!!
  * check docs at https://mongoosejs.com/
  */
-mongoose.connect("mongodb://localhost:27017/cat_app", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true });
 
-const accessSchema = new mongoose.Schema({
-    name: String,
-    url: String,
-    token: String,
-    authorized: Boolean,
-    shared: Boolean,
-    txHash: String
+const fileSchema = new mongoose.Schema({
+    fileName: String,
+    type: String,
+    subject: String,
+    from: String,
+    date: String,
 });
 
-const Access = mongoose.model("Access", accessSchema);
+const File = mongoose.model("Files", fileSchema);
 
 // =============================================================================================
 // ROUTES
@@ -76,10 +75,6 @@ app.get("/documentation", function (req, res) {
     res.render("documentation");
 });
 
-app.get("/dapp", function (req, res) {
-    res.render("dapp");
-});
-
 app.get("/account", function (req, res) {
     res.render("account");
 });
@@ -89,7 +84,14 @@ app.get("/messages", function (req, res) {
 });
 
 app.get("/personal", function (req, res) {
-    res.render("personal");
+    File.find({}, function (error, files) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.render("personal", { files: files });
+        }
+    });
+
 });
 
 app.get("/contact", function (req, res) {
