@@ -36,6 +36,8 @@ footer {
 
 #logo {
   margin-right: -8em;
+  width: 100px;
+  height: 100px;
 }
 
 .form-control {

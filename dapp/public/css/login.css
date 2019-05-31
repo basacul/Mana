@@ -1,8 +1,10 @@
 body {
-  background-color: #1b1b1b;
-  background-image: url(../img/welcome_bg1.png);
+  background-color: #4b4b4b;
+}
 
-  background-size: cover;
+img {
+  width: 110px;
+  height: 110px;
 }
 
 /* ---- container and log in form ---- */
@@ -19,7 +21,7 @@ body {
   margin-top: auto;
   margin-bottom: auto;
   width: 400px;
-  background-color: rgba(0,0,0,0.5) !important;
+  background-color: rgba(0,0,0,0.2) !important;
 }
 .card-header h3{
   color: white;
