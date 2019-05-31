@@ -114,7 +114,6 @@ function interact() {
     let instance = createContractInstance();
     let input = document.querySelector('#message_interact input');
     let value = input.value;
-    console.log(value);
     input.value = "";
 
     // console.log("Message equals ", value);
@@ -129,7 +128,6 @@ function interact() {
         gas: estimatedGas
     };
 
-    console.log("entered");
     instance.interact.sendTransaction(value, txnObject, function (error, result) {
         if (error) {
             alert(error);

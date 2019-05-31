@@ -167,7 +167,7 @@ input, button {
   border: 0;
   margin: 0;
   padding: 0.4em;
-  color: #6c757d;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 input[type="submit"], button{
@@ -180,7 +180,7 @@ nav input[type="text"]:focus {
   box-shadow: 0 0 0 0 !important;
 }
 
-button:focus, input:focus {
+button:hover, input[type="text"]:focus, input[type="submit"]:hover, .custom-file-upload:hover {
   color: black;
   background-color: rgb(104, 104, 103);
   outline: none;
@@ -208,4 +208,14 @@ pre {
 
 figure img {
   width: 100%;
+}
+
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: rgb(44, 44, 43);
 }

@@ -4,18 +4,30 @@
 
         <form class="nav-link" method="post" action="http://www.randyconnolly.com/tests/process.php">
             <fieldset>
-                <div id="search">
-                    <label for="f-search" class="sr-only"></label>
-                    <input type="text" name="search" placeholder="Search titles" list="keywords">
-                    <input type="submit" value="Search">
-                    <datalist id="keywords">
-                        <option>Ferris, John MD</option>
-                        <option>Medicare</option>
-                        <option>Lab Diagnostics Inc</option>
-                        <option>bill</option>
-                        <option>prescription</option>
-                        <option>reimbursement</option>
-                    </datalist>
+                <div class="d-flex justify-content-between">
+                    <div id="search">
+                        <label for="f-search" class="sr-only">Search file</label>
+                        <input type="text" name="search" placeholder="Search titles" list="keywords">
+                        <input type="submit" value="Search">
+                        <datalist id="keywords">
+                            <option>Ferris, John MD</option>
+                            <option>Medicare</option>
+                            <option>Lab Diagnostics Inc</option>
+                            <option>bill</option>
+                            <option>prescription</option>
+                            <option>reimbursement</option>
+                        </datalist>
+                    </div>
+                    <div id="upload">
+                        <label for="f-upload" class="custom-file-upload">
+                            <span class="glyphicon glyphicon-cloud-upload"></span> Upload File
+                        </label>
+                        <input id="f-upload" type="file" />
+                        <!-- <label for="f-upload" class="sr-only" class="custom_file_upload"><span
+                                class="glyphicon glyphicon-cloud-upload"></span>
+                            Upload File</label>
+                        <input type=" file" name="file"> -->
+                    </div>
                 </div>
             </fieldset>
         </form>
