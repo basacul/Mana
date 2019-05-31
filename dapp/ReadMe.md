@@ -10,26 +10,31 @@ This application uses mongodb, express, nodejs and ethereum. MetaMask - for now 
 ## Structure
 The web application uses ejs to display the following sites that are accessible through the navigation bar at the top starting with the logo from left to right:
 
-* __home.ejs__: **LOGO** Site welcomes the user that is rendered only by clicking the Mana logo
-* __e-record.ejs__: **E-Record** Site manages the data available through the ethereum network 
-* __tools.ejs__: **Tools** Site manages the settings concerning the ethereum network
-* __account.ejs__: **My Account** Site manage the account settings concerning the web application
-* __messages.ejs__: **Messages** Site providing the messaging service
-* __personal.ejs__: **Personal** Site manages data stored outside the ethereum network
-* __contact.ejs__: **Help/Contact Us** Site with contact information and form
-* __faq.ejs__: **Help/FAQ** Site with faq
-* __documentation.ejs__: **Help/Documentation** Site with documentation for the web application
-* __login.ejs__: **Checkout** Logs the user out and sends the user back to the login page
+* __home.ejs__: *LOGO* Site welcomes the user that is rendered only by clicking the Mana logo
+* __e-record.ejs__: *E-Record* Site manages the data available through the ethereum network 
+* __tools.ejs__: *Tools* Site manages the settings concerning the ethereum network
+* __account.ejs__: *My Account* Site manage the account settings concerning the web application
+* __messages.ejs__: *Messages* Site providing the messaging service
+* __personal.ejs__: *Personal* Site manages data stored outside the ethereum network
+* __contact.ejs__: *Help/Contact Us* Site with contact information and form
+* __faq.ejs__: *Help/FAQ* Site with faq
+* __documentation.ejs__: *Help/Documentation* Site with documentation for the web application
+* __login.ejs__: *Checkout* Logs the user out and sends the user back to the login page
 
 This web application currently in version 2.0.0 is under construction and will be live on July 31 2019 at [Openhealth.care](http://openhealth.care/). In MetaMask choose Rinkeby as network where the smart contracts are deployed and tested.
 
 ## How to use
 
-Clone the repository and check app.js how the web application is currently organized and the separate ejs sites, as it is still simple for now. By following this steps you can already test the application on your local machine at localhost:3000 for which you need to have the [MetaMask](https://metamask.io/) extension installed on your browser. Do not forget to set MetaMask to Rinkeby network.
+Please make sure, that you have Node.js istalled on your system, which you can download at their site [Node.js](https://nodejs.org/en/download/). With Node.js istalled you automatically have access to the command __npm__. This web app runs and is tested on nodejs version 12.2.0.
+
+If __git__ is not available on your system, you can download this repository as a zip file and unpack it on your system. In the *terminal*/*command line* go to ../../../Mana/dapp and run __node app.js__.  Otherwise clone the repository with git.
+
+Check app.js to see how the web application is currently organized and the separate ejs sites, as it is still simple for now. By following this steps you can already test the application on your local machine at localhost:3000 for which you need to have the [MetaMask](https://metamask.io/) extension installed on your browser. Do not forget to set MetaMask to Rinkeby network.
 
 ```
-> clone https://github.com/basacul/Mana.git
+Install node.js before 
+> git clone https://github.com/basacul/Mana.git
 > cd Mana/dapp
 > npm install
-> nodemon
+> node app.js
 ```
