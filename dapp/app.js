@@ -27,13 +27,13 @@ mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true });
 
 const fileSchema = new mongoose.Schema({
     fileName: String,
-    type: String,
-    subject: String,
-    from: String,
-    date: String,
+    file: String,
+    note: String,
+    shared: { type: Boolean, default: false },
+    date: { type: Date, default: Date.now }
 });
 
-const File = mongoose.model("Files", fileSchema);
+const File = mongoose.model("File", fileSchema);
 
 // =============================================================================================
 // ROUTES
@@ -83,15 +83,32 @@ app.get("/messages", function (req, res) {
     res.render("messages");
 });
 
-app.get("/personal", function (req, res) {
+
+app.get("/private", function (req, res) {
     File.find({}, function (error, files) {
         if (error) {
             console.log(error);
         } else {
-            res.render("personal", { files: files });
+            res.render("private", { files: files });
         }
     });
 
+});
+
+app.post("/private", function (req, res) {
+    //create new file
+    // throws errors
+    req.body.file.shared = req.body.file.shared ? true : false;
+    console.log(req.body.file);
+    File.create(req.body.file, function (err, newFile) {
+        if (err) {
+            console.log(err);
+            res.render("/private");
+        } else {
+            console.log("New File created");
+            res.redirect("/private");
+        }
+    });
 });
 
 app.get("/contact", function (req, res) {
