@@ -1,0 +1,123 @@
+<% include partials/header %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
+    <div class="container" id="mainNavigation">
+
+        <form class="nav-link" method="post" action="http://www.randyconnolly.com/tests/process.php">
+            <fieldset>
+                <div class="d-flex justify-content-between">
+                    <div id="search">
+                        <label for="f-search" class="sr-only">Search file</label>
+                        <input type="text" name="search" placeholder="Search titles" list="keywords">
+                        <input type="submit" value="Search">
+                        <datalist id="keywords">
+                            <option>Ferris, John MD</option>
+                            <option>Medicare</option>
+                            <option>Lab Diagnostics Inc</option>
+                            <option>bill</option>
+                            <option>prescription</option>
+                            <option>reimbursement</option>
+                        </datalist>
+                    </div>
+                    <div id="upload">
+                        <label for="f-upload" class="custom-file-upload">
+                            <button type="button" data-toggle="modal" data-target="#myModal">
+                                <span class="glyphicon glyphicon-cloud-upload"></span> Upload File
+                            </button>
+                        </label>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</nav>
+</div>
+</div>
+</header>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/private" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload New File</h4>
+
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="f-filename">File Name</label>
+                        <input type="text" class="form-control" name="file[fileName]" id="f-filename"
+                            placeholder="Enter file name">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="f-file">File</label>
+                        <input type="text" class="form-control" name="file[file]" id="f-file"
+                            placeholder="replace with type FILE">
+                    </div>
+                    <div class="form-group">
+                        <label for="f-note">File</label>
+                        <textarea class="form-control" name="file[note]" id="f-note" rows="3"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="file[shared]" value="true" id="f-shared">
+                        <label class="form-check-label" for="f-shared">
+                            Shared
+                        </label>
+                    </div>
+                    <!-- 
+                    <div class="form-group">
+                            <label for="f-shared">File</label>
+                            <input type="text" class="form-control" name="file[shared]" id="f-shred"
+                                placeholder="replace with type FILE">
+                        </div> -->
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<article>
+    <div class="container">
+        <h1>This section stores data not shared on the ethereum network and for personal purposes yet</h1>
+        <div id="table">
+            <table>
+                <thead>
+                    <th></th>
+                    <th scope="col">FILENAME</th>
+                    <th scope="col">FILE</th>
+                    <th scope="col">NOTE</th>
+                    <th scope="col">SHARED</th>
+                    <th scope="col">DATE</th>
+                    <th></th>
+                </thead>
+                <tfoot>
+                </tfoot>
+                <tbody>
+                    <% files.forEach(function(file){ %>
+                    <tr>
+                        <td><input type="checkbox" name="index[0]" value="<%=file.fileName%>>"></td>
+                        <td><%=file.fileName%></td>
+                        <td><%=file.file%></td>
+                        <td><a href="#"><%=file.note%></a></td>
+                        <td><%=file.shared%></td>
+                        <td><%=file.date.toDateString() %></td>
+                        <td><button><span class="glyphicon glyphicon-share"></span></button></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+<% include partials/footer %>

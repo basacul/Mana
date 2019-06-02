@@ -1,5 +1,9 @@
 body {
-  background-color: #4b4b4b;
+  background: url(../img/mana_logo_big.png)  no-repeat;
+  background-position-x: 80%;
+  background-position-y: 50px;
+
+  background-color: rgba(31,31,31, 0.99);
 }
 
 img {
@@ -13,7 +17,7 @@ img {
 .container{
   height: 100%;
   align-content: center;
-  position: absolute;
+  margin-top: 10%;
 }
 
 .card{
