@@ -111,6 +111,16 @@ app.post("/private", function (req, res) {
     });
 });
 
+app.get("/private/:id", function (req, res) {
+    File.findById(req.params.id, function (err, foundFile) {
+        if (err) {
+            console.log(err);
+            res.redirect("/private");
+        } else {
+            res.render("private_show", { file: foundFile });
+        }
+    });
+});
 app.get("/contact", function (req, res) {
     res.render("contact");
 });

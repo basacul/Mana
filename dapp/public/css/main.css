@@ -107,7 +107,7 @@ article{
   margin: 0 auto;
 }
 div#table {
-  background-color: #333333; 
+   
   color: black;
   margin: 2em 0;
 }
@@ -129,8 +129,9 @@ thead {
     color: white;
 }
 table {
+  background-color: #333333;
   width: 100%;
-  margin: 0 auto;
+  margin: 2em auto;
   border-collapse: collapse;
   border: 2px solid black;
 }

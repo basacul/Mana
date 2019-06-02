@@ -89,35 +89,34 @@
 </div>
 <article>
     <div class="container">
-        <h1>This section stores data not shared on the ethereum network and for personal purposes yet</h1>
-        <div id="table">
-            <table>
-                <thead>
-                    <th></th>
-                    <th scope="col">FILENAME</th>
-                    <th scope="col">FILE</th>
-                    <th scope="col">NOTE</th>
-                    <th scope="col">SHARED</th>
-                    <th scope="col">DATE</th>
-                    <th></th>
-                </thead>
-                <tfoot>
-                </tfoot>
-                <tbody>
-                    <% files.forEach(function(file){ %>
-                    <tr>
-                        <td><input type="checkbox" name="index[0]" value="<%=file.fileName%>>"></td>
-                        <td><%=file.fileName%></td>
-                        <td><%=file.file%></td>
-                        <td><a href="/private/<%=file._id%>"><%=file.note%></a></td>
-                        <td><%=file.shared%></td>
-                        <td><%=file.date.toDateString() %></td>
-                        <td><button><span class="glyphicon glyphicon-share"></span></button></td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th><%=file.fileName%></th>
+                    <th><a href="#"><%=file.file%></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ETHEREUM: </td>
+                    <% if(file.shared){ %>
+                    <td>THIS FILE IS AVAILABLE ON ETHEREUM</td>
+                    <% }else{ %>
+                    <td>THIS FILE IS KEPT PRIVATE</td>
+                    <% } %>
+                </tr>
+                <tr>
+                    <td>NOTE: </td>
+                    <td><%= file.note %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="text-right"><a href="/private">GO BACK</a></td>
+
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 </article>
 <% include partials/footer %>
