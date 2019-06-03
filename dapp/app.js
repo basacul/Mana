@@ -84,6 +84,18 @@ app.get("/messages", function (req, res) {
     res.render("messages");
 });
 
+app.get("/contact", function (req, res) {
+    res.render("contact");
+});
+
+app.get("/faq", function (req, res) {
+    res.render("faq");
+});
+
+app.get("/checkout", function (req, res) {
+    res.render("login");
+});
+
 
 app.get("/private", function (req, res) {
     File.find({}, function (error, files) {
@@ -96,6 +108,7 @@ app.get("/private", function (req, res) {
 
 });
 
+// TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
 // CREATE ROUTE
 app.post("/private", function (req, res) {
     //create new file
@@ -113,6 +126,7 @@ app.post("/private", function (req, res) {
     });
 });
 
+// EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
 // SHOW and EDIT ROUTE with button and modal form
 app.get("/private/:id", function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {
@@ -125,6 +139,7 @@ app.get("/private/:id", function (req, res) {
     });
 });
 
+// UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
 // UPDATE ROUTE
 app.put("/private/:id", function (req, res) {
     req.body.file.shared = req.body.file.shared ? true : false;
@@ -138,17 +153,18 @@ app.put("/private/:id", function (req, res) {
     });
 });
 
-app.get("/contact", function (req, res) {
-    res.render("contact");
+// DELETE ROUTE
+app.delete("/private/:id", function (req, res) {
+    File.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
+            console.log("ERROR WHEN DELETING FILE ", err);
+            res.redirect("/private");
+        } else {
+            res.redirect("/private");
+        }
+    });
 });
 
-app.get("/faq", function (req, res) {
-    res.render("faq");
-});
-
-app.get("/checkout", function (req, res) {
-    res.render("login");
-});
 
 app.listen(port, () => {
     console.log(`Running at https://localhost:${port}`);

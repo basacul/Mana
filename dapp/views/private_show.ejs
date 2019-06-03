@@ -56,6 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label for="f-file">File</label>
+                        <!-- TODO: IMPLEMENT UPLOAD FOR THIS FILE AND UPDATE MONGODB & APP.JS -->
                         <input type="text" class="form-control" name="file[file]" id="f-file" value="<%=file.file%>">
                     </div>
                     <div class="form-group">
@@ -97,7 +98,8 @@
             <thead>
                 <tr>
                     <th><%=file.fileName%></th>
-                    <th><a href=" #"><%=file.file%></a></th>
+                    <!-- TODO: IMPLEMENT DOWNLOAD FOR THIS FILE -->
+                    <th class="text-right"> <a href="/private">GO BACK</a></th>
                 </tr>
             </thead>
             <tbody>
@@ -114,13 +116,18 @@
                     <td><%= file.note %></td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td class="text-right"><a href="/private">GO BACK</a></td>
-
+                    <td>File: </td>
+                    <td><a href=" #"><%=file.file%></a></td>
                 </tr>
             </tbody>
         </table>
-
+        <div class="d-flex justify-content-end">
+            <div>
+                <form action="/private/<%= file._id %>?_method=DELETE" method="POST">
+                    <input type="submit" class="btn btn-danger" value="Delete File">
+                </form>
+            </div>
+        </div>
     </div>
 </article>
 <% include partials/footer %>
