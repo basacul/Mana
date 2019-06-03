@@ -2,17 +2,18 @@
 // =============================================================================================
 // SETUP
 // =============================================================================================
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const express = require('express'),
+    mongoose = require('mongoose'),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
+    app = express(),
+    port = 3000;
 
-const port = 3000;
 
-const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-
+app.use(methodOverride("_method"));
 
 
 // =============================================================================================
@@ -23,7 +24,7 @@ app.set("view engine", "ejs");
  * IMPORTANT: MongoDB needs to be running!!
  * check docs at https://mongoosejs.com/
  */
-mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true, useFindAndModify: false });
 
 const fileSchema = new mongoose.Schema({
     fileName: String,
@@ -95,6 +96,7 @@ app.get("/private", function (req, res) {
 
 });
 
+// CREATE ROUTE
 app.post("/private", function (req, res) {
     //create new file
     // throws errors
@@ -111,6 +113,7 @@ app.post("/private", function (req, res) {
     });
 });
 
+// SHOW and EDIT ROUTE with button and modal form
 app.get("/private/:id", function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {
         if (err) {
@@ -121,6 +124,20 @@ app.get("/private/:id", function (req, res) {
         }
     });
 });
+
+// UPDATE ROUTE
+app.put("/private/:id", function (req, res) {
+    req.body.file.shared = req.body.file.shared ? true : false;
+    File.findByIdAndUpdate(req.params.id, req.body.file, function (err, updatedFile) {
+        if (err) {
+            console.log("Updating caused an error", err);
+            res.redirect("/private");
+        } else {
+            res.redirect(`/private/${req.params.id}`)
+        }
+    });
+});
+
 app.get("/contact", function (req, res) {
     res.render("contact");
 });
