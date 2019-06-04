@@ -6,14 +6,16 @@ const express = require('express'),
     mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
+    expressSanitizer = require('express-sanitizer'),
     app = express(),
     port = 3000;
 
+app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
+app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // =============================================================================================
@@ -28,7 +30,7 @@ mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true, useF
 
 const fileSchema = new mongoose.Schema({
     fileName: String,
-    file: String,
+    file: String, // need to be replaced to upload real files
     note: String,
     shared: { type: Boolean, default: false },
     date: { type: Date, default: Date.now }
@@ -111,10 +113,7 @@ app.get("/private", function (req, res) {
 // TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
 // CREATE ROUTE
 app.post("/private", function (req, res) {
-    //create new file
-    // throws errors
-    req.body.file.shared = req.body.file.shared ? true : false;
-    console.log(req.body.file);
+    sanitize_text(req);
     File.create(req.body.file, function (err, newFile) {
         if (err) {
             console.log(err);
@@ -142,7 +141,9 @@ app.get("/private/:id", function (req, res) {
 // UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
 // UPDATE ROUTE
 app.put("/private/:id", function (req, res) {
-    req.body.file.shared = req.body.file.shared ? true : false;
+
+    sanitize_text(req);
+
     File.findByIdAndUpdate(req.params.id, req.body.file, function (err, updatedFile) {
         if (err) {
             console.log("Updating caused an error", err);
@@ -175,4 +176,12 @@ app.listen(port, () => {
 // =============================================================================================
 function authenticated(user, password) {
     return user === "user" && password === "pass";
+}
+
+function sanitize_text(req) {
+    req.body.file.shared = req.body.file.shared ? true : false;
+
+    // sanitize file.fileName and file.note 
+    req.body.file.fileName = req.sanitize(req.body.file.fileName);
+    req.body.file.note = req.sanitize(req.body.file.note);
 }

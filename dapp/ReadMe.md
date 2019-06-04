@@ -21,7 +21,7 @@ The web application uses ejs to display the following sites that are accessible 
 * __documentation.ejs__: *Help/Documentation* Site with documentation for the web application
 * __login.ejs__: *Checkout* Logs the user out and sends the user back to the login page
 
-This web application currently in version 3.0.0 is under construction and will be live on July 31 2019 at [Openhealth.care](http://openhealth.care/). In MetaMask choose Rinkeby as network where the smart contracts are deployed and tested.
+This web application currently in version 3.1.0 is under construction and will be live on July 31 2019 at [Openhealth.care](http://openhealth.care/). In MetaMask choose Rinkeby as network where the smart contracts are deployed and tested.
 
 ## How to use
 
@@ -32,7 +32,7 @@ If __git__ is not available on your system, you can download this repository as 
 Check app.js to see how the web application is currently organized and the separate ejs sites, as it is still simple for now. By following this steps you can already test the application on your local machine at localhost:3000 for which you need to have the [MetaMask](https://metamask.io/) extension installed on your browser. Do not forget to set MetaMask to Rinkeby network.
 
 ```
-Install node.js before 
+Install node.js before running this commands
 > git clone https://github.com/basacul/Mana.git
 > cd Mana/dapp
 > npm install
