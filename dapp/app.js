@@ -3,12 +3,13 @@
 // SETUP
 // =============================================================================================
 const express = require('express'),
+    app = express(),
     mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     expressSanitizer = require('express-sanitizer'),
     File = require('./model/file'),
-    app = express(),
+    User = require('./model/user'),
     port = 3000;
 
 app.set("view engine", "ejs");
