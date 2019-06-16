@@ -1,6 +1,6 @@
 {
   "name": "dapp",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Check ReadMe.md file",
   "main": "app.js",
   "scripts": {
