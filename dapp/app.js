@@ -10,6 +10,7 @@ const express = require('express'),
     expressSanitizer = require('express-sanitizer'),
     File = require('./model/file'),
     User = require('./model/user'),
+    seedDatabase = require('./model/seed'),
     port = 3000;
 
 app.set("view engine", "ejs");
@@ -30,6 +31,7 @@ app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ 
  */
 mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true, useFindAndModify: false });
 
+seedDatabase();
 
 // =============================================================================================
 // ROUTES
