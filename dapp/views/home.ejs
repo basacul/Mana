@@ -19,12 +19,6 @@
                         <span class="glyphicon glyphicon-cog"></span> How it works
                     </a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="#data-exchange">
-                        <span class="glyphicon glyphicon-retweet"></span> Data Exchange
-                    </a>
-                </li> -->
-
             </ul>
         </div>
     </div>
@@ -38,12 +32,33 @@
                 <section>
                     <h3 id="description">Description</h3>
                     <p>
-                        Mana is a web application that allows its users to manage, send and retrieve their health
-                        related
-                        data among participating users such as patients, insurance companies and healthcare
-                        professionals on top of the ethereum network. This application uses the technology and features
-                        provided by ethereum to securely manage and exchange data among users in the Mana ecosystem.
+                        Mana is a web application that allows its users to manage, send and retrieve health
+                        related data among participating users such as patients, insurance companies and healthcare
+                        professionals. The ethereum network manages the authorization and location of the data in order
+                        to manage and exchange data in the Mana ecosystem.
                     </p>
+                    <p>
+                        With the subsciption to the Mana ecosystem a private/public key is generated for the user and
+                        encrypted with
+                        the
+                        user's password. In addition, an ID for the mana ecosystem associated with this user and the
+                        respective
+                        public and private key are generated. The private key for the ID is encrypted with user's
+                        password.
+                        The user name and password are stored as hash values in the database such that
+                        external parties and system administrators cannot deduce the user nor password, with which the
+                        data
+                        has been encrypted.
+                        Files are uploaded to the web application that is encrypted by the user's public key and stored
+                        in the application's database. This files are private and in case of a data breach not readable.
+                    </p>
+                    <figure>
+                        <img src="img/model_registration.png"
+                            alt="Provides an overview over the registration process and the creation of the associated smart Contracts">
+                        <figcaption>Provides an overview over the registration process and the creation of the
+                            associated smart Contracts
+                        </figcaption>
+                    </figure>
                     <p>
                         The main navigation bar at the top allows the user to navigate among the following sections:
                         <ul class="list-group">

@@ -93,26 +93,24 @@
         <div id="table">
             <table>
                 <thead>
-                    <th></th>
+
                     <th scope="col">FILENAME</th>
                     <th scope="col">FILE</th>
                     <th scope="col">NOTE</th>
                     <th scope="col">SHARED</th>
                     <th scope="col">DATE</th>
-                    <th></th>
+
                 </thead>
                 <tfoot>
                 </tfoot>
                 <tbody>
                     <% files.forEach(function(file){ %>
                     <tr>
-                        <td><input type="checkbox" name="index[0]" value="<%=file.fileName%>>"></td>
                         <td><%=file.fileName%></td>
                         <td><%=file.file%></td>
                         <td><a href="/private/<%=file._id%>"><%=file.note%></a></td>
                         <td><%=file.shared%></td>
                         <td><%=file.date.toDateString() %></td>
-                        <td><button><span class="glyphicon glyphicon-share"></span></button></td>
                     </tr>
                     <% }) %>
                 </tbody>

@@ -7,6 +7,7 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     expressSanitizer = require('express-sanitizer'),
+    File = require('./model/file'),
     app = express(),
     port = 3000;
 
@@ -28,15 +29,6 @@ app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ 
  */
 mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true, useFindAndModify: false });
 
-const fileSchema = new mongoose.Schema({
-    fileName: String,
-    file: String, // need to be replaced to upload real files
-    note: String,
-    shared: { type: Boolean, default: false },
-    date: { type: Date, default: Date.now }
-});
-
-const File = mongoose.model("File", fileSchema);
 
 // =============================================================================================
 // ROUTES
