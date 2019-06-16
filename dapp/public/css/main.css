@@ -240,3 +240,14 @@ button[type="button"]{
   width: 100%;
 }
 
+
+/* cards to display files */
+.list-group-item:hover {
+  background-color: rgb(104, 104, 103);
+  outline: none;
+}
+
+.list-group a {
+  color: black;
+  text-decoration: none;
+}

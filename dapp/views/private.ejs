@@ -90,32 +90,26 @@
 <article>
     <div class="container">
         <h1>This section stores data not shared on the ethereum network and for personal purposes yet</h1>
-        <div id="table">
-            <table>
-                <thead>
+        <% if (files.length > 0) { %>
+        <div class="card text-white bg-dark mt-3">
+            <div class="card-header d-flex justify-content-between" style="background-color: black">
+                <span>FILENAME</span> <span>SHARED</span> <span>DATE</span>
+            </div>
+            <ul class="list-group list-group-flush">
+                <% files.forEach(function(file){ %>
+                <a href="/private/<%=file._id%>">
+                    <li class="list-group-item d-flex justify-content-between bg-dark">
 
-                    <th scope="col">FILENAME</th>
-                    <th scope="col">FILE</th>
-                    <th scope="col">NOTE</th>
-                    <th scope="col">SHARED</th>
-                    <th scope="col">DATE</th>
+                        <span><%=file.fileName%></span> <span><%=file.shared%></span>
+                        <span><%=file.date.toDateString() %></span>
 
-                </thead>
-                <tfoot>
-                </tfoot>
-                <tbody>
-                    <% files.forEach(function(file){ %>
-                    <tr>
-                        <td><%=file.fileName%></td>
-                        <td><%=file.file%></td>
-                        <td><a href="/private/<%=file._id%>"><%=file.note%></a></td>
-                        <td><%=file.shared%></td>
-                        <td><%=file.date.toDateString() %></td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+                    </li>
+                </a>
+                <% }) %>
+
+            </ul>
         </div>
+        <% } %>
     </div>
 </article>
 <% include partials/footer %>

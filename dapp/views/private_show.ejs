@@ -95,38 +95,40 @@
 </div>
 <article>
     <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th><%=file.fileName%></th>
-                    <!-- TODO: IMPLEMENT DOWNLOAD FOR THIS FILE -->
-                    <th class="text-right"> <a href="/private">GO BACK</a></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>ETHEREUM: </td>
-                    <% if(file.shared){ %>
-                    <td>THIS FILE IS AVAILABLE ON ETHEREUM</td>
-                    <% }else{ %>
-                    <td>THIS FILE IS KEPT PRIVATE</td>
-                    <% } %>
-                </tr>
-                <tr>
-                    <td>NOTE: </td>
-                    <td><%= file.note %></td>
-                </tr>
-                <tr>
-                    <td>File: </td>
-                    <td><a href=" #"><%=file.file%></a></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="d-flex justify-content-end">
-            <div>
-                <form action="/private/<%= file._id %>?_method=DELETE" method="POST">
-                    <input type="submit" class="btn btn-danger" value="Delete File">
-                </form>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mt-3 bg-dark text-white border-secondary">
+                    <h5 class="card-header d-flex justify-content-between" style="background: black">
+                        <!-- TODO: IMPLEMENT DOWNLOAD FOR THIS FILE -->
+                        <span><a href=" #"><%=file.file%></a></span>
+                        <span><a href="/private">GO BACK</a></span>
+                    </h5>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-around">
+                            <div>
+                                <h5 class="card-title">
+                                    <%=file.fileName%>:
+                                    <% if(file.shared){ %>
+                                    <span>THIS FILE IS AVAILABLE ON ETHEREUM</span>
+                                    <% }else{ %>
+                                    <span>THIS FILE IS KEPT PRIVATE</span>
+                                    <% } %>
+                                </h5>
+                                <p class="card-text"><%= file.note %></p>
+                            </div>
+                            <!-- TODO: ALIGN DELETE BUTTON TO BOTTOM RIGHT CORNER -->
+                            <div>
+                                <form action="/private/<%= file._id %>?_method=DELETE" method="POST">
+                                    <input type="submit" class="btn btn-danger" value="Delete File">
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
