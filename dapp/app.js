@@ -5,32 +5,49 @@
 const express = require('express'),
     app = express(),
     mongoose = require('mongoose'),
+    passport = require('passport'),
     bodyParser = require('body-parser'),
+    LocalStrategy = require('passport-local'),
+    passportLocalMongoose = require('passport-local-mongoose'),
     methodOverride = require('method-override'),
     expressSanitizer = require('express-sanitizer'),
-    File = require('./model/file'),
-    User = require('./model/user'),
-    seedDatabase = require('./model/seed'),
+    File = require('./models/file'),
+    User = require('./models/user'),
+    seedDatabase = require('./models/seed'),
     port = 3000;
 
 app.set("view engine", "ejs");
 
+app.use(require('express-session')({
+    secret: 'Mana is a dapp',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ extended: true }));
 
-
-// =============================================================================================
-// DB STUFF
-// =============================================================================================
-
-/* 
- * IMPORTANT: MongoDB needs to be running!!
- * check docs at https://mongoosejs.com/
+/**
+ * THese two methods are really important : 
+ * Deserialize: for reading the session, taking the data from the session and 
+ * decoding it
+ * Serialize: encodes the data. 
+ * This is possible thanks to passport-local-mongoose
  */
-mongoose.connect("mongodb://localhost:27017/data", { useNewUrlParser: true, useFindAndModify: false });
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
+// =============================================================================================
+// DB STUFF : MongoDB needs to be running https://mongoosejs.com/
+// =============================================================================================
+
+mongoose.connect("mongodb://localhost:27017/mana", { useNewUrlParser: true, useFindAndModify: false });
+
+// resets the database with seed data
 seedDatabase();
 
 // =============================================================================================
@@ -45,17 +62,6 @@ app.get("/", function (req, res) {
 });
 
 
-app.post("/login", function (req, res) {
-    let user = req.body.user;
-    let password = req.body.password;
-
-    // TODO: Implement authentication service
-    if (authenticated(user, password)) {
-        res.redirect("/home");
-    } else {
-        res.redirect("/");
-    }
-});
 
 app.get("/home", function (req, res) {
     res.render("home");
@@ -161,6 +167,33 @@ app.delete("/private/:id", function (req, res) {
     });
 });
 
+// =============================================================================================
+// AUTHENTICATION ROUTES
+// =============================================================================================
+
+app.post("/login", passport.authenticate('local', {
+    successRedirect: '/home',
+    failureRedirect: '/'
+}), function (req, res) {
+    // do nothing
+});
+
+/**
+ * Handles user sign up
+ */
+app.post('/register', function (req, res) {
+    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+        if (err) {
+            console.log('Error on sign up', err);
+            res.redirect('/');
+        } else {
+            // we can change the strategy 'local' to 'twitter' or something else
+            passport.authenticate('local')(req, res, function () {
+                res.redirect('home');
+            });
+        }
+    });
+});
 
 app.listen(port, () => {
     console.log(`Running at https://localhost:${port}`);
@@ -169,10 +202,6 @@ app.listen(port, () => {
 // =============================================================================================
 // FUNCTIONS
 // =============================================================================================
-function authenticated(user, password) {
-    return user === "user" && password === "pass";
-}
-
 function sanitize_text(req) {
     req.body.file.shared = req.body.file.shared ? true : false;
 

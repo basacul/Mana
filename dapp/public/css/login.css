@@ -46,14 +46,17 @@ input:focus{
   
 }
 
+button {
+  border: none;
+}
 
-.login_btn{
+.login_btn, button{
   color: #6c757d;
   background-color:  rgb(44, 44, 43);
   width: 100px;
 }
 
-.login_btn:hover{
+.login_btn:hover, button:hover{
   color: black;
   background-color: rgb(104, 104, 103);
 }
@@ -69,4 +72,14 @@ input:focus{
 a {
   color: darkblue;
   font-size: 18px;
+}
+
+
+.modal-content {
+  color: #6c757d;
+  background-color: rgba(22, 22, 22, 0.9);
+}
+
+.modal form {
+  width: 100%;
 }

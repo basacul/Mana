@@ -59,6 +59,7 @@ function getAccount() {
         } else {
             accounts = result;
             if (result.length === 0 && nodeType === "metamask") {
+                // TODO: include a boolean such that interact button is disabled
                 setData(p, "PLEASE LOG IN WITH METAMASK", true);
             } else {
                 account = accounts[0];

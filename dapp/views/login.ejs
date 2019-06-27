@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/bootstrap-4.3.1-dist/bootstrap.css">
     <link rel="stylesheet" media="screen" href="/css/login.css">
+    <script type="text/javascript" src="/js/login.js"></script>
 </head>
 
 <body>
+
     <div class="container">
         <div class="d-flex justify-content-center h-100">
             <div class="card">
@@ -24,7 +26,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><span class="glyphicon glyphicon-user"></span></span>
                             </div>
-                            <input type="text" name="user" class="form-control" placeholder="username">
+                            <input type="text" name="username" class="form-control" placeholder="username">
 
                         </div>
                         <div class="input-group form-group">
@@ -41,16 +43,64 @@
                     </form>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <div>
-                        <a href="#">Sign Up</a>
+                    <div id="upload">
+                        <label for="f-upload" class="custom-file-upload">
+                            <button type="button" data-toggle="modal" data-target="#myModal">
+                                Sign Up
+                            </button>
+                        </label>
                     </div>
-                    <div>
-                        <a href="#">Forgot your password?</a>
+                    <div id="forgot">
+                        <label>
+                            <button type="button">
+                                Password?
+                            </button>
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- The Modal -->
+    <div class="modal bg-dark" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/register" method="POST">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Sign Up Form</h4>
+
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="f-username">Username</label>
+                            <input type="text" class="form-control" name="username" id="f-username"
+                                placeholder="enter username...">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="f-password">Password</label>
+                            <input type="password" class="form-control" name="password" id="f-password"
+                                placeholder="enter password...">
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Sign Up</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap-4.3.1-dist/bootstrap.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 {
   "name": "dapp",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Check ReadMe.md file",
   "main": "app.js",
   "scripts": {
@@ -13,7 +13,11 @@
     "ejs": "^2.6.1",
     "express": "^4.17.0",
     "express-sanitizer": "^1.0.5",
+    "express-session": "^1.16.2",
     "method-override": "^3.0.0",
-    "mongoose": "^5.5.11"
+    "mongoose": "^5.5.11",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^5.0.1"
   }
 }
