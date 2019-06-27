@@ -54,53 +54,46 @@ seedDatabase();
 // ROUTES
 // =============================================================================================
 app.get("/", function (req, res) {
-    let attention = "";
-    if (req && req.params.attention) {
-        attention = req.params.attention;
+    if (req.isAuthenticated()) {
+        res.redirect("home");
+    } else {
+        res.render('login');
     }
-    res.render("login");
 });
 
-
-
-app.get("/home", function (req, res) {
+app.get("/home", isLoggedIn, function (req, res) {
     res.render("home");
 });
 
-app.get("/e-record", function (req, res) {
+app.get("/e-record", isLoggedIn, function (req, res) {
     res.render("e-record");
 });
 
-app.get("/tools", function (req, res) {
+app.get("/tools", isLoggedIn, function (req, res) {
     res.render("tools");
 });
 
-app.get("/documentation", function (req, res) {
+app.get("/documentation", isLoggedIn, function (req, res) {
     res.render("documentation");
 });
 
-app.get("/account", function (req, res) {
+app.get("/account", isLoggedIn, function (req, res) {
     res.render("account");
 });
 
-app.get("/messages", function (req, res) {
+app.get("/messages", isLoggedIn, function (req, res) {
     res.render("messages");
 });
 
-app.get("/contact", function (req, res) {
+app.get("/contact", isLoggedIn, function (req, res) {
     res.render("contact");
 });
 
-app.get("/faq", function (req, res) {
+app.get("/faq", isLoggedIn, function (req, res) {
     res.render("faq");
 });
 
-app.get("/checkout", function (req, res) {
-    res.render("login");
-});
-
-
-app.get("/private", function (req, res) {
+app.get("/private", isLoggedIn, function (req, res) {
     File.find({}, function (error, files) {
         if (error) {
             console.log(error);
@@ -113,7 +106,7 @@ app.get("/private", function (req, res) {
 
 // TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
 // CREATE ROUTE
-app.post("/private", function (req, res) {
+app.post("/private", isLoggedIn, function (req, res) {
     sanitize_text(req);
     File.create(req.body.file, function (err, newFile) {
         if (err) {
@@ -128,7 +121,7 @@ app.post("/private", function (req, res) {
 
 // EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
 // SHOW and EDIT ROUTE with button and modal form
-app.get("/private/:id", function (req, res) {
+app.get("/private/:id", isLoggedIn, function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {
         if (err) {
             console.log(err);
@@ -141,7 +134,7 @@ app.get("/private/:id", function (req, res) {
 
 // UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
 // UPDATE ROUTE
-app.put("/private/:id", function (req, res) {
+app.put("/private/:id", isLoggedIn, function (req, res) {
 
     sanitize_text(req);
 
@@ -156,7 +149,7 @@ app.put("/private/:id", function (req, res) {
 });
 
 // DELETE ROUTE
-app.delete("/private/:id", function (req, res) {
+app.delete("/private/:id", isLoggedIn, function (req, res) {
     File.findByIdAndRemove(req.params.id, function (err) {
         if (err) {
             console.log("ERROR WHEN DELETING FILE ", err);
@@ -195,6 +188,11 @@ app.post('/register', function (req, res) {
     });
 });
 
+app.get('/logout', isLoggedIn, function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
 app.listen(port, () => {
     console.log(`Running at https://localhost:${port}`);
 });
@@ -208,4 +206,15 @@ function sanitize_text(req) {
     // sanitize file.fileName and file.note 
     req.body.file.fileName = req.sanitize(req.body.file.fileName);
     req.body.file.note = req.sanitize(req.body.file.note);
+}
+
+/**
+ * Our middleware for authoritisation and authentication
+ */
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect('/');
+    }
 }
