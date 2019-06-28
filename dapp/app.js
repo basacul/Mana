@@ -26,7 +26,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 app.use(methodOverride("_method"));
 app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -35,11 +35,21 @@ app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ 
  * Deserialize: for reading the session, taking the data from the session and 
  * decoding it
  * Serialize: encodes the data. 
- * This is possible thanks to passport-local-mongoose
+ * This is possible thanks to passport-local-mongoose. Do not forget the parenthesis
+ * at the end of the method authenticate, serializeUser and deserializeUser. Otherwise
+ * you won't see any errors nor does the application work as intended, thus causing
+ * a lot of headaches.
  */
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// middleware that allows to inject currentUser to each site, especially
+// in the header and footer
+app.use(function (req, res, next) {
+    res.locals.currentUser = req.user;
+    next();
+});
 
 // =============================================================================================
 // DB STUFF : MongoDB needs to be running https://mongoosejs.com/
@@ -119,7 +129,7 @@ app.post("/private", isLoggedIn, function (req, res) {
     });
 });
 
-// EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
+// EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ********************************* !!!
 // SHOW and EDIT ROUTE with button and modal form
 app.get("/private/:id", isLoggedIn, function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {
@@ -132,7 +142,7 @@ app.get("/private/:id", isLoggedIn, function (req, res) {
     });
 });
 
-// UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ***************************************** !!!
+// UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ******************************* !!!
 // UPDATE ROUTE
 app.put("/private/:id", isLoggedIn, function (req, res) {
 
@@ -182,7 +192,7 @@ app.post('/register', function (req, res) {
         } else {
             // we can change the strategy 'local' to 'twitter' or something else
             passport.authenticate('local')(req, res, function () {
-                res.redirect('home');
+                res.redirect('/home');
             });
         }
     });
@@ -190,6 +200,12 @@ app.post('/register', function (req, res) {
 
 app.get('/logout', isLoggedIn, function (req, res) {
     req.logout();
+    res.redirect('/');
+});
+
+
+// DEFAULT ROUTE IF NOTHING ELSE MATCHES
+app.get('*', function (req, res) {
     res.redirect('/');
 });
 
