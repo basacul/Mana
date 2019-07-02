@@ -21,7 +21,7 @@ The web application uses ejs to display the following sites that are accessible 
 * __documentation.ejs__: *Help/Documentation* Site with documentation for the web application
 * __login.ejs__: *Checkout* Logs the user out and sends the user back to the login page
 
-This web application currently in version 3.2.0 is under construction and will be live on July 31 2019 at [Openhealth.care](http://openhealth.care/). In MetaMask choose Rinkeby as network where the smart contracts are deployed and tested.
+This web application currently in version 3.3.0 is under construction and will be live on July 31 2019 at [Openhealth.care](http://openhealth.care/). In MetaMask choose Rinkeby as network where the smart contracts are deployed and tested.
 
 ## How to use
 

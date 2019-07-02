@@ -8,10 +8,8 @@ const express = require('express'),
     passport = require('passport'),
     bodyParser = require('body-parser'),
     LocalStrategy = require('passport-local'),
-    passportLocalMongoose = require('passport-local-mongoose'),
     methodOverride = require('method-override'),
     expressSanitizer = require('express-sanitizer'),
-    File = require('./models/file'),
     User = require('./models/user'),
     seedDatabase = require('./models/seed'),
     port = 3000;
@@ -23,6 +21,7 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,6 +50,8 @@ app.use(function (req, res, next) {
     next();
 });
 
+
+
 // =============================================================================================
 // DB STUFF : MongoDB needs to be running https://mongoosejs.com/
 // =============================================================================================
@@ -63,146 +64,27 @@ seedDatabase();
 // =============================================================================================
 // ROUTES
 // =============================================================================================
-app.get("/", function (req, res) {
-    if (req.isAuthenticated()) {
-        res.redirect("home");
-    } else {
-        res.render('login');
-    }
-});
+const authRoutes = require('./routes/auth'),
+    privateRoutes = require('./routes/private'),
+    homeRoutes = require('./routes/home'),
+    eRecordRoutes = require('./routes/e-record'),
+    toolsRoutes = require('./routes/tools'),
+    documentationRoutes = require('./routes/documentation'),
+    accountRoutes = require('./routes/account'),
+    messageRoutes = require('./routes/messages'),
+    contactRoutes = require('./routes/contact'),
+    faqRoutes = require('./routes/faq');
 
-app.get("/home", isLoggedIn, function (req, res) {
-    res.render("home");
-});
-
-app.get("/e-record", isLoggedIn, function (req, res) {
-    res.render("e-record");
-});
-
-app.get("/tools", isLoggedIn, function (req, res) {
-    res.render("tools");
-});
-
-app.get("/documentation", isLoggedIn, function (req, res) {
-    res.render("documentation");
-});
-
-app.get("/account", isLoggedIn, function (req, res) {
-    res.render("account");
-});
-
-app.get("/messages", isLoggedIn, function (req, res) {
-    res.render("messages");
-});
-
-app.get("/contact", isLoggedIn, function (req, res) {
-    res.render("contact");
-});
-
-app.get("/faq", isLoggedIn, function (req, res) {
-    res.render("faq");
-});
-
-app.get("/private", isLoggedIn, function (req, res) {
-    File.find({}, function (error, files) {
-        if (error) {
-            console.log(error);
-        } else {
-            res.render("private", { files: files });
-        }
-    });
-
-});
-
-// TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
-// CREATE ROUTE
-app.post("/private", isLoggedIn, function (req, res) {
-    sanitize_text(req);
-    File.create(req.body.file, function (err, newFile) {
-        if (err) {
-            console.log(err);
-            res.render("/private");
-        } else {
-            console.log("New File created");
-            res.redirect("/private");
-        }
-    });
-});
-
-// EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ********************************* !!!
-// SHOW and EDIT ROUTE with button and modal form
-app.get("/private/:id", isLoggedIn, function (req, res) {
-    File.findById(req.params.id, function (err, foundFile) {
-        if (err) {
-            console.log(err);
-            res.redirect("/private");
-        } else {
-            res.render("private_show", { file: foundFile });
-        }
-    });
-});
-
-// UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ******************************* !!!
-// UPDATE ROUTE
-app.put("/private/:id", isLoggedIn, function (req, res) {
-
-    sanitize_text(req);
-
-    File.findByIdAndUpdate(req.params.id, req.body.file, function (err, updatedFile) {
-        if (err) {
-            console.log("Updating caused an error", err);
-            res.redirect("/private");
-        } else {
-            res.redirect(`/private/${req.params.id}`)
-        }
-    });
-});
-
-// DELETE ROUTE
-app.delete("/private/:id", isLoggedIn, function (req, res) {
-    File.findByIdAndRemove(req.params.id, function (err) {
-        if (err) {
-            console.log("ERROR WHEN DELETING FILE ", err);
-            res.redirect("/private");
-        } else {
-            res.redirect("/private");
-        }
-    });
-});
-
-// =============================================================================================
-// AUTHENTICATION ROUTES
-// =============================================================================================
-
-app.post("/login", passport.authenticate('local', {
-    successRedirect: '/home',
-    failureRedirect: '/'
-}), function (req, res) {
-    // do nothing
-});
-
-/**
- * Handles user sign up
- */
-app.post('/register', function (req, res) {
-    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
-        if (err) {
-            console.log('Error on sign up', err);
-            res.redirect('/');
-        } else {
-            // we can change the strategy 'local' to 'twitter' or something else
-            passport.authenticate('local')(req, res, function () {
-                res.redirect('/home');
-            });
-        }
-    });
-});
-
-app.get('/logout', isLoggedIn, function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
+app.use('/', authRoutes);
+app.use('/private', privateRoutes);
+app.use('/home', homeRoutes);
+app.use('/e-record', eRecordRoutes);
+app.use('/tools', toolsRoutes);
+app.use('/documentation', documentationRoutes);
+app.use('/account', accountRoutes);
+app.use('/messages', messageRoutes);
+app.use('/contact', contactRoutes);
+app.use('/faq', faqRoutes);
 
 // DEFAULT ROUTE IF NOTHING ELSE MATCHES
 app.get('*', function (req, res) {
