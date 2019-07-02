@@ -11,7 +11,7 @@ const express = require('express'),
     methodOverride = require('method-override'),
     expressSanitizer = require('express-sanitizer'),
     User = require('./models/user'),
-    seedDatabase = require('./models/seed'),
+    // seedDatabase = require('./models/seed'), // commented otherwise it still seeds the db
     port = 3000;
 
 app.set("view engine", "ejs");
@@ -58,8 +58,7 @@ app.use(function (req, res, next) {
 
 mongoose.connect("mongodb://localhost:27017/mana", { useNewUrlParser: true, useFindAndModify: false });
 
-// resets the database with seed data
-seedDatabase();
+// seedDatabase(); // resets the database with seed data
 
 // =============================================================================================
 // ROUTES
