@@ -4,7 +4,12 @@
 // =============================================================================================
 const express = require('express'),
     app = express(),
+    path = require('path'), // ADDED for uploading the files, a core nodejs module 
+    crypto = require('crypto'), // ADDED to generata the files name, a core nodejs module
     mongoose = require('mongoose'),
+    multer = require('multer'), // ADDED to handle encytpe=multipart/data as bodyparser is not able to handle it
+    GridFsStorage = require('multer-gridfs-storage'), // to work gridfs with multer
+    Grid = require('gridfs-stream'), // ADDED to store files above 16 MB
     passport = require('passport'),
     bodyParser = require('body-parser'),
     LocalStrategy = require('passport-local'),
@@ -25,6 +30,7 @@ app.use(require('express-session')({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // for uploading files???
 app.use(express.static(`${__dirname}/public`));
 app.use(methodOverride("_method"));
 app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,8 +49,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// middleware that allows to inject currentUser to each site, especially
-// in the header and footer
+// middleware that allows to inject currentUser to each template, especially
+// in the header and footer. Inside js files, I simply use req.user
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
     next();
@@ -60,9 +66,96 @@ mongoose.connect("mongodb://localhost:27017/mana", { useNewUrlParser: true, useF
 
 // seedDatabase(); // resets the database with seed data
 
+// create mongo connection
+const conn = mongoose.createConnection("mongodb://localhost:27017/mana", { useNewUrlParser: true, useFindAndModify: false });
+
+// init gfs
+let gfs;
+
+conn.once('open', () => {
+    // initialized stream
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('uploads');
+});
+
+// create storage engine, check documentation on multer-gridfs-storage
+const storage = new GridFsStorage({
+    url: 'mongodb://localhost:27017/mana',
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'uploads'
+                };
+                resolve(fileInfo);
+            })
+        });
+    }
+});
+const upload = multer({ storage });
 // =============================================================================================
 // ROUTES
 // =============================================================================================
+
+/**
+ * @route GET /upload
+ * @description loads form
+ */
+app.get('/upload', (req, res) => {
+    res.render('upload');
+});
+
+/**
+ * @route POST /upload
+ * @description uploads file to db
+ */
+app.post('/upload', upload.single('file'), (req, res) => {
+    // res.json({ file: req.file });
+    res.redirect('/upload');
+});
+
+/**
+ * @route GET /files
+ * @description display all files in JSON
+ */
+app.get('/files', (req, res) => {
+    gfs.files.find().toArray((err, files) => {
+        // check if files exist
+        if (!files || files.length === 0) {
+            return res.status(404).json({
+                err: 'No files exist'
+            });
+        }
+
+        // files exist
+        return res.json(files);
+    });
+});
+
+
+/**
+ * @route GET /files/:filename
+ * @description display a specific file in JSON
+ */
+app.get('/files/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        // check if file exists
+        if (!file || file.length === 0) {
+            return res.status(404).json({
+                err: '"No such file exists'
+            });
+        }
+
+        // file exists
+        return res.json(file);
+    });
+});
+
 const authRoutes = require('./routes/auth'),
     privateRoutes = require('./routes/private'),
     homeRoutes = require('./routes/home'),

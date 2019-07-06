@@ -26,7 +26,9 @@ router.get("/", isLoggedIn, function (req, res) {
 // TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
 // CREATE ROUTE
 router.post("/", isLoggedIn, function (req, res) {
-    sanitize_text(req);
+    // sanitize_text(req);
+    console.log('Retrieved file');
+    console.log(req.body.file);
     File.create(req.body.file, function (err, newFile) {
         if (err) {
             console.log(err);
@@ -109,7 +111,12 @@ router.delete("/:id", isLoggedIn, function (req, res) {
 });
 
 function sanitize_text(req) {
-    req.body.file.shared = req.body.file.shared ? true : false;
+    if (req.body.file.shared) {
+        req.body.file.shared = true;
+    } else {
+        req.body.file.shared = false;
+    }
+
 
     // sanitize file.fileName and file.note 
     req.body.file.fileName = req.sanitize(req.body.file.fileName);
