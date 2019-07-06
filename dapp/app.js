@@ -9,7 +9,7 @@ const express = require('express'),
     mongoose = require('mongoose'),
     multer = require('multer'), // ADDED to handle encytpe=multipart/data as bodyparser is not able to handle it
     GridFsStorage = require('multer-gridfs-storage'), // to work gridfs with multer
-    Grid = require('gridfs-stream'), // ADDED to store files above 16 MB
+    Grid = require('gridfs-stream'), // ADDED to display images of uploaded files
     passport = require('passport'),
     bodyParser = require('body-parser'),
     LocalStrategy = require('passport-local'),
@@ -107,7 +107,21 @@ const upload = multer({ storage });
  * @description loads form
  */
 app.get('/upload', (req, res) => {
-    res.render('upload');
+    gfs.files.find().toArray((err, files) => {
+        // check if files exist
+        if (!files || files.length === 0) {
+            res.render('upload', { files: false });
+        } else {
+            files.map(file => {
+                if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+                    file.isImage = true;
+                } else {
+                    file.isImage = false;
+                }
+            });
+            res.render('upload', { files: files });
+        }
+    });
 });
 
 /**
@@ -153,6 +167,50 @@ app.get('/files/:filename', (req, res) => {
 
         // file exists
         return res.json(file);
+    });
+});
+
+
+
+/**
+ * @route GET /image/:filename
+ * @description display image
+ */
+app.get('/image/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        // check if file exists
+        if (!file || file.length === 0) {
+            return res.status(404).json({
+                err: '"No such file exists'
+            });
+        }
+
+        // check if it is an image
+        if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+            // read output to browser
+            const readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+        } else {
+            res.status(404).json({
+                err: 'Not an image'
+            });
+        }
+    });
+});
+
+
+/**
+ * @route DELETE /files/:id
+ * @description delete file
+ */
+app.delete('/files/:id', (req, res) => {
+    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
+        if (err) {
+            return res.status(404).json({
+                err: err
+            });
+        }
+        res.redirect('/upload');
     });
 });
 
