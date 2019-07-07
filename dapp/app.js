@@ -67,7 +67,7 @@ mongoose.connect("mongodb://localhost:27017/mana", { useNewUrlParser: true, useF
 // seedDatabase(); // resets the database with seed data
 
 // create mongo connection
-const conn = mongoose.createConnection("mongodb://localhost:27017/mana", { useNewUrlParser: true, useFindAndModify: false });
+const conn = mongoose.createConnection("mongodb://localhost:27017/mana", { useNewUrlParser: true });
 
 // init gfs
 let gfs;
