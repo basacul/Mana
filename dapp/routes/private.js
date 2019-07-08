@@ -26,35 +26,51 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
 
 // TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
 // CREATE ROUTE
-router.post("/", middleware.isLoggedIn, function (req, res) {
+router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req, res, next) => {
     sanitize_text(req);
+    console.log('======================================');
+    console.log(req.file);
+    console.log('======================================');
+    console.log(req.body);
+    console.log('======================================');
 
-    File.create(req.body.file, function (err, newFile) {
-        if (err) {
-            console.log(err);
-            res.render("/private");
-        } else {
-            newFile.owner.id = req.user._id;
-            newFile.owner.username = req.user.username;
-            newFile.save();
+    const file = req.file;
 
-            console.log("New File created");
-            console.log(req.user);
-            User.findById(req.user._id, function (err, user) {
-                if (err) {
-                    console.log('FATAL ERROR: NEW FILE BUT NO USER!!!');
-                    console.log(err);
-                    res.redirect('/');
-                } else {
-                    console.log('User found');
-                    user.files.push(newFile);
-                    user.save();
-                    console.log(user);
-                    res.redirect("/private");
-                }
-            });
-        }
-    });
+    if (!file) {
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+        return next(error);
+    } else {
+        File.create(req.body.file, function (err, newFile) {
+            if (err) {
+                console.log(err);
+                res.render("/private");
+            } else {
+                newFile.owner.id = req.user._id;
+                newFile.owner.username = req.user.username;
+                newFile.path = `uploads/${req.file}`
+                newFile.save();
+
+                console.log("New File created");
+                console.log(req.user);
+                User.findById(req.user._id, function (err, user) {
+                    if (err) {
+                        console.log('FATAL ERROR: NEW FILE BUT NO USER!!!');
+                        console.log(err);
+                        res.redirect('/');
+                    } else {
+                        console.log('User found');
+                        user.files.push(newFile);
+                        user.save();
+                        console.log(user);
+                        res.redirect("/private");
+                    }
+                });
+            }
+        });
+    }
+
+
 });
 
 // EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ********************************* !!!
@@ -118,7 +134,7 @@ router.delete("/:id", middleware.isLoggedIn, function (req, res) {
 // as bodyParser cannot read from multipart/form-data
 function sanitize_text(req) {
     req.body.file.shared = req.body.file.shared ? true : false;
-
+    console.log(req.body.file.shared);
     // sanitize file.fileName and file.note 
     req.body.file.fileName = req.sanitize(req.body.file.fileName);
     req.body.file.note = req.sanitize(req.body.file.note);

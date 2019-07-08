@@ -38,7 +38,7 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/private" method="POST">
+            <form action="/private" method="POST" enctype="multipart/form-data">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Upload New File</h4>
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="form-group custom-file">
-                        <input class="custom-file-input" type="file" name="file[file]" id="f-file">
+                        <input class="custom-file-input" type="file" name="upload" id="f-file">
                         <label class="custom-file-label" for=f-file>Choose File</label>
                     </div>
                     <div class="form-group">

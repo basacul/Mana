@@ -2,7 +2,14 @@ const mongoose = require('mongoose');
 
 const fileSchema = new mongoose.Schema({
     fileName: String,
-    file: String, // need to be replaced to upload real files
+    owner: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        username: String
+    },
+    path: String, // replaced with path in folder structure
     note: String,
     shared: { type: Boolean, default: false },
     date: { type: Date, default: Date.now }

@@ -1,3 +1,15 @@
+const path = require('path');
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        // the folder needs to be created beforehand!
+        cb(null, 'public/uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
 const middleware = {};
 
 /**
@@ -10,5 +22,8 @@ middleware.isLoggedIn = function (req, res, next) {
         res.redirect('/');
     }
 };
+
+middleware.upload = upload;
+
 
 module.exports = middleware;
