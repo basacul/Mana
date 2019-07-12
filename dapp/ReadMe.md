@@ -7,6 +7,29 @@ The goal of Mana is to provide a secure distributed data exchange grid for the h
 
 This application uses mongodb, express, nodejs and ethereum. MetaMask - for now - is needed as a wallet to use the features given by the ethereum network. The frontend uses html5, css3 with bootstrap v4.3.1, and finally javascript using jQuery for bootstrap, web3.js injected by MetaMask and vanilla javascript - a fancy name for plain javascript without any additional libraries.
 
+## Task Schedule
+The bachelor thesis starts end of July or at August 1st and takes twelve weeks to complete. The tasks are scheduled along these twelve weeks.
+
+
+| Task           | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 |
+| -------------- | ------ | ------ | ------ | ------ | ------ | ------ |
+| Research       | YES    | YES    | YES    | YES    | no     | no     |
+| Analysis       | no     | YES    | YES    | YES    | YES    | YES    |
+| Design Concept | no     | no     | YES    | YES    | YES    | YES    |
+| Implementation | no     | no     | no     | YES    | YES    | YES    |
+| Evaluation     | no     | no     | no     | no     | YES    | YES    |
+| Writing        | YES    | YES    | YES    | YES    | YES    | YES    |
+
+
+| Task           | Week 7 | Week 8 | Week 9 | Week 10 | Week 11 | Week 12 |
+| -------------- | ------ | ------ | ------ | ------- | ------- | ------- |
+| Research       | no     | no     | no     | no      | no      | no      |
+| Analysis       | no     | no     | no     | no      | no      | no      |
+| Design Concept | YES    | YES    | no     | no      | no      | no      |
+| Implementation | YES    | YES    | YES    | YES     | YES     | no      |
+| Evaluation     | YES    | no     | YES    | YES     | YES     | no      |
+| Writing        | YES    | YES    | YES    | YES     | YES     | YES     |
+
 ## Structure
 The web application uses ejs to display the following sites that are accessible through the navigation bar at the top starting with the logo from left to right:
 
