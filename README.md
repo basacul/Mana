@@ -9,3 +9,27 @@ The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data
 
 
 The name for this project will be Mana coming from the Polynesian belief, that Mana is an impersonal supernatural power which can be transmitted or inherited.
+
+
+## Task Schedule
+The bachelor thesis starts end of July or at August 1st and takes twelve weeks to complete. The tasks are scheduled along these twelve weeks.
+
+
+| Task           | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 |
+| -------------- | ------ | ------ | ------ | ------ | ------ | ------ |
+| Research       | YES    | YES    | YES    | YES    | no     | no     |
+| Analysis       | no     | YES    | YES    | YES    | YES    | YES    |
+| Design Concept | no     | no     | YES    | YES    | YES    | YES    |
+| Implementation | no     | no     | no     | YES    | YES    | YES    |
+| Evaluation     | no     | no     | no     | no     | YES    | YES    |
+| Writing        | YES    | YES    | YES    | YES    | YES    | YES    |
+
+
+| Task           | Week 7 | Week 8 | Week 9 | Week 10 | Week 11 | Week 12 |
+| -------------- | ------ | ------ | ------ | ------- | ------- | ------- |
+| Research       | no     | no     | no     | no      | no      | no      |
+| Analysis       | no     | no     | no     | no      | no      | no      |
+| Design Concept | YES    | YES    | no     | no      | no      | no      |
+| Implementation | YES    | YES    | YES    | YES     | YES     | no      |
+| Evaluation     | YES    | no     | YES    | YES     | YES     | no      |
+| Writing        | YES    | YES    | YES    | YES     | YES     | YES     |
