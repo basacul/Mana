@@ -4,6 +4,8 @@ const File = require('../models/file');
 const User = require('../models/user');
 const middleware = require('../middleware');
 
+const fs = require('fs');
+const dir = 'encrypted/users';
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
 
@@ -48,7 +50,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
             } else {
                 newFile.owner.id = req.user._id;
                 newFile.owner.username = req.user.username;
-                newFile.path = `uploads/${req.file}`
+                newFile.path = `${req.user.username}/${req.file.originalname}`;
                 newFile.save();
 
                 console.log("New File created");
@@ -120,11 +122,18 @@ router.delete("/:id", middleware.isLoggedIn, function (req, res) {
         console.log(user.files);
     })
     // remove file from collection files
-    File.findByIdAndRemove(req.params.id, function (err) {
+    File.findByIdAndRemove(req.params.id, function (err, file) {
         if (err) {
             console.log("ERROR WHEN DELETING FILE ", err);
             res.redirect("/private");
         } else {
+            if (fs.existsSync(`${dir}/${file.path}`)) {
+                fs.unlink(`${dir}/${file.path}`, (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                });
+            }
             res.redirect("/private");
         }
     });

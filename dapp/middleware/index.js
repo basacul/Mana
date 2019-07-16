@@ -1,9 +1,12 @@
-const path = require('path');
+
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // the folder needs to be created beforehand!
-        cb(null, 'public/uploads')
+        // the folder needs to be created beforehand which
+        // is handled by routes/auth.js
+
+        // TODO: fileName duplication, how to handle it
+        cb(null, `encrypted/users/${req.user.username}`);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
