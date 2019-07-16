@@ -38,29 +38,28 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/private" method="POST">
+            <form action="/private" method="POST" enctype="multipart/form-data">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Upload New File</h4>
-
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
 
+
                     <div class="form-group">
                         <label for="f-filename">File Name</label>
                         <input type="text" class="form-control" name="file[fileName]" id="f-filename"
                             placeholder="Enter file name">
+                    </div>
 
+                    <div class="form-group custom-file">
+                        <input class="custom-file-input" type="file" name="upload" id="f-file">
+                        <label class="custom-file-label" for=f-file>Choose File</label>
                     </div>
                     <div class="form-group">
-                        <label for="f-file">File</label>
-                        <input type="text" class="form-control" name="file[file]" id="f-file"
-                            placeholder="replace with type FILE">
-                    </div>
-                    <div class="form-group">
-                        <label for="f-note">File</label>
+                        <label for="f-note">Notes</label>
                         <textarea class="form-control" name="file[note]" id="f-note" rows="3"></textarea>
                     </div>
                     <div class="form-check">
@@ -112,4 +111,17 @@
         <% } %>
     </div>
 </article>
+
 <% include partials/footer %>
+
+<!-- TODO: PUT THIS CODE INTO A SEPERATE FILE
+    Needed to display the file name which is intended to be uploaded 
+    and replace jQuery code with vanilla js-->
+<script>
+    $('input[type="file"]').on('change', function () {
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    })
+</script>
