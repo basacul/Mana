@@ -15,9 +15,9 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
             res.redirect('/');
         } else {
 
-            console.log(`Files retrieved from user ${req.user.username}`);
-            console.log(data);
-            console.log(`Length of files: ${data.files.length}`)
+            // console.log(`Files retrieved from user ${req.user.username}`);
+            // console.log(data);
+            // console.log(`Length of files: ${data.files.length}`)
             res.render("private", { files: data.files });
         }
     });
@@ -30,11 +30,11 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
 // CREATE ROUTE
 router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req, res, next) => {
     sanitize_text(req);
-    console.log('======================================');
-    console.log(req.file);
-    console.log('======================================');
-    console.log(req.body);
-    console.log('======================================');
+    // console.log('======================================');
+    // console.log(req.file);
+    // console.log('======================================');
+    // console.log(req.body);
+    // console.log('======================================');
 
     const file = req.file;
 
@@ -53,18 +53,18 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
                 newFile.path = `${req.user.username}/${req.file.originalname}`;
                 newFile.save();
 
-                console.log("New File created");
-                console.log(req.user);
+                // console.log("New File created");
+                // console.log(req.user);
                 User.findById(req.user._id, function (err, user) {
                     if (err) {
                         console.log('FATAL ERROR: NEW FILE BUT NO USER!!!');
                         console.log(err);
                         res.redirect('/');
                     } else {
-                        console.log('User found');
+                        // console.log('User found');
                         user.files.push(newFile);
                         user.save();
-                        console.log(user);
+                        // console.log(user);
                         res.redirect("/private");
                     }
                 });
@@ -83,6 +83,7 @@ router.get("/:id", middleware.isLoggedIn, function (req, res) {
             console.log(err);
             res.redirect("/private");
         } else {
+            // TODO: Check that the file belongs to the current 
             res.render("private_show", { file: foundFile });
         }
     });
@@ -142,8 +143,8 @@ router.delete("/:id", middleware.isLoggedIn, function (req, res) {
 // TODO: req.body.file is empty, check for solutions
 // as bodyParser cannot read from multipart/form-data
 function sanitize_text(req) {
-    req.body.file.shared = req.body.file.shared ? true : false;
-    console.log(req.body.file.shared);
+    req.body.file.accessible = req.body.file.accessible ? true : false;
+    console.log(req.body.file.accessible);
     // sanitize file.fileName and file.note 
     req.body.file.fileName = req.sanitize(req.body.file.fileName);
     req.body.file.note = req.sanitize(req.body.file.note);

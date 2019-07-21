@@ -11,7 +11,7 @@ const fileSchema = new mongoose.Schema({
     },
     path: String, // replaced with path in folder structure
     note: String,
-    shared: { type: Boolean, default: false },
+    accessible: { type: Boolean, default: false },
     date: { type: Date, default: Date.now }
 });
 
