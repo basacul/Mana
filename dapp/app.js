@@ -5,6 +5,7 @@
 const express = require('express'),
     app = express(),
     mongoose = require('mongoose'),
+    flash = require('connect-flash'),
     passport = require('passport'),
     bodyParser = require('body-parser'),
     LocalStrategy = require('passport-local'),
@@ -22,12 +23,14 @@ app.use(require('express-session')({
     saveUninitialized: false
 }));
 
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(methodOverride("_method"));
 app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ extended: true }));
+
 
 /**
  * THese two methods are really important : 
