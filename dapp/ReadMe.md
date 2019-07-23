@@ -5,7 +5,7 @@ In addition, Mana allows users to store sensitive data outside of the ethereum n
 
 The goal of Mana is to provide a secure distributed data exchange grid for the healthcare sector by minimizing the investment in new IT infrastructure and providing a tool to accelerate the digital adoption in the healthcare system. 
 
-This application uses mongodb, express, nodejs and ethereum. MetaMask - for now - is needed as a wallet to use the features given by the ethereum network. The frontend uses html5, css3 with bootstrap v4.3.1, and finally javascript using jQuery for bootstrap, web3.js injected by MetaMask and vanilla javascript - a fancy name for plain javascript without any additional libraries.
+This application uses mongodb, express, nodejs and ethereum. MetaMask - for now - is needed as a wallet to use the features given by the ethereum network. The frontend uses html5, css3 with bootstrap v4.1.0, and finally javascript using jQuery for bootstrap, web3.js injected by MetaMask and vanilla javascript - a fancy name for plain javascript without any additional libraries.
 
 ## Task Schedule
 The bachelor thesis starts end of July or at August 1st and takes twelve weeks to complete. The tasks are scheduled along these twelve weeks.
