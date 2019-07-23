@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router(); // now instead of app, use router
 const File = require('../models/file');
 const User = require('../models/user');
@@ -7,6 +8,8 @@ const middleware = require('../middleware');
 const fs = require('fs');
 const dir = 'encrypted/users';
 
+// TODO: Figure out, if I need to check if all these files are owned by the user
+// as only the files in its db structure are retrieved, I dont think it is necessary
 router.get("/", middleware.isLoggedIn, function (req, res) {
 
     User.findById(req.user._id).populate('files').exec(function (err, data) {
@@ -14,11 +17,19 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
             console.log('FATAL ERROR: POPULATE FILES GONE WRONG');
             res.redirect('/');
         } else {
-
+            User.find({}, function (error, users) {
+                if (error) {
+                    console.log(error);
+                    res.redirect('back');
+                } else {
+                    // TODO: the users array should only contain the usernames and further necessary identifiable infos
+                    res.render("private", { files: data.files, users: users });
+                }
+            });
             // console.log(`Files retrieved from user ${req.user.username}`);
             // console.log(data);
             // console.log(`Length of files: ${data.files.length}`)
-            res.render("private", { files: data.files });
+
         }
     });
 
@@ -46,15 +57,20 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
         File.create(req.body.file, function (err, newFile) {
             if (err) {
                 console.log(err);
-                res.render("/private");
+                res.render("private");
             } else {
                 newFile.owner.id = req.user._id;
                 newFile.owner.username = req.user.username;
                 newFile.path = `${req.user.username}/${req.file.originalname}`;
+                if (req.body.authorizedUser) {
+                    newFile.authorized = req.body.authorizedUser.map(item => {
+                        return mongoose.Types.ObjectId(item.split(':')[1].trim());
+                    });
+                }
+
                 newFile.save();
 
-                // console.log("New File created");
-                // console.log(req.user);
+
                 User.findById(req.user._id, function (err, user) {
                     if (err) {
                         console.log('FATAL ERROR: NEW FILE BUT NO USER!!!');
@@ -77,21 +93,40 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 
 // EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ********************************* !!!
 // SHOW and EDIT ROUTE with button and modal form
-router.get("/:id", middleware.isLoggedIn, function (req, res) {
+router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {
         if (err) {
             console.log(err);
             res.redirect("/private");
         } else {
-            // TODO: Check that the file belongs to the current 
-            res.render("private_show", { file: foundFile });
+            User.find({}, function (error, users) {
+                if (error) {
+                    console.log(error);
+                    res.redirect('back');
+                } else {
+                    // TODO: List of authorized users too
+                    res.render("private_show", { file: foundFile, users: users });
+                    // File.findById(req.user._id).populate('authorized').exec(function (err, authorizedUsers) {
+                    //     if (err) {
+                    //         console.log(err);
+                    //         res.redirect('back');
+                    //     } else {
+                    //         console.log(`Authorized users:`);
+                    //         console.log(authorizedUsers);
+                    //         res.render("private_show", { file: foundFile, authorizedUsers: foundFile.authorized, users: users });
+                    //     }
+                    // });
+
+                }
+            });
+
         }
     });
 });
 
 // UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ******************************* !!!
 // UPDATE ROUTE
-router.put("/:id", middleware.isLoggedIn, function (req, res) {
+router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
 
     sanitize_text(req);
 
@@ -100,6 +135,40 @@ router.put("/:id", middleware.isLoggedIn, function (req, res) {
             console.log("Updating caused an error", err);
             res.redirect("/private");
         } else {
+
+            // remove users from being authorized to access this file
+            if (req.body.removeAuthorizedUser) {
+                const toRemove = req.body.removeAuthorizedUser.map(id => mongoose.Types.ObjectId(id));
+                for (let i = 0; i < toRemove.length; i++) {
+                    console.log(`removing an authorized user ${toRemove[i]}`);
+                    updatedFile.authorized.pull({ _id: toRemove[i] });
+                }
+
+            } else {
+                console.log('No user to remove from authorized array.');
+            }
+
+            // add new users to be authorized to access this file
+            if (req.body.authorizedUser) {
+
+                // retrieve ObjectId from the chosen user
+                const authorizedUsers = req.body.authorizedUser.map(item => {
+                    return item.split(':')[1].trim();
+                });
+
+                console.log(`Value for authorized user is ${authorizedUsers}`)
+                authorizedUsers.forEach(toAdd => {
+                    if (!updatedFile.authorized.includes(toAdd)) {
+                        console.log('Authorized user not in the list');
+                        updatedFile.authorized.push(toAdd);
+                    }
+                });
+
+            }
+
+
+            updatedFile.save();
+
             res.redirect(`/private/${req.params.id}`)
         }
     });
@@ -107,7 +176,7 @@ router.put("/:id", middleware.isLoggedIn, function (req, res) {
 
 // TODO: UPDATE delete to modify user's files array
 // DELETE ROUTE
-router.delete("/:id", middleware.isLoggedIn, function (req, res) {
+router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
     // remove file from user's array named files
     User.updateOne({ _id: req.user._id },
         { $pullAll: { files: [req.params.id] } }, { safe: true }, function (err, obj) {

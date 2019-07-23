@@ -12,7 +12,13 @@ const fileSchema = new mongoose.Schema({
     path: String, // replaced with path in folder structure
     note: String,
     accessible: { type: Boolean, default: false },
-    date: { type: Date, default: Date.now }
+    date: { type: Date, default: Date.now },
+    authorized: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Mana'
+        }
+    ]
 });
 
 module.exports = mongoose.model("File", fileSchema);
