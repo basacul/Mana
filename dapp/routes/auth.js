@@ -16,31 +16,45 @@ router.get("/", function (req, res) {
     }
 });
 
+
 router.post("/login", passport.authenticate('local', {
     successRedirect: '/home',
-    failureRedirect: '/'
+    failureRedirect: '/',
+    failureFlash: true,
+    successFlash: `Welcome back!`
 }), function (req, res) {
     // do nothing
 });
 
+router.get('/signup', function (req, res) {
+    if (!req.isAuthenticated()) {
+        res.render('signup');
+    } else {
+        req.flash('error', 'Sign up only accessible if not logged in.');
+        res.redirect('/home');
+    }
+});
 /**
  * Handles user sign up
  */
-router.post('/register', function (req, res) {
+router.post('/signup', function (req, res) {
     User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
         if (err) {
             console.log('Error on sign up', err);
-            res.redirect('/');
+            req.flash('error', err.message);
+            res.redirect('back');
         } else {
 
             fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
                 if (err) {
+                    req.flash('error', err.message);
                     throw err;
                 }
             });
             // we can change the strategy 'local' to 'twitter' or something else
             passport.authenticate('local')(req, res, function () {
-                res.redirect('/home');
+                req.flash('success', 'Please check your email and follow the instructions.');
+                res.redirect('/');
             });
         }
     });
@@ -48,6 +62,7 @@ router.post('/register', function (req, res) {
 
 router.get('/logout', middleware.isLoggedIn, function (req, res) {
     req.logout();
+    req.flash('success', 'Successfully logged you out');
     res.redirect('/');
 });
 

@@ -1,85 +1,133 @@
 body {
-  background: url(../img/mana_logo_big.png)  no-repeat;
-  background-position-x: 80%;
-  background-position-y: 50px;
-
-  background-color: rgba(31,31,31, 0.99);
+  background-color: #000;
 }
 
-img {
-  width: 110px;
-  height: 110px;
+.card {
+  height: 50%;
+  width: 50rem;
+  margin: auto 5rem;
+  background-color: rgba(0,0,0,0.5);
 }
 
-/* ---- container and log in form ---- */
-/* https://bootsnipp.com/snippets/vl4R7 */
+.alert {
+  z-index: 2;
+}
 
-.container{
+#landing-header {
+  z-index: 1;
+  position: relative;
+  text-align: center;
+  padding-top: 15vh;
+}
+
+.slideshow { 
+  position: fixed;
+  width: 100%;
   height: 100%;
-  align-content: center;
-  margin-top: 10%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.card{
-  height: 400px;
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 400px;
-  background-color: rgba(0,0,0,0.2) !important;
-}
-.card-header h3{
-  color: white;
-
-}
-
-
-.input-group-prepend span{
-  width: 50px;
-  background-color: rgb(44, 44, 43);
-  color: black;
-  border:0 !important;
-}
-  
-input:focus{
-  outline: 0 0 0 0  !important;
-  box-shadow: 0 0 0 0 !important;
-  
+.slideshow li { 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  z-index: 0;
+  animation: imageAnimation 50s linear infinite; 
 }
 
-button {
-  border: none;
+.slideshow li:nth-child(1) { 
+  background-image: url('https://images.unsplash.com/photo-1471377375227-29eb574e942b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=1651&q=80') 
+}
+.slideshow li:nth-child(2) { 
+  background-image: url('https://images.unsplash.com/photo-1495985262958-d7b873c0f044?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80');
+  animation-delay: 10s; 
+}
+.slideshow li:nth-child(3) { 
+  background-image: url('https://images.unsplash.com/photo-1558419806-963fda54c8cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
+  animation-delay: 20s; 
+}
+.slideshow li:nth-child(4) { 
+  background-image: url('https://images.unsplash.com/39/lIZrwvbeRuuzqOoWJUEn_Photoaday_CSD%20(1%20of%201)-5.jpg?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80');
+  animation-delay: 30s; 
+}
+.slideshow li:nth-child(5) { 
+  background-image: url('https://images.unsplash.com/photo-1418225162054-0f773a996f9e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1058&q=80');
+  animation-delay: 40s; 
 }
 
-.login_btn, button{
-  color: #6c757d;
-  background-color:  rgb(44, 44, 43);
-  width: 100px;
+@keyframes imageAnimation { 
+  0% { 
+    opacity: 0; 
+    animation-timing-function: ease-in;
+  }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  20% {
+    opacity: 1
+  }
+  30% {
+    opacity: 0
+  }
 }
 
-.login_btn:hover, button:hover{
-  color: black;
-  background-color: rgb(104, 104, 103);
+/* Older browser support - .no-cssanimations class added by modernizr */
+.no-cssanimations .slideshow li {
+	opacity: 1;
 }
 
+.input-group-prepend span, 
+.btn_own_style, 
 .form-control {
   background-color: rgb(44, 44, 43);
 }
+
+a:focus,
+input:focus, 
+.btn_own_style:hover, 
 .form-control:focus {
-  color: black;
   background-color: rgb(104, 104, 103);
 }
 
-a {
-  color: darkblue;
-  font-size: 18px;
+a:focus,
+input:focus,
+.input-group-prepend span,
+.btn_own_style:hover,
+.form-control:focus {
+  color: black;
 }
 
+.input-group-prepend span{
+  width: 50px;
+  border:0;
+}
+  
+a:focus,
+input:focus{
+  box-shadow: 0 0 0 0 !important;
+}
 
-.modal-content {
+.btn_own_style{
   color: #6c757d;
-  background-color: rgba(22, 22, 22, 0.9);
+  width: 100px;
 }
 
-.modal form {
-  width: 100%;
-}
+
+
+
+
+
+
+
