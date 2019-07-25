@@ -19,14 +19,14 @@
             <span class="d-none d-lg-inline"><a href="/home"><img src="/img/mana_logo.png"
                         alt="Logo of the project Mana" id="logo"></a></span>
             <% if(error && error.length > 0){ %>
-            <div class="container  d-flex justify-content-center">
+            <div class="row overlay">
                 <div class="alert alert-secondary">
                     <%= error %>
                 </div>
             </div>
             <% } %>
             <% if(success && success.length > 0){ %>
-            <div class="container  d-flex justify-content-center">
+            <div class="row overlay">
                 <div class="alert alert-success">
                     <%= success %>
                 </div>

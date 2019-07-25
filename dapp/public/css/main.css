@@ -2,6 +2,7 @@ body {
   /* ;#1e1e1e; */
   background-color: #1e1e1e;
   color:  rgba(255, 255, 255, 0.5);
+  position: relative;
 }
 footer {
    margin-top: 1em;
@@ -250,4 +251,25 @@ button[type="button"]{
 .list-group a {
   color: black;
   text-decoration: none;
+}
+
+/*
+Such that flash messages do not mess with the grid
+*/
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 10rem; 
+  margin-top: 0.2rem;
+  width: auto;
+  height: 100%;
+  display: table;
+  z-index: 10;
+}
+
+.overlay .alert {
+  display: table-cell;
+  text-align: center;
+  z-index: 11;
+  font-size: 0.75rem;
 }
