@@ -20,16 +20,13 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
             User.find({}, function (error, users) {
                 if (error) {
                     console.log(error);
+                    res.flash('error', error.message)
                     res.redirect('back');
                 } else {
                     // TODO: the users array should only contain the usernames and further necessary identifiable infos
                     res.render("private", { files: data.files, users: users });
                 }
             });
-            // console.log(`Files retrieved from user ${req.user.username}`);
-            // console.log(data);
-            // console.log(`Length of files: ${data.files.length}`)
-
         }
     });
 
@@ -37,7 +34,6 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
 
 });
 
-// TODO: CREATE SHOULD UPLOAD REAL FILES ***************************************** !!!
 // CREATE ROUTE
 router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req, res, next) => {
     sanitize_text(req);
@@ -75,12 +71,12 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
                     if (err) {
                         console.log('FATAL ERROR: NEW FILE BUT NO USER!!!');
                         console.log(err);
+                        req.flash('error', err.message);
                         res.redirect('/');
                     } else {
-                        // console.log('User found');
                         user.files.push(newFile);
                         user.save();
-                        // console.log(user);
+                        req.flash('success', 'New file uploaded');
                         res.redirect("/private");
                     }
                 });
@@ -104,19 +100,7 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
                     console.log(error);
                     res.redirect('back');
                 } else {
-                    // TODO: List of authorized users too
                     res.render("private_show", { file: foundFile, users: users });
-                    // File.findById(req.user._id).populate('authorized').exec(function (err, authorizedUsers) {
-                    //     if (err) {
-                    //         console.log(err);
-                    //         res.redirect('back');
-                    //     } else {
-                    //         console.log(`Authorized users:`);
-                    //         console.log(authorizedUsers);
-                    //         res.render("private_show", { file: foundFile, authorizedUsers: foundFile.authorized, users: users });
-                    //     }
-                    // });
-
                 }
             });
 
@@ -136,40 +120,46 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
             res.redirect("/private");
         } else {
 
-            // remove users from being authorized to access this file
-            if (req.body.removeAuthorizedUser) {
-                const toRemove = req.body.removeAuthorizedUser.map(id => mongoose.Types.ObjectId(id));
-                for (let i = 0; i < toRemove.length; i++) {
-                    console.log(`removing an authorized user ${toRemove[i]}`);
-                    updatedFile.authorized.pull({ _id: toRemove[i] });
+            if (!updatedFile) {
+                return res.status(400).send("Item not found.")
+            } else {
+                // remove users from being authorized to access this file
+                if (req.body.removeAuthorizedUser) {
+                    const toRemove = req.body.removeAuthorizedUser.map(id => mongoose.Types.ObjectId(id));
+                    for (let i = 0; i < toRemove.length; i++) {
+                        console.log(`removing an authorized user ${toRemove[i]}`);
+                        updatedFile.authorized.pull({ _id: toRemove[i] });
+                    }
+
+                } else {
+                    console.log('No user to remove from authorized array.');
                 }
 
-            } else {
-                console.log('No user to remove from authorized array.');
+                // add new users to be authorized to access this file
+                if (req.body.authorizedUser) {
+
+                    // retrieve ObjectId from the chosen user
+                    const authorizedUsers = req.body.authorizedUser.map(item => {
+                        return item.split(':')[1].trim();
+                    });
+
+                    console.log(`Value for authorized user is ${authorizedUsers}`)
+                    authorizedUsers.forEach(toAdd => {
+                        if (!updatedFile.authorized.includes(toAdd)) {
+                            console.log('Authorized user not in the list');
+                            updatedFile.authorized.push(toAdd);
+                        }
+                    });
+
+                }
+
+
+                updatedFile.save();
+                req.flash('success', 'File successfully updated.');
+                res.redirect(`/private/${req.params.id}`)
             }
 
-            // add new users to be authorized to access this file
-            if (req.body.authorizedUser) {
 
-                // retrieve ObjectId from the chosen user
-                const authorizedUsers = req.body.authorizedUser.map(item => {
-                    return item.split(':')[1].trim();
-                });
-
-                console.log(`Value for authorized user is ${authorizedUsers}`)
-                authorizedUsers.forEach(toAdd => {
-                    if (!updatedFile.authorized.includes(toAdd)) {
-                        console.log('Authorized user not in the list');
-                        updatedFile.authorized.push(toAdd);
-                    }
-                });
-
-            }
-
-
-            updatedFile.save();
-
-            res.redirect(`/private/${req.params.id}`)
         }
     });
 });
@@ -204,6 +194,8 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
                     }
                 });
             }
+
+            req.flash('success', 'File successfully deleted.');
             res.redirect("/private");
         }
     });
@@ -213,7 +205,7 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
 // as bodyParser cannot read from multipart/form-data
 function sanitize_text(req) {
     req.body.file.accessible = req.body.file.accessible ? true : false;
-    console.log(req.body.file.accessible);
+    console.log(`Sanitizing. file.accessible as boolean? : ${req.body.file.accessible}`);
     // sanitize file.fileName and file.note 
     req.body.file.fileName = req.sanitize(req.body.file.fileName);
     req.body.file.note = req.sanitize(req.body.file.note);

@@ -46,10 +46,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// middleware that allows to inject currentUser to each site, especially
+// middleware that allows to inject currentUser and req.flash() to each site, especially
 // in the header and footer
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 });
 
@@ -100,21 +102,3 @@ app.listen(port, () => {
 // =============================================================================================
 // FUNCTIONS
 // =============================================================================================
-function sanitize_text(req) {
-    req.body.file.shared = req.body.file.shared ? true : false;
-
-    // sanitize file.fileName and file.note 
-    req.body.file.fileName = req.sanitize(req.body.file.fileName);
-    req.body.file.note = req.sanitize(req.body.file.note);
-}
-
-/**
- * Our middleware for authoritisation and authentication
- */
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.redirect('/');
-    }
-}

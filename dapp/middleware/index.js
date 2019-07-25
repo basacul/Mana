@@ -28,6 +28,7 @@ middleware.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     } else {
+        req.flash('error', 'Please, Login First');
         res.redirect('/');
     }
 };
@@ -40,10 +41,15 @@ middleware.checkOwnership = function (req, res, next) {
         if (error) {
             res.redirect('back')
         } else {
-            if (foundFile.owner.id.equals(req.user._id)) {
+
+            // VERY IMPORTANT TO PREVENT CRASHES AS NOT EXISTING 
+            // OBJECTID STILL GETS THE FUNCTION TO EXECUTE THIS PART
+            // BY SIMPLY ADDING foundFile AS CONDITION
+            if (foundFile && foundFile.owner.id.equals(req.user._id)) {
                 next();
             } else {
-                res.redirect('back');
+                req.flash('error', `Permission denied for file ${req.params.id}!`);
+                res.redirect('/private');
             }
         }
     });
