@@ -27,6 +27,7 @@ router.post("/login", passport.authenticate('local', {
 });
 
 router.get('/signup', function (req, res) {
+
     if (!req.isAuthenticated()) {
         res.render('signup');
     } else {
@@ -42,7 +43,7 @@ router.post('/signup', function (req, res) {
         if (err) {
             console.log('Error on sign up', err);
             req.flash('error', err.message);
-            res.redirect('back');
+            res.redirect('/signup');
         } else {
 
             fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
@@ -51,11 +52,13 @@ router.post('/signup', function (req, res) {
                     throw err;
                 }
             });
-            // we can change the strategy 'local' to 'twitter' or something else
-            passport.authenticate('local')(req, res, function () {
-                req.flash('success', 'Please check your email and follow the instructions.');
-                res.redirect('/');
-            });
+            // we can change the strategy 'local' to 'twitter' or something else. THis redirects user
+            // indirectly to /home as authenticated
+            // passport.authenticate('local')(req, res, function () {
+            //     res.redirect('/');
+            // });
+            req.flash('success', 'Please check your email and follow the instructions.');
+            res.redirect('/');
         }
     });
 });
