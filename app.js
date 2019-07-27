@@ -97,7 +97,7 @@ app.get('*', function (req, res) {
 });
 
 app.listen(process.env.PORT || localPort, () => {
-    console.log(`Running at https://localhost:${localPort}`);
+    console.log(`Running... `);
 });
 
 
