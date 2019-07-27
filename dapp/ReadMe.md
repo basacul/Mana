@@ -3,9 +3,13 @@ Mana is a web application for the healthcare system that allows healthcare servi
 
 In addition, Mana allows users to store sensitive data outside of the ethereum network such that this data is not available in the ethereum network. A messaging service for users in the ecosystem allows to communicate with healthcare service providers, insurance companies and other patients.
 
-The goal of Mana is to provide a secure distributed data exchange grid for the healthcare sector by minimizing the investment in new IT infrastructure and providing a tool to accelerate the digital adoption in the healthcare system. 
+The goal of Mana is to provide a secure distributed data exchange grid for the healthcare sector by minimizing the investment in new IT infrastructure and providing a tool to accelerate the digital adoption in the healthcare system.
 
 This application uses mongodb, express, nodejs and ethereum. MetaMask - for now - is needed as a wallet to use the features given by the ethereum network. The frontend uses html5, css3 with bootstrap v4.2.0, and finally javascript using jQuery for bootstrap, web3.js injected by MetaMask and vanilla javascript - a fancy name for plain javascript without any additional libraries.
+
+The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_8.pdf) of my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
+
+The name for this project will be Mana coming from the Polynesian belief, that Mana is an impersonal supernatural power which can be transmitted or inherited. The first generation prototype will go live on July 31 2019 at [Openhealth](http://openhealth.care).
 
 ## Task Schedule
 The bachelor thesis starts end of July or at August 1st and takes twelve weeks to complete. The tasks are scheduled along these twelve weeks.

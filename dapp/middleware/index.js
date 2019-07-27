@@ -22,6 +22,22 @@ const upload = multer({ storage: storage });
 middleware.upload = upload;
 
 /**
+ * EXAMPLE WITH FILE FILTER THAT WON'T BE USED BUT IS 
+ * MENTIONED FOR TEACHING PURPOSES
+ * 
+ * const imageFilter = (req, file, callback) => {
+ *      if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)){
+ *          return cb(new Error('Only image files are allowed!'), false);
+ *      }
+ *      cb(null, true);
+ * }
+ * 
+ * .....
+ * 
+ * const upload = mutler({storage: storage, fileFilter: imageFilter});
+ */
+
+/**
  * middleware for authoritisation and authentication
  */
 middleware.isLoggedIn = function (req, res, next) {
