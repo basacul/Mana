@@ -7,7 +7,7 @@ The goal of Mana is to provide a secure distributed data exchange grid for the h
 
 This application uses mongodb, express, nodejs and ethereum. MetaMask - for now - is needed as a wallet to use the features given by the ethereum network. The frontend uses html5, css3 with bootstrap v4.2.0, and finally javascript using jQuery for bootstrap, web3.js injected by MetaMask and vanilla javascript - a fancy name for plain javascript without any additional libraries.
 
-The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_8.pdf) of my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
+The [synopsis](https://github.com/basacul/Mana/blob/master/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_8.pdf) of my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
 
 The name for this project will be Mana coming from the Polynesian belief, that Mana is an impersonal supernatural power which can be transmitted or inherited. The first generation prototype will go live on July 31 2019 at [Openhealth](http://openhealth.care).
 
