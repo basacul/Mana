@@ -78,5 +78,7 @@ Install node.js before running this commands
 > npm install
 > npm run start
 // if you want to develop without having to restart the server all the time
+// make sure to have nodemon installed
+// > npm install nodemon // if you do not have nodemon installed
 // > npm run dev
 ```
