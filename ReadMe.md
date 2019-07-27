@@ -7,7 +7,7 @@ The goal of Mana is to provide a secure distributed data exchange grid for the h
 
 This application uses mongodb, express, nodejs and ethereum. MetaMask - for now - is needed as a wallet to use the features given by the ethereum network. The frontend uses html5, css3 with bootstrap v4.2.0, and finally javascript using jQuery for bootstrap, web3.js injected by MetaMask and vanilla javascript - a fancy name for plain javascript without any additional libraries.
 
-The [synopsis](https://github.com/basacul/Mana/blob/master/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_8.pdf) of my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
+The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_10.pdf) of my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project.
 
 The name for this project will be Mana coming from the Polynesian belief, that Mana is an impersonal supernatural power which can be transmitted or inherited. The first generation prototype will go live on July 31 2019 at [Openhealth](http://openhealth.care).
 
@@ -58,10 +58,25 @@ If __git__ is not available on your system, you can download this repository as 
 
 Check app.js to see how the web application is currently organized and the separate ejs sites, as it is still simple for now. By following this steps you can already test the application on your local machine at localhost:3000 for which you need to have the [MetaMask](https://metamask.io/) extension installed on your browser. Do not forget to set MetaMask to Rinkeby network.
 
+Make sure you have mongodb installed and set the environment variables. In my setting, I installed mongodb community version on Windows 10 with the default settings and created a bat file that allows me to start the database manually called StartMongo.bat.
+
+```bat
+@echo off
+cd "C:\mongodb\bin"
+start mongod.exe
+timeout 3
+start mongo.exe
+exit
+```
+
+In order to use the prototype:
+
 ```
 Install node.js before running this commands
 > git clone https://github.com/basacul/Mana.git
-> cd Mana/dapp
+> cd Mana
 > npm install
-> node app.js
+> npm run start
+// if you want to develop without having to restart the server all the time
+// > npm run dev
 ```

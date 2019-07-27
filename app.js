@@ -13,7 +13,8 @@ const express = require('express'),
     expressSanitizer = require('express-sanitizer'),
     User = require('./models/user'),
     // seedDatabase = require('./models/seed'), // commented otherwise it still seeds the db
-    port = 3000;
+    localPort = 9000,   // in case you run a localhost then on port 3000
+    localDB = "mongodb://localhost:27017/mana"; // in case you run a local mongodb
 
 app.set("view engine", "ejs");
 
@@ -61,7 +62,7 @@ app.use(function (req, res, next) {
 // DB STUFF : MongoDB needs to be running https://mongoosejs.com/
 // =============================================================================================
 
-mongoose.connect("mongodb://localhost:27017/mana", { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect(process.env.DATABASEURL || localDB, { useNewUrlParser: true, useFindAndModify: false });
 
 // seedDatabase(); // resets the database with seed data
 
@@ -95,10 +96,8 @@ app.get('*', function (req, res) {
     res.redirect('/');
 });
 
-app.listen(port, () => {
-    console.log(`Running at https://localhost:${port}`);
+app.listen(process.env.PORT || localPort, () => {
+    console.log(`Running at https://localhost:${localPort}`);
 });
 
-// =============================================================================================
-// FUNCTIONS
-// =============================================================================================
+
