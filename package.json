@@ -12,6 +12,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
+    "crypto-random-string": "^3.0.1",
     "ejs": "^2.6.1",
     "express": "^4.17.0",
     "express-sanitizer": "^1.0.5",

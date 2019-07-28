@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router(); // now instead of app, use router
 const passport = require('passport');
+const cryptoRandomString = require('crypto-random-string'); // to generate verification token
 const User = require('../models/user');
 const middleware = require('../middleware');
 
@@ -16,20 +17,23 @@ router.get("/", function (req, res) {
     }
 });
 
-
-router.post("/login", passport.authenticate('local', {
+// perform simple promise procedure to test for inactivity
+router.post("/login", middleware.isVerified, passport.authenticate('local', {
     successRedirect: '/home',
     failureRedirect: '/',
     failureFlash: true,
     successFlash: `Welcome back!`
 }), function (req, res) {
-    // do nothing
+	// we can change the strategy 'local' to 'twitter' or something else. THis redirects user
+	// indirectly to /home as authenticated
+	// passport.authenticate('local')(req, res, function () {
+	//     res.redirect('/');
+	// });
 });
 
-router.get('/signup', function (req, res) {
-
+router.get('/register', function (req, res) {
     if (!req.isAuthenticated()) {
-        res.render('signup');
+        res.render('register');
     } else {
         req.flash('error', 'Sign up only accessible if not logged in.');
         res.redirect('/home');
@@ -38,29 +42,74 @@ router.get('/signup', function (req, res) {
 /**
  * Handles user sign up
  */
-router.post('/signup', function (req, res) {
-    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+router.post('/register', function (req, res) {
+	// check, that a username and email is not already taken
+    User.register(new User({ username: req.body.username, email: req.body.email, active: false }), req.body.password, function (err, user) {
         if (err) {
             console.log('Error on sign up', err);
             req.flash('error', err.message);
-            res.redirect('/signup');
+            res.redirect('/register');
         } else {
-
+			
             fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
                 if (err) {
                     req.flash('error', err.message);
                     throw err;
                 }
             });
-            // we can change the strategy 'local' to 'twitter' or something else. THis redirects user
-            // indirectly to /home as authenticated
-            // passport.authenticate('local')(req, res, function () {
-            //     res.redirect('/');
-            // });
-            req.flash('success', 'Please check your email and follow the instructions.');
-            res.redirect('/');
+
+			
+			// TODO: generate secret token and send email
+			user.token = cryptoRandomString({length: 32, type: 'base64'});
+			user.save();
+
+            req.flash('success', 'Please check your email and follow the instructions to input verification token.');
+            res.redirect('/verification');
         }
     });
+});
+
+// allows user to verify with a secret token
+router.get('/verification', (req,res) => {
+	if (req.isAuthenticated()) {
+        res.redirect("home");
+    } else {
+        res.render('verification');
+    }
+});
+
+// to process the secret token and activate the user
+router.post('/verification', (req, res) => {
+
+	User.findOne({token: req.body.token}, function(err, user){
+		if(!user){
+			
+			req.flash('error', 'Please make sure your token is correct.');
+			res.redirect('/verification');
+			
+		}else{
+			
+			if(user.active){
+				
+				req.flash('success', 'Your account has already been verified. Please log in.');
+				res.redirect('/');
+				
+			}else{
+
+				if(user.username === req.body.username){
+					user.active = true;
+					user.save();
+					req.flash('success', `Verification successful. You can now log in.`);
+					res.redirect('/');
+				}else{
+					req.flash('error', 'Please make sure your username is correct.');
+					res.redirect('/verification');
+				}
+				
+			}
+			
+		}
+	});
 });
 
 router.get('/logout', middleware.isLoggedIn, function (req, res) {

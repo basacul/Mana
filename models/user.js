@@ -6,6 +6,9 @@ const mongoose = require('mongoose'),
 
 const userSchema = new mongoose.Schema({
     username: String, // TODO: store keccak(username) such that identity is not stored on the database
+	email: String, // TODO: Protect it but used for verification and resets
+	active: Boolean, 
+	token: String,
     /* password: String, // TODO: store keccak(password) */
     // TODO: files are encrypted with password
     files: [

@@ -55,7 +55,7 @@ middleware.checkOwnership = function (req, res, next) {
 
     File.findById(req.params.id, function (error, foundFile) {
         if (error) {
-            res.redirect('back')
+            res.redirect('back');
         } else {
 
             // VERY IMPORTANT TO PREVENT CRASHES AS NOT EXISTING 
@@ -70,7 +70,25 @@ middleware.checkOwnership = function (req, res, next) {
         }
     });
 
-}
+};
+
+middleware.isVerified = function(req, res, next){
+	User.findOne({username: req.body.username}, function(err,user){
+		if(err){
+			req.flash('error', err.message);
+			res.redirect('back');
+		}else{
+			if(user && !user.active){
+				req.flash('error', 'Please verify your account before accessing Mana.');
+				res.redirect('/verification');
+			}else{
+				next();	
+
+			}
+			
+		}
+	});
+};
 
 middleware.checkIfAuthorized = function (req, res, next) {
     //retrieve the file
