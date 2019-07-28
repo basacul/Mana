@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router(); // now instead of app, use router
 const passport = require('passport');
 const cryptoRandomString = require('crypto-random-string'); // to generate verification token
+const mailer = require('../misc/mailer');
 const User = require('../models/user');
 const middleware = require('../middleware');
 
@@ -24,6 +25,8 @@ router.post("/login", middleware.isVerified, passport.authenticate('local', {
     failureFlash: true,
     successFlash: `Welcome back!`
 }), function (req, res) {
+	// do nothing. code below just saved if I want to use it in another request
+	
 	// we can change the strategy 'local' to 'twitter' or something else. THis redirects user
 	// indirectly to /home as authenticated
 	// passport.authenticate('local')(req, res, function () {
@@ -59,10 +62,27 @@ router.post('/register', function (req, res) {
             });
 
 			
-			// TODO: generate secret token and send email
+			// 1. generate secret token 
 			user.token = cryptoRandomString({length: 32, type: 'base64'});
 			user.save();
-
+			
+			// 2. compose the email
+			const html = `Hi ${user.username}!
+			<br>
+			Thank you for registering!
+			<br>
+			<br>
+			
+			Please verify your account by following this link and input the given token:
+			<br>
+			Token: <strong>${user.token}</strong>
+			URL: <a href="https://mana-prototype.run.goorm.io/verification">https://mana-prototype.run.goorm.io/register</a>
+			<br><br>
+			See you soon!`;
+			
+			// 3. and send email. this function returns a promise
+			mailer.sendEmail('registration@openhealth.care', user.email, 'Verify your account', html);
+			
             req.flash('success', 'Please check your email and follow the instructions to input verification token.');
             res.redirect('/verification');
         }
