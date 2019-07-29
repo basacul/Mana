@@ -72,7 +72,7 @@ router.post('/register', function (req, res) {
 			Thank you for registering!
 			<br>
 			<br>
-			
+			Send this email to ${user.email}
 			Please verify your account by following this link and input the given token:
 			<br>
 			Token: <strong>${user.token}</strong>
@@ -81,9 +81,12 @@ router.post('/register', function (req, res) {
 			See you soon!`;
 			
 			// 3. and send email. this function returns a promise
-			mailer.sendEmail('registration@openhealth.care', user.email, 'Verify your account', html);
 			
-            req.flash('success', 'Please check your email and follow the instructions to input verification token.');
+			// email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
+			const email_for_dev = 'antelo.b.lucas@gmail.com';
+			mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Verify your account', html);
+			
+            req.flash('success', 'Please check your email tomorrow and follow the instructions to input verification token.');
             res.redirect('/verification');
         }
     });
