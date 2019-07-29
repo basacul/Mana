@@ -4,6 +4,11 @@ body {
   color:  rgba(255, 255, 255, 0.5);
   position: relative;
 }
+
+.row {
+	overflow-x: hidden; /* avoid x overflow on all devices and pages */
+}
+
 footer {
    margin-top: 1em;
    padding-top: 1em;
@@ -36,7 +41,7 @@ footer {
 }
 
 #logo {
-  margin-right: -8em;
+  /* margin-right: -8em; */
   width: 100px;
   height: 100px;
 }
@@ -52,6 +57,7 @@ footer {
 .dropdown-menu, .dropdown-item {
   color: rgba(255, 255, 255, 0.5);
   background-color: #343a40; 
+  overflow: hidden;
 }
 
 .dropdown-item:hover {
@@ -259,7 +265,7 @@ Such that flash messages do not mess with the grid
 .overlay {
   position: absolute;
   top: 0;
-  left: 10rem; 
+  left: 14rem; 
   margin-top: 0.2rem;
   width: auto;
   height: 100%;

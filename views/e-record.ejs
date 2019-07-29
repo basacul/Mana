@@ -1,5 +1,5 @@
 <% include partials/header %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block sticky-top" id="second_navbar">
     <div class="container" id="mainNavigation">
         <div id="message_interact" class="nav-link">
             <label for="f-interact" class="sr-only">Say Something</label>
@@ -8,28 +8,26 @@
         </div>
     </div>
 </nav>
-</div>
-</div>
-</header>
 
 <article>
+
     <div class="container">
         <div class="row">
             <!-- javascript dapp.js inserts metamask version and account information -->
-            <div class="col-12">
+            <div class="col-12  pt-4 mt-0">
                 <h2></h2>
             </div>
-            <div class="col-12">
+            <div class="col-12  pt-4 mt-0">
                 <p></p>
             </div>
-            <div class="col-12">
+            <div class="col-12  pt-4 mt-0">
                 <p>
                     Contract Address: 0x6d0d7e4f6f7780c593894f18e1460a450e7058d5
                 </p>
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12  pt-4 mt-0">
                 <div id="table">
                     <table>
                         <thead>
@@ -45,7 +43,8 @@
             </div>
         </div>
         <div class="row">
-            <section>
+			 <div class="col-12  pt-4 mt-0">
+                 <section>
                 <h3 id="description">IMPLEMENTS web3 contract invocation</h3>
                 <p>This section holds personal data stored indirectly in the ethereum
                     network as an external data storage solution such as IPFS will be used. </p>
@@ -107,9 +106,11 @@
                     </li>
                 </ul>
             </section>
+            </div>
+           
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12  pt-4 mt-0">
                 <h3 id="data-exchange">Data Exchange</h3>
                 <form method="post" enctype="mutlipart/form-data"
                     action="http://www.randyconnolly.com/tests/process.php">
