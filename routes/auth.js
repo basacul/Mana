@@ -92,6 +92,16 @@ router.post('/register', function (req, res) {
     });
 });
 
+// page to recover lost passwords
+router.get('/password', (req, res) => {
+		   
+});
+
+// request new password
+router.post('/password', (req, res) => {
+	
+});
+
 // allows user to verify with a secret token
 router.get('/verification', (req,res) => {
 	if (req.isAuthenticated()) {
