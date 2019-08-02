@@ -45,16 +45,21 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 
     const file = req.file;
 
-    if (!file) {
-        const error = new Error('Please upload a file');
-        error.httpStatusCode = 400;
-        return next(error);
+    if (!(file &&req.body.file.fileName)) {
+        const error = new Error('Please upload a file and a file name to perform upload');
+		// commented following two line to get rid of internal error
+        //error.httpStatusCode = 400;
+        //return next(error); 
+		req.flash('error', error.message);
+		res.redirect('/private');
     } else {
         File.create(req.body.file, function (err, newFile) {
             if (err) {
                 console.log(err);
                 res.render("private");
             } else {
+				// TODO: if empty file name then go back and update error message
+				// TO
                 newFile.owner.id = req.user._id;
                 newFile.owner.username = req.user.username;
                 newFile.path = `${req.user.username}/${req.file.originalname}`;
