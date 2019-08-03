@@ -180,7 +180,7 @@ router.post('/password', (req, res) => {
 					user.save();
 					
 					const html = template.reset(user.username, user.email, user.token);
-					mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Reset your password', html);
+					mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
 					
 					req.flash('success', 'You are account is blocked and you will shortly receive an email with a new verification token to set a new password');
 					res.redirect('/reset');
