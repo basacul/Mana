@@ -4,8 +4,12 @@ const passport = require('passport');
 // TODO: replace cryptoRandomString with crypto!!
 const cryptoRandomString = require('crypto-random-string'); // to generate verification token
 const mailer = require('../misc/mailer');
+const template = require('../misc/templates');
 const User = require('../models/user');
 const middleware = require('../middleware');
+
+// email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
+const email_for_dev = 'antelo.b.lucas@gmail.com';
 
 // to create the necessary folder structures
 const fs = require('fs');
@@ -43,6 +47,7 @@ router.get('/register', function (req, res) {
         res.redirect('/home');
     }
 });
+
 /**
  * Handles user sign up
  */
@@ -73,26 +78,13 @@ router.post('/register', function (req, res) {
 			user.save();
 			
 			// 2. compose the email
-			const html = `Hi ${user.username}!
-			<br>
-			Thank you for registering!
-			<br>
-			<br>
-			Send this email to ${user.email}
-			Please verify your account by following this link and input the given token:
-			<br>
-			Token: <strong>${user.token}</strong>
-			URL: <a href="https://mana-prototype.run.goorm.io/verification">https://mana-prototype.run.goorm.io/register</a>
-			<br><br>
-			See you soon!`;
+			const html = template.verification(user.username, user.email, user.token);
+
 			
 			// 3. and send email. this function returns a promise
-			
-			// email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
-			const email_for_dev = 'antelo.b.lucas@gmail.com';
 			mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Verify your account', html);
 			
-            req.flash('success', 'Please check your email tomorrow and follow the instructions to input verification token.');
+            req.flash('success', 'Please check your email and follow the instructions to input verification token.');
             res.redirect('/verification');
         }
     });
@@ -151,56 +143,49 @@ router.get('/password', (req, res) => {
     }
 });
 
-// TODO: verification token make it optional
+
 // request new password 
 router.post('/password', (req, res) => {
-	User.findOne({token: req.body.token}, function(err, user){
+
+	
+	User.findOne({username: req.body.username}, function(err, user){
 		if(!user){
 			
-			req.flash('error', 'Please make sure your token is correct.');
+			req.flash('error', 'Please make sure your username is correct.');
 			res.redirect('/password');
 			
 		}else{
 			
-			if(req.body.username === user.username && req.body.email === user.email){
-				// 1. generate secret token 
-				user.token = cryptoRandomString({length: 32, type: 'base64'});
-				// TODO: HOW TO RESET PASSWORD?
-				user.active = false;
-				user.save();
+			if(req.body.token === user.token && req.body.email === user.email){
 
-				// 2. compose the email
-				const html = `Hi ${user.username}!
-				<br>
-				Send this email to ${user.email}.
-				<br>
-				Please ret your new password together with your new verification token. Please keep your token in 
-				a safe place as it will be used in the future. Your account is now set to inactive.
-				<br>
-				
-				Token: <strong>${user.token}</strong>
-				URL: <a href="https://mana-prototype.run.goorm.io/reset">https://mana-prototype.run.goorm.io/reset</a>
-				<br><br>
-				See you soon!`;
+				// 2. compose the email without token as token is correct
+				const html = template.reset(user.username, user.email, "");
 
 				// 3. and send email. this function returns a promise
-
-				// email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
-				const email_for_dev = 'antelo.b.lucas@gmail.com';
-				mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Reset your password', html);
+				mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
 				
 				req.flash('success', 'You will shortly receive an email to set a new password');
 				res.redirect('/reset');
 				
 			}else{
-
-				if(user.username === req.body.username){
-					user.active = true;
-					user.save();
-					req.flash('error', `Please make sure your email is correct.`);
+				if(user.token === req.body.token){
+					req.flash('error', `Please enter your email used for this account.`);
 					res.redirect('/password');
+				}else if(req.body.email === user.email){
+					
+					// 1. generate new secret token
+					user.token = cryptoRandomString({length: 32, type: 'base64'});
+					// TODO: HOW TO MAKE PREVIOUS PASSWORD UNUSABLE
+					user.active = false;
+					user.save();
+					
+					const html = template.reset(user.username, user.email, user.token);
+					mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Reset your password', html);
+					
+					req.flash('success', 'You are account is blocked and you will shortly receive an email with a new verification token to set a new password');
+					res.redirect('/reset');
 				}else{
-					req.flash('error', 'Please make sure your username is correct.');
+					req.flash('error', 'Please make sure, that your token or email is correct.');
 					res.redirect('/password');
 				}
 				
