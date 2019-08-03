@@ -33,40 +33,34 @@
     </div>
     <div class="d-flex justify-content-center" id="landing-header">
         <div class="card">
-            <div class="card-header  d-flex justify-content-center mt-1">
+            <div class="card-header  d-flex justify-content-center">
                 <img src="img/mana_logo.png" alt="Logo of the project Mana" id="logo">
             </div>
             <div class="card-body">
-                <form method='POST' action='/login'>
-                    <div class="input-group form-group">
+                <form method='POST' action='/contact'>
+					<div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><span class="glyphicon glyphicon-user"></span></span>
+                            <span class="input-group-text"><span class="glyphicon glyphicon-envelope"></span></span>
                         </div>
-                        <input type="text" name="username" class="form-control" placeholder="username" required>
+                        <input type="email" name="email" class="form-control" placeholder="your email" required>
                     </div>
-                    <div class="input-group form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><span class="glyphicon glyphicon-pencil"></span></span>
-                        </div>
-                        <input type="password" name="password" class="form-control" placeholder="password" required>
+                    
+					 <div class="input-group form-group">
+						<label for="f-message" class="sr-only">Message</label>
+						<textarea class="form-control" name="message" id="f-message" rows="5"
+							placeholder="Your message to us..."></textarea>
                     </div>
-                    <div class="row d-flex justify-content-center">
+                    <div class="row d-flex justify-content-around">
                         <div class="form-group">
-                            <input type="submit" value="Login" class="btn btn_own_style">
+                            <input type="submit" value="Send" class="btn btn_own_style">
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn_own_style" href='/'>Cancel</a>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="card-footer">
-                <div class="card-footer d-flex justify-content-between">
-                    <!-- TODO LINK TO /register -->
-                    <a class="btn btn_own_style" href='/register'>
-                        Register?</a>
-					<a class="" href='/contact'>
-                        Contact Us</a>
-                    <a class="btn  btn_own_style" href="/password">Password?</a>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -77,10 +71,6 @@
         <li></li>
         <li></li>
     </ul>
-
-
-
-
 
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/bootstrap-4.3.1-dist/bootstrap.js"></script>

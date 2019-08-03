@@ -250,5 +250,16 @@ router.get('/logout', middleware.isLoggedIn, function (req, res) {
     res.redirect('/');
 });
 
+router.get('/contact', (req, res) =>{
+	res.render('auth/contact');
+});
+
+router.post('/contact', (req,res) => {
+	// TODO: check if a correct email was given
+	console.log(req.body.email);
+	console.log(req.body.message);
+	req.flash('success', 'Your message has been received and we will soon answer you.');
+	res.redirect('/');
+});
 
 module.exports = router;
