@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router(); // now instead of app, use router
 const passport = require('passport');
+// TODO: replace cryptoRandomString with crypto!!
 const cryptoRandomString = require('crypto-random-string'); // to generate verification token
 const mailer = require('../misc/mailer');
 const User = require('../models/user');
@@ -50,8 +51,13 @@ router.post('/register', function (req, res) {
     User.register(new User({ username: req.body.username, email: req.body.email, active: false }), req.body.password, function (err, user) {
         if (err) {
             console.log('Error on sign up', err);
-            req.flash('error', err.message);
-            res.redirect('/auth/register');
+			if(err.message.includes('email')){
+				req.flash('error', 'Please, provide a different email.'); // as the err message is too abstract
+			}else{
+				req.flash('error', err.message);
+			}
+            
+            res.redirect('/register');
         } else {
 			
             fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
@@ -145,7 +151,8 @@ router.get('/password', (req, res) => {
     }
 });
 
-// request new password
+// TODO: verification token make it optional
+// request new password 
 router.post('/password', (req, res) => {
 	User.findOne({token: req.body.token}, function(err, user){
 		if(!user){
@@ -172,7 +179,7 @@ router.post('/password', (req, res) => {
 				<br>
 				
 				Token: <strong>${user.token}</strong>
-				URL: <a href="https://mana-prototype.run.goorm.io/verification">https://mana-prototype.run.goorm.io/reset</a>
+				URL: <a href="https://mana-prototype.run.goorm.io/reset">https://mana-prototype.run.goorm.io/reset</a>
 				<br><br>
 				See you soon!`;
 
@@ -229,6 +236,8 @@ router.post('/reset', (req, res) => {
 						if(err){
 							req.flash('error', 'New password could not be set by our application.');
 							return res.redirect('/');
+						}else{
+							user.save();
 						}
 					});
 					user.active = true;
