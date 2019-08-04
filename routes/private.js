@@ -20,7 +20,7 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
             User.find({}, function (error, users) {
                 if (error) {
                     console.log(error);
-                    res.flash('error', error.message)
+                    res.flash('error', error.message);
                     res.redirect('back');
                 } else {
                     // TODO: the users array should only contain the usernames and further necessary identifiable infos
@@ -126,7 +126,7 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
         } else {
 
             if (!updatedFile) {
-                return res.status(400).send("Item not found.")
+                return res.status(400).send("Item not found.");
             } else {
                 // remove users from being authorized to access this file
                 if (req.body.removeAuthorizedUser) {
@@ -148,7 +148,7 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
                         return item.split(':')[1].trim();
                     });
 
-                    console.log(`Value for authorized user is ${authorizedUsers}`)
+                    console.log(`Value for authorized user is ${authorizedUsers}`);
                     authorizedUsers.forEach(toAdd => {
                         if (!updatedFile.authorized.includes(toAdd)) {
                             console.log('Authorized user not in the list');
@@ -161,7 +161,7 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
 
                 updatedFile.save();
                 req.flash('success', 'File successfully updated.');
-                res.redirect(`/private/${req.params.id}`)
+                res.redirect(`/private/${req.params.id}`);
             }
 
 
@@ -185,7 +185,7 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
     console.log(`Files id : ${req.params.id}`);
     User.findById(req.user._id, function (err, user) {
         console.log(user.files);
-    })
+    });
     // remove file from collection files
     File.findByIdAndRemove(req.params.id, function (err, file) {
         if (err) {

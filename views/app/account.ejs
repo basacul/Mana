@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col-12 pt-4">
 				<h4>Change Password</h4>
-				<form method='POST' action='/account?_method=PUT' class="d-block">
+				<form method='POST' action='/account/password?_method=PUT' class="d-block">
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><span class="glyphicon glyphicon-pencil"></span></span>
@@ -33,22 +33,112 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-md-12">
+
+				<h4 >GDPR Options</h4>
+			
+			
+				<form method='POST' action='/account/gdpr?_method=PUT' class="d-block">
+					<div class="input-group form-group">
+						<div class="form-check  ml-1">
+							<input type="checkbox" name="notifications" class="form-check-input" value="true" id="f-informed">
+							<label class="form-check-label" for="f-informed">Would you like to be informed by email for any events concerning your account?</label>
+						</div>
+					</div>
+					<div class="input-group form-group">
+						<div class="form-check ml-1">
+							<input type="checkbox" name="mana" class="form-check-input" value="true" id="f-mana">
+							<label class="form-check-label" for="f-mana">Would you like to let Mana analyze your data to personalize your user experience?</label>
+						</div>
+					</div>
+					<div class="input-group form-group">
+						<div class="form-check ml-1">
+							<input type="checkbox" name="research" class="form-check-input" value="true" id="f-research">
+							<label class="form-check-label" for="f-research">Would you like to allow public research institutes to access your data?</label>
+						</div>
+					</div>
+					<div class="input-group form-group">
+						<div class="form-check ml-1">
+							<input type="checkbox" name="insurance" class="form-check-input" value="true" id="f-insurance">
+							<label class="form-check-label" for="f-insurance">Would you like to allow your insurance company access to your data?</label>
+						</div>
+					</div>
+
+
+					<!-- <div class="input-group form-group">
+
+						<input type="text" name="token" class="form-control" placeholder="verification token" required>
+					</div> -->
+					<div class="row d-flex justify-content-around">
+						<div class="form-group">
+							<input type="submit" value="Save" class="btn btn_own_style">
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 pt-4">
+				<h4>Send Verification Token</h4>
+				<form method='POST' action='/account/token' class="d-block">
+					
+					<div class="row d-flex justify-content-around">
+						<div class="form-group">
+							<input type="submit" value="Request" class="btn btn_own_style">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<h4>
+					Request a copy of your data
+				</h4>
+				<form method='POST' action='/account/data' class="d-block">
+						<div class="input-group form-group">
+							<div class="form-check  ml-1">
+								<input type="checkbox" name="summary" class="form-check-input" value="true" id="f-notification-request-summary">
+								<label class="form-check-label" for="f-notification-request-summary">Only a summary of the data</label>
+							</div>
+						</div>
+
+
+						<div class="input-group form-group">
+							<label class="sr-only" for="f-verification-request">Input verification token</label>
+							<div class="input-group-prepend">
+								<span class="input-group-text"><span class="glyphicon glyphicon-lock"></span></span>
+							</div>
+							<input type="text" id="f-verification-request" name="token" class="form-control" placeholder="verification token" required>
+						</div>
+						<div class="row d-flex justify-content-around">
+							<div class="form-group">
+								<label class="sr-only">I woul like to get a copy of all my data</label>
+								<input type="submit" value="Request" class="btn btn_own_style">
+							</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-md-12 pt-4 mt-0">
 				<h4>Delete Account</h4>
-				<form method='POST' action='/delete' class="d-block">
+				<form method='POST' action='/account/delete?_method=DELETE' class="d-block">
 					<div class="input-group form-group">
-						<label class="sr-only" for="f-verification">Input verification token</label>
+						<label class="sr-only" for="f-verification-delete">Input verification token</label>
 						<div class="input-group-prepend">
 							<span class="input-group-text"><span class="glyphicon glyphicon-lock"></span></span>
 						</div>
-						<input type="text" id="f-verification" name="token" class="form-control" placeholder="verification token" required>
+						<input type="text" id="f-verification-delete" name="token" class="form-control" placeholder="verification token" required>
 					</div>
 
 					<div class="row d-flex justify-content-around">
 						<div class="form-group">
 
 							<label class="sr-only">I woul like to delete my account and all my data</label>
-							<input type="submit" value="Delete" class="btn btn_own_style">
+							<input type="submit" value="Delete" class="btn btn-danger">
 						</div>
 					</div>
 				</form>

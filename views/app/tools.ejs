@@ -8,12 +8,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-				
-				<li class="nav-item">
-                    <a class="nav-link" href="#gdpr">
-                        GDPR Options
-                    </a>
-                </li>
 				<li class="nav-item">
                     <a class="nav-link" href="#personal">
                        Personal
@@ -34,83 +28,19 @@
                        LevelDB
                     </a>
                 </li>
-
-				
-				
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container">
-	<h2 id="gdpr">IMPLEMENTS gdpr options and web3.eth,.net,.db and .personal Management API</h2>
+	<h2 >IMPLEMENTS web3.eth,.net,.db and .personal Management API</h2>
 	
-	<div class="row">
-		<div class="col-md-12 pt-4 mt-0">
+	
+	
 
-			<h3 >GDPR Options</h3>
-			<p>
-				This part includes options that are compliant with GDPR.
-			</p>
-			<div class="col-12">
-				<h4>
-					General GDPR Options
-				</h4>
-				<form method='POST' action='/tools'>
-					<div class="input-group form-group">
-						<input type="checkbox" name="notifications" class="form-check-input" value="true" id="f-notification">
-						<label for="f-notification">Would you like to be informed by email for any events concerning your account?</label>
-					</div>
-					<div class="input-group form-group">
-						<input type="checkbox" name="mana" class="form-check-input" value="true" id="f-mana">
-						<label for="f-mana">Would you like to let Mana analyze your data to personalize your user experience?</label>
-					</div>
-					<div class="input-group form-group">
-						<input type="checkbox" name="research" class="form-check-input" value="true" id="f-research">
-						<label for="f-research">Would you like to allow public research institutes to access your data?</label>
-					</div>
-
-
-					<!-- <div class="input-group form-group">
-
-						<input type="text" name="token" class="form-control" placeholder="verification token" required>
-					</div> -->
-
-					<div class="form-group">
-						<input type="submit" value="Save" class="btn btn_own_style">
-					</div>
-
-				</form>
-			</div>
-
-		<hr>
-
-			<div class="col-12">
-				<h4>
-					Request a copy of your data
-				</h4>
-				<form method='POST' action='/request'>
-						<div class="input-group form-group">
-							<input type="checkbox" name="summary" class="form-check-input" value="true" id="f-notification">
-							<label for="f-notification">Only a summary of the data</label>
-						</div>
-
-
-						<div class="input-group form-group">
-							<label class="sr-only" for="f-verification">Input verification token</label>
-							<input type="text" id="f-verification" name="token" class="form-control" placeholder="verification token" required>
-						</div>
-
-						<div class="form-group">
-							<label class="sr-only">I woul like to get a copy of all my data</label>
-							<input type="submit" value="Request" class="btn btn_own_style">
-						</div>
-
-				</form>
-			</div>
+			
 		<a id="personal"></a>
-		</div>
-	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12 pt-4 mt-0">

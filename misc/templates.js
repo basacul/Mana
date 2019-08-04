@@ -41,4 +41,19 @@ templates.verification = function(username, email, token){
 	return html;
 };
 
+templates.token = function(username, email, token){
+	
+	let html = `<h3>Hi ${username}!</h3><br>` +
+				`<p>Send this email to ${email}.<p><br>` +
+				
+				"<p>We send you your verification token. Please keep your token in " +
+				"a safe place as it will be used in the future.</p><br>" +
+				"<p>Token: <strong> " + token + "</strong></p><br>" +
+				"<p>If you did not request your current token, please contact us immediately!</p>"+
+				"See you soon!<br>" +
+				"Openhealth.care";
+	
+	return html;
+};
+
 module.exports = templates;
