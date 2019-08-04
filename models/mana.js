@@ -12,6 +12,6 @@ const manaSchema = new mongoose.Schema({
         ref: 'User'
     },
     eth: { type: String, default: null } // ethereum address
-})
+});
 
 module.exports = mongoose.model('Mana', manaSchema);

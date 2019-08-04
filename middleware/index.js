@@ -98,6 +98,6 @@ middleware.checkIfAuthorized = function (req, res, next) {
     //if user is authorized : next
 
     //else flash message and redirect
-}
+};
 
 module.exports = middleware;

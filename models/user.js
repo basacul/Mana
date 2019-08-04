@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
 	email: {type: String, unique: true, required: true}, // TODO: Protect it but used for verification and resets
 	active: Boolean, 
 	token: String,
-    /* password: String, // TODO: store keccak(password) */
     // TODO: files are encrypted with password
     files: [
         {
