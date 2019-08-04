@@ -169,6 +169,9 @@ input:focus{
   width: 100%;
 }
 
+#interact {
+	  border-left: 1px solid black;
+}
 
 input, button {
   background-color:  rgb(44, 44, 43);
@@ -180,7 +183,6 @@ input, button {
 
 input[type="submit"], button{
   margin-left: -5px;
-  border-left: 1px solid black;
 }
 
 nav input[type="text"]:focus {
@@ -270,8 +272,8 @@ Such that flash messages do not mess with the grid
 */
 .overlay {
   position: absolute;
-  top: 0;
-  left: 14rem; 
+  top: 0rem;
+  left: 6rem; 
   margin-top: 0.2rem;
   width: auto;
   height: 100%;
@@ -283,5 +285,5 @@ Such that flash messages do not mess with the grid
   display: table-cell;
   text-align: center;
   z-index: 11;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }

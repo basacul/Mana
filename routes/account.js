@@ -12,7 +12,7 @@ router.put("/", middleware.isLoggedIn, (req, res)=> {
 	User.findById(req.user._id, function(err, user){
 		if(!user){
 			
-			req.flash('error', 'We could not find your entry in the database.');
+			req.flash('error', 'Your account not found.');
 			res.redirect('back');
 			
 		}else{
@@ -27,12 +27,12 @@ router.put("/", middleware.isLoggedIn, (req, res)=> {
 							
 						}else {
 							
-							req.flash('error', 'Something went wrong!! Please try again after sometimes.');
+							req.flash('error', 'Please try again after sometimes.');
 
 						}
 					} else {
 						
-						req.flash('success','Your password has been changed successfully' );
+						req.flash('success','Your password has been updated.' );
 					}
 					
 					res.redirect('back');
@@ -40,7 +40,7 @@ router.put("/", middleware.isLoggedIn, (req, res)=> {
 				});
 			}else{
 				
-				req.flash('error', 'New and confirmation password have to be equal.');
+				req.flash('error', 'Confirmation password mismatch.');
 				res.redirect('back');
 				
 			}

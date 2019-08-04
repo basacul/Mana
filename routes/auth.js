@@ -43,7 +43,7 @@ router.get('/register', function (req, res) {
     if (!req.isAuthenticated()) {
         res.render('auth/register');
     } else {
-        req.flash('error', 'Sign up only accessible if not logged in.');
+        req.flash('error', 'Registration only accessible if not logged in.');
         res.redirect('/home');
     }
 });

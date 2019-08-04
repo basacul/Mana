@@ -46,7 +46,7 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <div class="form-check mb-3">
+                    <div class="form-check mb-3 ml-1">
                         <% if(file.accessible){ %>
                         <input class="form-check-input" type="checkbox" name="file[accessible]" value="true"
                             id="f-accessible" checked>
@@ -77,14 +77,14 @@
                     <!-- TODO: IMPLEMENT ARRAY WITH USER NAME AND ALLOW FOR DELETIONS!!! PREVENT DUPLICATIONS-->
                     <% if(file.authorized && file.authorized.length > 0){ %>
                     <div class="form-group">
-                        <h4>Access authorized to</h4>
+                        <h4>Remove authorized access to</h4>
 
-                        <div class="text-center">
+                        <div class="form-check ml-1">
                             <% file.authorized.forEach(function(authUser, index){ %>
                             <div>
                                 <input type='checkbox' name="removeAuthorizedUser[]" class='form-check-input'
                                     id='f-<%=authUser%>' value="<%= authUser%>">
-                                <label for="f-<%=authUser%>"><%=authUser%></label>
+                                <label class="form-check-label" for="f-<%=authUser%>"><%=authUser%></label>
                             </div>
 
                             <% }) %>
@@ -96,7 +96,7 @@
                     <% if(users && users.length > 0){ %>
                     <div class="form-group">
                         <label class="form-check-label d-block" for="f-authorized">Authorize for</label>
-                        <select class="selectpicker bg-dark" multiple data-live-search="true" name="authorizedUser[]">
+                        <select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
                             <% users.forEach(function(user){ %>
                             <option><%= user.username %> : <%= user._id %></option>
                             <% }) %>

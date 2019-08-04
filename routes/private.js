@@ -46,7 +46,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
     const file = req.file;
 
     if (!(file &&req.body.file.fileName)) {
-        const error = new Error('Please upload a file and a file name to perform upload');
+        const error = new Error('Provide file and file name.');
 		// commented following two line to get rid of internal error
         //error.httpStatusCode = 400;
         //return next(error); 

@@ -71,10 +71,10 @@
 
                     <!-- TODO: Multiple users can be chosen through checkbox perhaps -->
                     <% if(users && users.length > 0){ %>
-                    <div class="form-group">
+                    <div class="form-group ">
                         <label class="form-check-label d-block" for="f-authorized">Authorize for:</label>
 
-                        <select class="selectpicker bg-dark" multiple data-live-search="true" name="authorizedUser[]">
+                        <select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
                             <% users.forEach(function(user){ %>
                             <option><%= user.username %> : <%= user._id %></option>
                             <% }) %>
