@@ -1,5 +1,5 @@
 <% include partials/header %>
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark d-none d-lg-block sticky-top" id="second_navbar">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark d-none d-lg-block" id="second_navbar">
     <div class="container" id="mainNavigation">
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -8,11 +8,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-                    <a class="nav-link" href="#settings">
-                        Account Settings
-                    </a>
-                </li>
+				
 				<li class="nav-item">
                     <a class="nav-link" href="#gdpr">
                         GDPR Options
@@ -47,12 +43,12 @@
 </nav>
 
 <div class="container">
-	<h2>IMPLEMENTS gdpr options and web3.eth,.net,.db and .personal Management API</h2>
+	<h2 id="gdpr">IMPLEMENTS gdpr options and web3.eth,.net,.db and .personal Management API</h2>
 	
 	<div class="row">
 		<div class="col-md-12 pt-4 mt-0">
 
-			<h3 id="gdpr">GDPR Options</h3>
+			<h3 >GDPR Options</h3>
 			<p>
 				This part includes options that are compliant with GDPR.
 			</p>
@@ -112,47 +108,47 @@
 
 				</form>
 			</div>
-
+		<a id="personal"></a>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12 pt-4 mt-0">
 
-				<h3 id="personal">Personal</h3>
+				<h3>Personal</h3>
 				<p>
 					This part includes personal related option for the web3.personal library.
 				</p>
-
+		<a id="ethereum"></a>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12 pt-4 mt-0">
 
-				<h3 id="ethereum">Ethereum Blockchain</h3>
+				<h3>Ethereum Blockchain</h3>
 				<p>
 					This part includes ethereum blockchain related methods from the web3.eth library.
 				</p>
-
+		<a id="network"></a>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12 pt-4 mt-0">
 
-				<h3 id="network">Network Status</h3>
+				<h3>Network Status</h3>
 				<p>
 				This part includes the node's network status related methods from the web3.net library. As long as I do not run a local node, this option 						is unnecessary.
 				</p>
-
+		<a id="db"></a>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12 pt-4 mt-0">
 
-				<h3 id="db">LevelDB</h3>
+				<h3>LevelDB</h3>
 				<p>
 					This part includes local LevelDB related methods from the web3.db library. As Long as I do not run a local node, this option is 								unnecessary.
 				</p>

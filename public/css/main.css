@@ -259,6 +259,12 @@ button[type="button"]{
   text-decoration: none;
 }
 
+.input-group-prepend span{
+  width: 50px;
+  border:0;
+  background-color: rgb(44, 44, 43);
+	color: black;
+}
 /*
 Such that flash messages do not mess with the grid
 */

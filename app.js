@@ -76,7 +76,7 @@ const authRoutes = require('./routes/auth'),
     documentationRoutes = require('./routes/documentation'),
     accountRoutes = require('./routes/account'),
     messageRoutes = require('./routes/messages'),
-    contactRoutes = require('./routes/contact'),
+    customerServiceRoutes = require('./routes/customer-service'),
     faqRoutes = require('./routes/faq');
 
 app.use('/', authRoutes);
@@ -87,7 +87,7 @@ app.use('/tools', toolsRoutes);
 app.use('/documentation', documentationRoutes);
 app.use('/account', accountRoutes);
 app.use('/messages', messageRoutes);
-app.use('/contact', contactRoutes);
+app.use('/customer-service', customerServiceRoutes);
 app.use('/faq', faqRoutes);
 
 // DEFAULT ROUTE IF NOTHING ELSE MATCHES

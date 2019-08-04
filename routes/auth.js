@@ -198,7 +198,7 @@ router.post('/password', (req, res) => {
 // get reset password page
 router.get('/reset', (req, res) => {
 	if (req.isAuthenticated()) {
-        res.redirect("home");
+        res.redirect("/home");
     } else {
         res.render('auth/reset');
     }

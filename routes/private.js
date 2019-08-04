@@ -24,7 +24,7 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
                     res.redirect('back');
                 } else {
                     // TODO: the users array should only contain the usernames and further necessary identifiable infos
-                    res.render("private", { files: data.files, users: users });
+                    res.render("app/private", { files: data.files, users: users });
                 }
             });
         }
@@ -56,7 +56,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
         File.create(req.body.file, function (err, newFile) {
             if (err) {
                 console.log(err);
-                res.render("private");
+                res.render("app/private");
             } else {
 				// TODO: if empty file name then go back and update error message
 				// TO
@@ -105,7 +105,7 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
                     console.log(error);
                     res.redirect('back');
                 } else {
-                    res.render("private_show", { file: foundFile, users: users });
+                    res.render("app/private_show", { file: foundFile, users: users });
                 }
             });
 

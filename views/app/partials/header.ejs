@@ -14,14 +14,11 @@
 </head>
 
 <body>
-
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<div class="container">
-				
-
-				<span class="d-none d-lg-inline"><a href="/home"><img src="/img/mana_logo.png"
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<span class="d-none d-lg-inline"><a href="/home"><img src="/img/mana_logo.png"
 							alt="Logo of the project Mana" id="logo"></a></span>
+			<div class="container">
 				<% if(error && error.length > 0){ %>
 				<div class="row overlay">
 					<div class="alert alert-secondary">
@@ -44,29 +41,32 @@
 					</button>
 					<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
 						<ul class="navbar-nav ">
+							<li class="nav-item"><a class="nav-link" href="/account">
+								<span class="glyphicon glyphicon-user"></span>
+									<%= currentUser.username %>
+								</a>
+							</li>
 							<li class="nav-item"><a class="nav-link" href="/e-record"><span
 										class="glyphicon glyphicon-th-list"></span>
 									E-Record</a></li>
 							<li class="nav-item mr-auto"><a class="nav-link" href="/tools"><span
 										class="glyphicon glyphicon-wrench"></span>
 									Tools</a></li>
-							<!-- <li class="nav-item"><a class="nav-link" href="/account"><span
-										class="glyphicon glyphicon-user"></span>
-									<%= currentUser.username %>
-								</a></li> -->
+							
 							<li class="nav-item"><a class="nav-link" href="/messages"><span
 										class="glyphicon glyphicon-envelope"></span>
 									Messages</a></li>
 							<li class="nav-item"><a class="nav-link" href="/private"><span
 										class="glyphicon glyphicon-folder-open"></span> Private</a></li>
+							
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									<span class="glyphicon glyphicon-question-sign"></span> Help
 								</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/contact">
-										<span class="glyphicon glyphicon-earphone"></span> Contact Us
+									<a class="dropdown-item" href="/customer-service">
+										<span class="glyphicon glyphicon-earphone"></span> Customer Service
 									</a>
 									<a class="dropdown-item" href="/faq">
 										<span class="glyphicon glyphicon-info-sign"></span> FAQ
