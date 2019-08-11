@@ -114,7 +114,25 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
     });
 });
 
-// UPDATE ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ******************************* !!!
+// DOWNLOAD FILE
+router.post('/:id', (req, res) => {
+	File.findById(req.params.id, (err, file) => {
+		if(err){
+			req.flash('error', 'File not found.');
+			res.redirect('back');
+		}else{
+			const download = `encrypted/users/${file.path}`;
+			res.download(download, err => {
+				if(err){
+					req.flash('error', 'Download not possible.');
+					
+				}
+			});
+		}
+	})
+	
+});
+
 // UPDATE ROUTE
 router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
 

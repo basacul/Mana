@@ -1,117 +1,93 @@
 <% include partials/header %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
-    <div class="container" id="mainNavigation">
-<!-- TODO: Implement search form for given files-->
-        <!-- <form class="nav-link" method="post" action="http://www.randyconnolly.com/tests/process.php">
-            <fieldset>
-                <div class="d-flex justify-content-between">
-                    <div id="search">
-                        <label for="f-search" class="sr-only">Search file</label>
-                        <input type="text" name="search" placeholder="Search titles" list="keywords">
-                        <input type="submit" value="Search">
-                        <datalist id="keywords">
-                            <option>Ferris, John MD</option>
-                            <option>Medicare</option>
-                            <option>Lab Diagnostics Inc</option>
-                            <option>bill</option>
-                            <option>prescription</option>
-                            <option>reimbursement</option>
-                        </datalist>
-                    </div> -->
-				
-                    <div id="upload">
-                        <label for="f-upload" class="custom-file-upload">
-                            <button type="button" data-toggle="modal" data-target="#myModal">
-                                <span class="glyphicon glyphicon-cloud-upload"></span> Edit File
-                            </button>
-                        </label>
-
-                    </div>
-                <!-- </div>
-            </fieldset>
-        </form> -->
-    </div>
-</nav>
 
 <!-- The Modal -->
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/private/<%=file._id%>?_method=PUT" method="POST">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit File</h4>
+			
+			<!-- Modal Header -->
+			<div class="modal-header d-flex justify-content-between">
+				<h4 class="modal-title">Edit File</h4>
+				<div>
+					<form action="/private/<%= file._id %>?_method=DELETE" method="POST">
+						<input type="submit" class="btn btn-danger" value="Delete File">
+					</form>
+				</div>
 
-                </div>
+			</div>
+			<form action="/private/<%=file._id%>?_method=PUT" method="POST">
 
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="form-check mb-3 ml-1">
-                        <% if(file.accessible){ %>
-                        <input class="form-check-input" type="checkbox" name="file[accessible]" value="true"
-                            id="f-accessible" checked>
-                        <% }else{ %>
-                        <input class="form-check-input" type="checkbox" name="file[accessible]" value="true"
-                            id="f-accessible">
-                        <% } %>
-                        <label class="form-check-label" for="f-accessible">
-                            Accessible?
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="f-filename">File Name</label>
-                        <input type="text" class="form-control" name="file[fileName]" id="f-filename"
-                            value="<%=file.fileName%>">
 
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="f-file">File</label>
-                        <!-- TODO: IMPLEMENT UPLOAD FOR THIS FILE AND UPDATE MONGODB & APP.JS -->
-                        <input type="text" class="form-control" name="file[file]" id="f-file" value="<%=file.path%>"
-                            readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="f-note">Notes</label>
-                        <textarea class="form-control" name="file[note]" id="f-note" rows="3"><%=file.note%></textarea>
-                    </div>
-                    <!-- TODO: IMPLEMENT ARRAY WITH USER NAME AND ALLOW FOR DELETIONS!!! PREVENT DUPLICATIONS-->
-                    <% if(file.authorized && file.authorized.length > 0){ %>
-                    <div class="form-group">
-                        <h4>Remove authorized access to</h4>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="form-check mb-3 ml-1">
+						<% if(file.accessible){ %>
+						<input class="form-check-input" type="checkbox" name="file[accessible]" value="true"
+							id="f-accessible" checked>
+						<% }else{ %>
+						<input class="form-check-input" type="checkbox" name="file[accessible]" value="true"
+							id="f-accessible">
+						<% } %>
+						<label class="form-check-label" for="f-accessible">
+							Accessible?
+						</label>
+					</div>
+					<div class="form-group">
+						<label for="f-filename">File Name</label>
+						<input type="text" class="form-control" name="file[fileName]" id="f-filename"
+							value="<%=file.fileName%>">
 
-                        <div class="form-check ml-1">
-                            <% file.authorized.forEach(function(authUser, index){ %>
-                            <div>
-                                <input type='checkbox' name="removeAuthorizedUser[]" class='form-check-input'
-                                    id='f-<%=authUser%>' value="<%= authUser%>">
-                                <label class="form-check-label" for="f-<%=authUser%>"><%=authUser%></label>
-                            </div>
+					</div>
+					<div class="form-group mb-2">
+						<label for="f-file">File</label>
+						<!-- TODO: IMPLEMENT UPLOAD FOR THIS FILE AND UPDATE MONGODB & APP.JS -->
+						<input type="text" class="form-control" name="file[file]" id="f-file" value="<%=file.path%>"
+							readonly>
+					</div>
+					<div class="form-group">
+						<label for="f-note">Notes</label>
+						<textarea class="form-control" name="file[note]" id="f-note" rows="3"><%=file.note%></textarea>
+					</div>
+					<!-- TODO: IMPLEMENT ARRAY WITH USER NAME AND ALLOW FOR DELETIONS!!! PREVENT DUPLICATIONS-->
+					<% if(file.authorized && file.authorized.length > 0){ %>
+					<div class="form-group">
+						<h4>Remove authorized access to</h4>
 
-                            <% }) %>
-                        </div>
+						<div class="form-check ml-1">
+							<% file.authorized.forEach(function(authUser, index){ %>
+							<div>
+								<input type='checkbox' name="removeAuthorizedUser[]" class='form-check-input'
+									id='f-<%=authUser%>' value="<%= authUser%>">
+								<label class="form-check-label" for="f-<%=authUser%>"><%=authUser%></label>
+							</div>
 
-                    </div> <% } %>
-                    <!-- TODO: Multiple users can be chosen through
-                            checkbox perhaps -->
-                    <% if(users && users.length > 0){ %>
-                    <div class="form-group">
-                        <label class="form-check-label d-block" for="f-authorized">Authorize for</label>
-                        <select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
-                            <% users.forEach(function(user){ %>
-                            <option><%= user.username %> : <%= user._id %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-                    <% } %>
+							<% }) %>
+						</div>
 
-                </div>
+					</div> <% } %>
+					<!-- TODO: Multiple users can be chosen through
+							checkbox perhaps -->
+					<% if(users && users.length > 0){ %>
+					<div class="form-group">
+						<label class="form-check-label d-block" for="f-authorized">Authorize for</label>
+						<select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
+							<% users.forEach(function(user){ %>
+							<option><%= user.username %> : <%= user._id %></option>
+							<% }) %>
+						</select>
+					</div>
+					<% } %>
 
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer d-flex justify-content-around">
+					<button type="submit" class="btn btn-primary">Update</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
+			</form>
+		
+			
         </div>
     </div>
 </div>
@@ -121,9 +97,18 @@
             <div class="col-12">
                 <div class="card mt-3 bg-dark text-white border-secondary">
                     <h5 class="card-header d-flex justify-content-between" style="background: black">
-                        <!-- TODO: IMPLEMENT DOWNLOAD FOR THIS FILE INSTEAD OF-->
-                        <span><a href="/public/uploads/<%=file.fileName%>"><%=file.fileName%></a></span>
-                        <span><a href="/private">GO BACK</a></span>
+						<form action='/private/<%= file._id %>' method='POST'>
+							<input type="submit" class="btn btn-info" value="download">
+						</form>
+					
+						
+						<input class="btn btn-info" type="button" data-toggle="modal" data-target="#myModal" value="edit">
+					
+						
+						
+
+					
+                        <span><a href="/private" class="btn btn-info">go back</a></span>
                     </h5>
                     <div class="card-body">
                         <div class="row d-flex justify-content-around">
@@ -138,12 +123,7 @@
                                 </h5>
                                 <p class="card-text"><%= file.note %></p>
                             </div>
-                            <!-- TODO: ALIGN DELETE BUTTON TO BOTTOM RIGHT CORNER -->
-                            <div>
-                                <form action="/private/<%= file._id %>?_method=DELETE" method="POST">
-                                    <input type="submit" class="btn btn-danger" value="Delete File">
-                                </form>
-                            </div>
+                           
                         </div>
 
 
