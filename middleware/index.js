@@ -2,6 +2,7 @@
 const multer = require('multer');
 const User = require('../models/user');
 const File = require('../models/file');
+const crypto = require('crypto');
 
 const middleware = {};
 
@@ -14,7 +15,10 @@ const storage = multer.diskStorage({
         cb(null, `encrypted/users/${req.user.username}`);
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+		// a user can now have multiple duplicate files with same file name but stored with a different file path each
+		const hash = crypto.createHmac('sha256', req.user.username).update(Date.now().toString()).digest('hex') ;
+		const format = file.originalname.split('.').pop()
+        cb(null, `${hash}.${format}`);
     }
 });
 const upload = multer({ storage: storage });

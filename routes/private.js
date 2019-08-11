@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router(); // now instead of app, use router
 const File = require('../models/file');
 const User = require('../models/user');
+const crypt = require('crypto');
 const middleware = require('../middleware');
 
 const fs = require('fs');
@@ -44,7 +45,6 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
     // console.log('======================================');
 
     const file = req.file;
-
     if (!(file &&req.body.file.fileName)) {
         const error = new Error('Provide file and file name.');
 		// commented following two line to get rid of internal error
@@ -63,7 +63,9 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
                 newFile.owner.id = req.user._id;
                 newFile.owner.username = req.user.username;
 				// TODO: Give a unique file name to store in folder
-                newFile.path = `${req.user.username}/${req.file.originalname}`;
+
+			
+                newFile.path = `${req.user.username}/${req.file.filename}`;
                 if (req.body.authorizedUser) {
                     newFile.authorized = req.body.authorizedUser.map(item => {
                         return mongoose.Types.ObjectId(item.split(':')[1].trim());
@@ -115,20 +117,16 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
 });
 
 // DOWNLOAD FILE
-router.post('/:id', (req, res) => {
-	File.findById(req.params.id, (err, file) => {
-		if(err){
-			req.flash('error', 'File not found.');
-			res.redirect('back');
-		}else{
-			const download = `encrypted/users/${file.path}`;
-			res.download(download, err => {
-				if(err){
-					req.flash('error', 'Download not possible.');
-					
-				}
-			});
-		}
+router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res) => {
+	
+	File.findById(req.params.id, (error, file) => {
+		// middleware.checkOwnership already checks for error not found
+		const download = `encrypted/users/${file.path}`;
+		res.download(download, err => {
+			if(err){
+				req.flash('error', 'Download not possible.');
+			}
+		});
 	})
 	
 });
