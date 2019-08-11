@@ -51,7 +51,7 @@
 					<!-- TODO: IMPLEMENT ARRAY WITH USER NAME AND ALLOW FOR DELETIONS!!! PREVENT DUPLICATIONS-->
 					<% if(file.authorized && file.authorized.length > 0){ %>
 					<div class="form-group">
-						<h4>Remove authorized access to</h4>
+						<p>Remove authorized access to</p>
 
 						<div class="form-check ml-1">
 							<% file.authorized.forEach(function(authUser, index){ %>
@@ -64,7 +64,11 @@
 							<% }) %>
 						</div>
 
-					</div> <% } %>
+					</div> <% }else{ %>
+					<div class="form-group">
+						<p>Explicit authorization from list not given</p>
+					</div>
+					<% } %>
 					<!-- TODO: Multiple users can be chosen through
 							checkbox perhaps -->
 					<% if(users && users.length > 0){ %>
@@ -104,11 +108,6 @@
 						
 						<input class="btn btn-info" type="button" data-toggle="modal" data-target="#myModal" value="edit">
 					
-						
-						
-
-					
-                        <span><a href="/private" class="btn btn-info">go back</a></span>
                     </h5>
                     <div class="card-body">
                         <div class="row d-flex justify-content-around">
@@ -121,7 +120,9 @@
                                     <span>THIS FILE IS ACCESSIBLE ONLY UPON AUTHORIZATION</span>
                                     <% } %>
                                 </h5>
-                                <p class="card-text"><%= file.note %></p>
+                                <p class="card-text"><%= file.note %> <br><span class="float-right mr-2"><a href="/private">go back</a></span></p>
+								
+								
                             </div>
                            
                         </div>

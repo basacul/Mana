@@ -82,10 +82,16 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
                         req.flash('error', err.message);
                         res.redirect('/');
                     } else {
-                        user.files.push(newFile);
-                        user.save();
-                        req.flash('success', 'New file uploaded');
-                        res.redirect("/private");
+						// in case no user with given id there is simply no error thus null testing
+						if(user){
+					  		user.files.push(newFile);
+							user.save();
+							req.flash('success', 'New file uploaded');
+						}else{
+							req.flash('error', 'User not found to push file!');
+						}
+						res.redirect('/private');
+                      
                     }
                 });
             }
@@ -101,14 +107,28 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
     File.findById(req.params.id, function (err, foundFile) {
         if (err) {
             console.log(err);
+			req.flash('error', err.message);
             res.redirect("/private");
+		// if foundFile not null
         } else {
             User.find({}, function (error, users) {
                 if (error) {
                     console.log(error);
                     res.redirect('back');
                 } else {
-                    res.render("app/private_show", { file: foundFile, users: users });
+					// if users equal null, then simply no users are displayed to choose from
+					
+					let list = [];
+					if(users){
+						users.forEach(user => {
+						if(!user._id.equals(req.user._id)){
+							list.push({username: user.username, _id: user._id});
+						}
+					});
+					}
+					
+					// console.log(users);
+                    res.render("app/private_show", { file: foundFile, users: list });
                 }
             });
 
@@ -120,7 +140,7 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
 router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res) => {
 	
 	File.findById(req.params.id, (error, file) => {
-		// middleware.checkOwnership already checks for error not found
+		// middleware.checkOwnership already checks for error and null
 		const download = `encrypted/users/${file.path}`;
 		res.download(download, err => {
 			if(err){
@@ -232,5 +252,7 @@ function sanitize_text(req) {
     req.body.file.fileName = req.sanitize(req.body.file.fileName);
     req.body.file.note = req.sanitize(req.body.file.note);
 }
+
+
 
 module.exports = router;
