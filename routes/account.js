@@ -3,6 +3,7 @@ const router = express.Router(); // now instead of app, use router
 const middleware = require('../middleware');
 const User = require('../models/user');
 const File = require('../models/file');
+const Privacy = require('../models/privacy');
 const mailer = require('../misc/mailer');
 const template = require('../misc/templates');
 
@@ -27,7 +28,15 @@ const deleteFolderRecursive = function(path) {
 };
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
-    res.render("app/account");
+	Privacy.findOne({user: req.user._id}, (err, privacy) => {
+		if(err){
+			req.flash('error', 'Please try later...');
+			res.redirect('/home');
+		}else{
+			 res.render("app/account", {privacy: privacy});
+		}
+	})
+   
 });
 
 router.put("/password", middleware.isLoggedIn, (req, res)=> {
@@ -73,9 +82,23 @@ router.put("/password", middleware.isLoggedIn, (req, res)=> {
 	});	
 });
 
-router.put("/gdpr", middleware.isLoggedIn, (req, res)=> {
-	req.flash('success', 'GDPR options updated.');
-	res.redirect('/account');
+router.put("/privacy", middleware.isLoggedIn, (req, res)=> {
+	let privacy_settings = sanitize_privacy(req);
+	
+	console.log(req.body.privacy);
+
+	
+	Privacy.findOneAndUpdate({user: req.user._id}, privacy_settings, (err, privacy) => {
+		if(err){
+			req.flash('error', 'Could not update privacy settings.');
+		}else{
+			console.log(`Privacy object: ${privacy}`);
+			req.flash('success', 'Privacy settings updated.');
+		}
+		res.redirect('/account');
+	})
+	
+	
 });
 
 router.post('/token', middleware.isLoggedIn, (req, res) => {
@@ -108,6 +131,12 @@ router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 				req.flash('error', 'Please provide the correct token.');
 				res.redirect('back');
 			}else{
+				Privacy.findOneAndRemove({user: user._id}, (err, privacy) => {
+					if(err){
+						console.log(`Could not delete privacy setting for ${user._id}`);
+					}
+				});
+				
 				File.deleteMany({ owner : {id: user._id, username: user.username} }, function (err) {
 					if(err){
 						req.flash('error', 'Something went wrong with files.');
@@ -128,6 +157,18 @@ router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 	});
 });
 
+function sanitize_privacy(req) {
+	if(req.body.privacy){
+		req.body.privacy.notify = req.body.privacy.notify ? true : false;
+		req.body.privacy.personalize = req.body.privacy.personalize ? true : false;
+		req.body.privacy.research = req.body.privacy.research ? true : false;
+		req.body.privacy.providers = req.body.privacy.providers ? true : false;
+		req.body.privacy.insurance = req.body.privacy.insurance ? true : false;
+		return req.body.privacy;
+	}else{
+		return {notify: false, personalize: false, research: false, providers: false, insurance: false};
+	}
 
+}
 
 module.exports = router;

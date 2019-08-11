@@ -62,6 +62,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 				// TO
                 newFile.owner.id = req.user._id;
                 newFile.owner.username = req.user.username;
+				// TODO: Give a unique file name to store in folder
                 newFile.path = `${req.user.username}/${req.file.originalname}`;
                 if (req.body.authorizedUser) {
                     newFile.authorized = req.body.authorizedUser.map(item => {

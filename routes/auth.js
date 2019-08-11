@@ -6,6 +6,7 @@ const cryptoRandomString = require('crypto-random-string'); // to generate verif
 const mailer = require('../misc/mailer');
 const template = require('../misc/templates');
 const User = require('../models/user');
+const Privacy = require('../models/privacy');
 const middleware = require('../middleware');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
@@ -65,13 +66,23 @@ router.post('/register', function (req, res) {
             res.redirect('/register');
         } else {
 			
+			// Create folder for files for the respective user in encrypted/users
             fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
                 if (err) {
                     req.flash('error', err.message);
                     throw err;
                 }
             });
-
+			
+			// Create Privacy DB OBject
+			Privacy.create({user: user._id}, (err, privacy) => {
+				if(err){
+					console.log('Something went wrong when creating a new privacy object.');
+				}else{
+					console.log('Privacy object created with: ');
+					console.log(privacy);
+				}
+			});
 			
 			// 1. generate secret token 
 			user.token = cryptoRandomString({length: 32, type: 'base64'});

@@ -32,43 +32,64 @@
 				</form>
 			</div>
 		</div>
+		<hr>
 		<div class="row">
 			<div class="col-md-12">
 
-				<h4 >GDPR Options</h4>
+				<h4 >Privacy Options</h4>
 			
 			
-				<form method='POST' action='/account/gdpr?_method=PUT' class="d-block">
+				<form method='POST' action='/account/privacy?_method=PUT' class="d-block">
 					<div class="input-group form-group">
 						<div class="form-check  ml-1">
-							<input type="checkbox" name="notifications" class="form-check-input" value="true" id="f-informed">
-							<label class="form-check-label" for="f-informed">Would you like to be informed by email for any events concerning your account?</label>
+							<% if(privacy.notify){ %>
+							<input type="checkbox" name="privacy[notify]" class="form-check-input" value="true" id="f-notify" checked>
+							<% }else{ %> 
+							<input type="checkbox" name="privacy[notify]" class="form-check-input" value="true" id="f-notify">
+							<% } %>
+							<label class="form-check-label" for="f-notify">Would you like to be informed by email for any events concerning your account?</label>
 						</div>
 					</div>
 					<div class="input-group form-group">
 						<div class="form-check ml-1">
-							<input type="checkbox" name="mana" class="form-check-input" value="true" id="f-mana">
-							<label class="form-check-label" for="f-mana">Would you like to let Mana analyze your data to personalize your user experience?</label>
+							<% if(privacy.personalize){ %>
+							<input type="checkbox" name="privacy[personalize]" class="form-check-input" value="true" id="f-personalize" checked>
+							<% }else{ %>
+							<input type="checkbox" name="privacy[personalize]" class="form-check-input" value="true" id="f-personalize">
+							<% } %>
+							<label class="form-check-label" for="f-personalize">Would you like to let Mana analyze your data to personalize your user experience?</label>
 						</div>
 					</div>
 					<div class="input-group form-group">
 						<div class="form-check ml-1">
-							<input type="checkbox" name="research" class="form-check-input" value="true" id="f-research">
+							<% if(privacy.research){ %>
+							<input type="checkbox" name="privacy[research]" class="form-check-input" value="true" id="f-research" checked>
+							<% }else{ %>
+							<input type="checkbox" name="privacy[research]" class="form-check-input" value="true" id="f-research">
+							<% } %>
 							<label class="form-check-label" for="f-research">Would you like to allow public research institutes to access your data?</label>
 						</div>
 					</div>
 					<div class="input-group form-group">
 						<div class="form-check ml-1">
-							<input type="checkbox" name="insurance" class="form-check-input" value="true" id="f-insurance">
+							<% if(privacy.providers){ %>
+							<input type="checkbox" name="privacy[providers]" class="form-check-input" value="true" id="f-providers" checked>
+							<% }else{ %>
+							<input type="checkbox" name="privacy[providers]" class="form-check-input" value="true" id="f-providers">
+							<% } %>
+							<label class="form-check-label" for="f-providers">Would you like to allow healthcare providers in general to access your data?</label>
+						</div>
+					</div>
+					<div class="input-group form-group">
+						<div class="form-check ml-1">
+							<% if(privacy.insurance){ %>
+							<input type="checkbox" name="privacy[insurance]" class="form-check-input" value="true" id="f-insurance" checked>
+							<% }else{ %>
+							<input type="checkbox" name="privacy[insurance]" class="form-check-input" value="true" id="f-insurance">
+							<% } %>
 							<label class="form-check-label" for="f-insurance">Would you like to allow your insurance company access to your data?</label>
 						</div>
 					</div>
-
-
-					<!-- <div class="input-group form-group">
-
-						<input type="text" name="token" class="form-control" placeholder="verification token" required>
-					</div> -->
 					<div class="row d-flex justify-content-around">
 						<div class="form-group">
 							<input type="submit" value="Save" class="btn btn_own_style">
@@ -78,6 +99,7 @@
 
 			</div>
 		</div>
+		<hr>
 		<div class="row">
 			<div class="col-12 pt-4">
 				<h4>Send Verification Token</h4>
