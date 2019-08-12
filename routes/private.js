@@ -25,7 +25,7 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
                     res.redirect('back');
                 } else {
                     // TODO: the users array should only contain the usernames and further necessary identifiable infos
-                    res.render("app/private", { files: data.files, users: users });
+                    res.render("app/private", { files: data.files, users: onlyOtherUsers(users, req.user._id) });
                 }
             });
         }
@@ -118,17 +118,17 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
                 } else {
 					// if users equal null, then simply no users are displayed to choose from
 					
-					let list = [];
-					if(users){
-						users.forEach(user => {
-						if(!user._id.equals(req.user._id)){
-							list.push({username: user.username, _id: user._id});
-						}
-					});
-					}
+					// let list = [];
+					// if(users){
+					// 	users.forEach(user => {
+					// 	if(!user._id.equals(req.user._id)){
+					// 		list.push({username: user.username, _id: user._id});
+					// 	}
+					// });
+					// }
 					
 					// console.log(users);
-                    res.render("app/private_show", { file: foundFile, users: list });
+                    res.render("app/private_show", { file: foundFile, users: onlyOtherUsers(users, req.user._id) });
                 }
             });
 
@@ -254,5 +254,17 @@ function sanitize_text(req) {
 }
 
 
+// removes the currently logged in user from the array users
+function onlyOtherUsers(users, id){
+	let list = [];
+	if(users){
+		users.forEach(user => {
+		if(!user._id.equals(id)){
+			list.push({username: user.username, _id: user._id});
+		}
+	});
+	}
+	return list;
+}
 
 module.exports = router;
