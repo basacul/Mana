@@ -5,11 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js --ignore encrypted/*"
+    "dev": "nodemon app.js --ignore encrypted/* --ignore logs/*"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^2.2.1",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "crypto-random-string": "^3.0.1",
@@ -19,10 +20,12 @@
     "express-session": "^1.16.2",
     "method-override": "^3.0.0",
     "mongoose": "^5.6.8",
+    "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "nodemailer": "^6.3.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^5.0.1"
+    "passport-local-mongoose": "^5.0.1",
+    "winston": "^3.2.1"
   }
 }

@@ -3,6 +3,8 @@
 // =============================================================================================
 const express = require('express'),
     app = express(),
+	morgan = require('morgan'),
+	winston = require('./config/winston'),
     mongoose = require('mongoose'),
     flash = require('connect-flash'),
     passport = require('passport'),
@@ -23,6 +25,11 @@ app.use(require('express-session')({
     saveUninitialized: false
 }));
 
+
+app.use(morgan('combined',{ 
+	stream: winston.stream, 
+	skip: (req, res) => { return res.statusCode < 400 } // otherwise the app.log is full of any request
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());

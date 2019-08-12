@@ -6,6 +6,7 @@ const File = require('../models/file');
 const Privacy = require('../models/privacy');
 const mailer = require('../misc/mailer');
 const template = require('../misc/templates');
+const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
 const email_for_dev = 'antelo.b.lucas@gmail.com';
@@ -43,7 +44,7 @@ router.put("/password", middleware.isLoggedIn, (req, res)=> {
 	
 	User.findById(req.user._id, function(err, user){
 		if(!user){
-			
+			winston.error('Set new password: User not found');
 			req.flash('error', 'Your account not found.');
 			res.redirect('back');
 			
@@ -54,6 +55,7 @@ router.put("/password", middleware.isLoggedIn, (req, res)=> {
 					if(err) {
 						
 						if(err.name === 'IncorrectPasswordError'){
+							winston.info(`Incorrect Password for setting a new password by user ${req.user.username}`);
 							
 							req.flash('error', 'Incorrect password' ); // Return error
 							
