@@ -1,5 +1,5 @@
 <% include partials/header %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
     <div class="container" id="mainNavigation">
         <div id="message_interact" class="nav-link">
             <label for="f-interact" class="sr-only">Say Something</label>
@@ -7,168 +7,17 @@
             <button id="interact">Interact</button>
         </div>
     </div>
-</nav>
+</nav> -->
 
 <article>
 
     <div class="container">
         <div class="row">
-            <!-- javascript dapp.js inserts metamask version and account information -->
-            <div class="col-12  pt-4 mt-0">
-                <h2></h2>
-            </div>
-            <div class="col-12  pt-4 mt-0">
-                <p></p>
-            </div>
-            <div class="col-12  pt-4 mt-0">
-                <p>
-                    Contract Address: 0x6d0d7e4f6f7780c593894f18e1460a450e7058d5
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12  pt-4 mt-0">
-                <div id="table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Message</th>
-                                <th>Block Number</th>
-                                <th>Transaction Hash</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-			 <div class="col-12  pt-4 mt-0">
-                 <section>
-                <h3 id="description">IMPLEMENTS web3 contract invocation</h3>
-                <p>This section holds personal data stored indirectly in the ethereum
-                    network as an external data storage solution such as IPFS will be used. </p>
-
-                <p>The contract is accessible after the transaction has been mined.
-                    The contract object is accessible with web3.</p>
-                <ul>
-                    <li>web3.eth.contract(abiDefinition Array)
-                        <ol>
-                            <li>Deploying the contract code to EVM<br>
-                                <ul>
-                                    <li>
-                                        let contractInstance= contract.new({
-                                        from: web3.eth.coinbase,
-                                        data: bytecode,
-                                        gas: gas
-                                        })<br>
-                                        Callback function gets called 2 times if successful<br>
-                                        1. Result = Transaction Hash<br>
-                                        2. Result = Contract Instance address<br>
-                                        with contractInstance.transactionHash and contractInstance.address
-                                    </li>
-                                    <li>
-                                        OR USING sendTransaction<br>
-                                        let conData = contract.new.getData(..., {data:bytecode});<br>
-                                        let transactionHash = web3.eth.sendTransaction({..., conData},
-                                        function(e,r){..})<br>
-                                        let conAddress = web3.eth.getTransactionReceipt(transactionHash,
-                                        function(e,r){...});
-
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>Invoking a contract function
-                                <ul>
-                                    <li>Requires a contract instance we need the address of the contract</li>
-                                    <li>Executed on local node: <br>
-                                        let contract = web3.eth.contract(abiDefinitioN) <br>
-                                        let contractInstance = contract.at(address)</li>
-                                    <li>
-                                        For invoking the contract in network<br>
-                                        1. contractInstance.METHOD.call(...) or <br>
-                                        2. contractInstance.METHOD.sendTransaction(..)
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li>Watch for events from contract instance
-                                <ul>
-                                    <li>Use events for dapp for which I need the specific address</li>
-                                    <li>Event: get/watch especially for dapps</li>
-                                    <li>Filter: get/watch may be used for writing tools as it listens to all events from
-                                        any
-                                        source
-                                    </li>
-                                </ul>
-                            </li>
-                        </ol>
-                    </li>
-                </ul>
-            </section>
-            </div>
-           
-        </div>
-        <div class="row">
-            <div class="col-12  pt-4 mt-0">
-                <h3 id="data-exchange">Data Exchange</h3>
-                <form method="post" enctype="mutlipart/form-data"
-                    action="http://www.randyconnolly.com/tests/process.php">
-                    <fieldset>
-                        <legend class="sr-only">Data Exchange User Interface - for now</legend>
-
-                        <input type="hidden" name="datetime" value="current datetime">
-                        <input type="hidden" name="sender" value="hashvalue-sender">
-
-                        <!-- user can only choose from a given set of contacts such that data can be send to those, who are known. Aka Ripple style -->
-                        <div class="input-group mb-3">
-                            <label for="f-recipient" class="sr-only">Recipient: </label>
-                            <input class="form-control" type="search" name="recipient" id="f-recipient"
-                                list="recipients" required placeholder="Enter recipient...">
-
-                            <!-- value would be the respective ethereum id-->
-                            <datalist id="recipients">
-                                <option value="hashvalue-p1">Patient 1</option>
-                                <option value="hashvalue-p2">Patient 2</option>
-                                <option value="hashvalue-h1">Healthcare Professional 1</option>
-                                <option value="hashvalue-h2">Healthcare Professional 2</option>
-                                <option value="hashvalue-i1">Insurance Company 1</option>
-                                <option value="hashvalue-i2">Insurance Company 2</option>
-                            </datalist>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <label for="f-subject" class="sr-only">Subject: </label>
-                            <input class="form-control" type="text" name="subject" id="f-subject" required
-                                placeholder="Enter subject...">
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <label for="f-message" class="sr-only">Message: </label>
-                            <textarea class="form-control" rows="3" name="message" id="f-message"
-                                placeholder="Enter a message..."></textarea>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label for="f-data" class="sr-only">Data: </label>
-                            <input type="file" name="data" id="f-data" required>
-                        </div>
-                        <div class="input-group mb-3">
-                            <!-- sometimes the data owner needs to be notified when sharing its respective data, but in that case this will checked automatically and invisible. Otherwise it is optional - like reimbursements, etc -->
-                            <label for="f-notify" class="sr-only">Notify data owner: </label>
-                            <p><input type="checkbox" name="notifiy" id="f-notify"> Notify data owner</p>
-                        </div>
-                        <div class="input-group mb-3">
-                            <input class="btn" type="submit">
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-
-
+     		<p>THIS PART IMPLEMENTS SOLUTION BASED ON HYPERLEDGER.</p>
+		</div>
     </div>
 
 </article>
-<script type="text/javascript" src="js/dapp.js"></script>
+<script type="text/javascript" src="js/hyperledger.js"></script>
 
 <% include partials/footer %>
