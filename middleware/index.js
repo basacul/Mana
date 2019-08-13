@@ -3,6 +3,7 @@ const multer = require('multer');
 const User = require('../models/user');
 const File = require('../models/file');
 const crypto = require('crypto');
+const winston = require('../config/winston');
 
 const middleware = {};
 
@@ -59,6 +60,8 @@ middleware.checkOwnership = function (req, res, next) {
 
     File.findById(req.params.id, function (error, foundFile) {
         if (error) {
+			winston.error(error.message);
+			req.flash('error', error.message);
             res.redirect('back');
         } else {
 
@@ -68,6 +71,7 @@ middleware.checkOwnership = function (req, res, next) {
             if (foundFile && foundFile.owner.id.equals(req.user._id)) {
                 next();
             } else {
+				winston.info('User tried to access file to which it was not authorized.');
                 req.flash('error', `Permission denied for file ${req.params.id}!`);
                 res.redirect('/private');
             }
@@ -79,10 +83,12 @@ middleware.checkOwnership = function (req, res, next) {
 middleware.isVerified = function(req, res, next){
 	User.findOne({username: req.body.username}, function(err,user){
 		if(err){
+			winston.error(err.message);
 			req.flash('error', err.message);
 			res.redirect('back');
 		}else{
 			if(user && !user.active){
+				winston.inf('A log in attempt with a currently not verified account.');
 				req.flash('error', 'Please verify your account before accessing Mana.');
 				res.redirect('/verification');
 			}else{

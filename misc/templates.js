@@ -56,4 +56,29 @@ templates.token = function(username, email, token){
 	return html;
 };
 
+templates.data = function(username, email, summary){
+		let html = `<h3>Hi ${username}!</h3><br>` +
+				`<p>Send this email to ${email}.<p><br>` +
+				
+				"<p>We received your request to get the data we currently store " +
+				"on our servers. This request will be answered in 48 till 72 hours.</p><br>";
+		if(summary){
+			html += "<p>We will specifically send you a summary of this data. In case you wish " +
+					"to receive the complete data, please make sure that the checkbox <br>"+
+					"<strong>Only a summary of the data</strong><br>"+
+					"is unchecked.";
+		}else{
+			html += "<p>We will specifically send you a the complete set of this data. In case you wish " +
+					"to receive the summary, please make sure that the checkbox <br>"+
+					"<strong>Only a summary of the data</strong><br>"+
+					"is checked.";
+		}
+			
+		html += "<p>If you did not perform this request, please contact us immediately!</p>"+
+				"See you soon!<br>" +
+				"Openhealth.care";
+	
+	return html;
+}
+
 module.exports = templates;

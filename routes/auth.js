@@ -8,6 +8,7 @@ const template = require('../misc/templates');
 const User = require('../models/user');
 const Privacy = require('../models/privacy');
 const middleware = require('../middleware');
+const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
 const email_for_dev = 'antelo.b.lucas@gmail.com';
@@ -56,7 +57,7 @@ router.post('/register', function (req, res) {
 	// check, that a username and email is not already taken
     User.register(new User({ username: req.body.username, email: req.body.email, active: false }), req.body.password, function (err, user) {
         if (err) {
-            console.log('Error on sign up', err);
+            winston.error(err.message);
 			if(err.message.includes('email')){
 				req.flash('error', 'Please, provide a different email.'); // as the err message is too abstract
 			}else{
@@ -69,16 +70,21 @@ router.post('/register', function (req, res) {
 			// Create folder for files for the respective user in encrypted/users
             fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
                 if (err) {
+					winston.error(err.message);
                     req.flash('error', err.message);
                     throw err;
-                }
+                }else{
+					winston.info('A new folder created upon registration')
+				}
             });
 			
 			// Create Privacy DB OBject
 			Privacy.create({user: user._id}, (err, privacy) => {
 				if(err){
+					winston.error(err.message);
 					console.log('Something went wrong when creating a new privacy object.');
 				}else{
+					winston.info('A new privacy object created upon registration.');
 					console.log('Privacy object created with: ');
 					console.log(privacy);
 				}
@@ -115,7 +121,11 @@ router.get('/verification', (req,res) => {
 router.post('/verification', (req, res) => {
 
 	User.findOne({token: req.body.token}, function(err, user){
-		if(!user){
+		if(err){
+			winston.error(err.message);
+			req.flash('error', 'Something went wrong. Try again later.');
+			res.redirect('back');
+		}if(!user){
 			
 			req.flash('error', 'Please make sure your token is correct.');
 			res.redirect('/verification');
@@ -124,6 +134,7 @@ router.post('/verification', (req, res) => {
 			
 			if(user.active){
 				
+				winston.info('User account was verified.');
 				req.flash('success', 'Your account has already been verified. Please log in.');
 				res.redirect('/');
 				
@@ -160,7 +171,11 @@ router.post('/password', (req, res) => {
 
 	
 	User.findOne({username: req.body.username}, function(err, user){
-		if(!user){
+		if(err){
+			winston.error(err.message);
+			req.flash('Something went wrong. Try again later.');
+			res.redirect('back');
+		}else if(!user){
 			
 			req.flash('error', 'Please make sure your username is correct.');
 			res.redirect('/password');
@@ -174,7 +189,7 @@ router.post('/password', (req, res) => {
 
 				// 3. and send email. this function returns a promise
 				mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
-				
+				winston.info('Password change request from auth.js by a user with a valid token.');
 				req.flash('success', 'You will shortly receive an email to set a new password');
 				res.redirect('/reset');
 				
@@ -192,7 +207,7 @@ router.post('/password', (req, res) => {
 					
 					const html = template.reset(user.username, user.email, user.token);
 					mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
-					
+					winston.info('Password change request from auth.js by a user without a token.');
 					req.flash('success', 'You are account is blocked and you will shortly receive an email with a new verification token to set a new password');
 					res.redirect('/reset');
 				}else{
@@ -218,7 +233,10 @@ router.get('/reset', (req, res) => {
 // post credentials for getting a new password
 router.post('/reset', (req, res) => {
 	User.findOne({token: req.body.token}, function(err, user){
-		if(!user){
+		if(err){
+			winston.error(err.message);
+			req.flash('error', 'Something went wrong. Try again later.');
+		}else if(!user){
 			
 			req.flash('error', 'Please make sure your token is correct.');
 			res.redirect('/reset');
@@ -230,14 +248,16 @@ router.post('/reset', (req, res) => {
 					
 					user.setPassword(req.body.password, err => {
 						if(err){
+							winston.error(err.message);
 							req.flash('error', 'New password could not be set by our application.');
 							return res.redirect('/');
 						}else{
+							user.active = true;
 							user.save();
 						}
 					});
-					user.active = true;
-					user.save();
+
+					winston.info('Password reset succesfully performed by a user.');
 					req.flash('success', `Password reset was successful. You can now log in.`);
 					res.redirect('/');
 				}else{
@@ -267,8 +287,7 @@ router.get('/contact', (req, res) =>{
 
 router.post('/contact', (req,res) => {
 	// TODO: check if a correct email was given
-	console.log(req.body.email);
-	console.log(req.body.message);
+	winston.info('A message was sent from the contact form from a not logged in user.');
 	req.flash('success', 'Your message has been received and we will soon answer you.');
 	res.redirect('/');
 });

@@ -5,7 +5,7 @@ const File = require('../models/file');
 const User = require('../models/user');
 const crypt = require('crypto');
 const middleware = require('../middleware');
-
+const winston = require('../config/winston');
 const fs = require('fs');
 const dir = 'encrypted/users';
 
@@ -15,12 +15,12 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
 
     User.findById(req.user._id).populate('files').exec(function (err, data) {
         if (err) {
-            console.log('FATAL ERROR: POPULATE FILES GONE WRONG');
+			winston.error(err.message);
             res.redirect('/');
         } else {
             User.find({}, function (error, users) {
                 if (error) {
-                    console.log(error);
+					winston.error(error.message);
                     res.flash('error', error.message);
                     res.redirect('back');
                 } else {
@@ -38,11 +38,7 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
 // CREATE ROUTE
 router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req, res, next) => {
     sanitize_text(req);
-    // console.log('======================================');
-    // console.log(req.file);
-    // console.log('======================================');
-    // console.log(req.body);
-    // console.log('======================================');
+
 
     const file = req.file;
     if (!(file &&req.body.file.fileName)) {
@@ -50,12 +46,14 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 		// commented following two line to get rid of internal error
         //error.httpStatusCode = 400;
         //return next(error); 
+		winston.error(error.message);
 		req.flash('error', error.message);
 		res.redirect('/private');
     } else {
         File.create(req.body.file, function (err, newFile) {
             if (err) {
-                console.log(err);
+                winston.error(err.message);
+				req.flash(err.message);
                 res.render("app/private");
             } else {
 				// TODO: if empty file name then go back and update error message
@@ -73,12 +71,11 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
                 }
 
                 newFile.save();
-
+				winston.info('Ne file was uploaded by user to its respective folder.');
 
                 User.findById(req.user._id, function (err, user) {
                     if (err) {
-                        console.log('FATAL ERROR: NEW FILE BUT NO USER!!!');
-                        console.log(err);
+                        winston.error(err.message);
                         req.flash('error', err.message);
                         res.redirect('/');
                     } else {
@@ -86,8 +83,10 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 						if(user){
 					  		user.files.push(newFile);
 							user.save();
+							winston.info('File ID pushed to corresponding user files array.');
 							req.flash('success', 'New file uploaded');
 						}else{
+							winston.error('User account NOT found to push file id to files array.');
 							req.flash('error', 'User not found to push file!');
 						}
 						res.redirect('/private');
@@ -106,28 +105,16 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {
         if (err) {
-            console.log(err);
+            winston.error(err.message);
 			req.flash('error', err.message);
             res.redirect("/private");
 		// if foundFile not null
         } else {
             User.find({}, function (error, users) {
                 if (error) {
-                    console.log(error);
+                    winston.error(error.message);
                     res.redirect('back');
                 } else {
-					// if users equal null, then simply no users are displayed to choose from
-					
-					// let list = [];
-					// if(users){
-					// 	users.forEach(user => {
-					// 	if(!user._id.equals(req.user._id)){
-					// 		list.push({username: user.username, _id: user._id});
-					// 	}
-					// });
-					// }
-					
-					// console.log(users);
                     res.render("app/private_show", { file: foundFile, users: onlyOtherUsers(users, req.user._id) });
                 }
             });
@@ -144,7 +131,10 @@ router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res)
 		const download = `encrypted/users/${file.path}`;
 		res.download(download, err => {
 			if(err){
+				winston.error(err.message);
 				req.flash('error', 'Download not possible.');
+			}else{
+				winston.info('File downlad was successful but not sure, if user finally wanted to download anyway.');
 			}
 		});
 	})
@@ -158,7 +148,8 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
 
     File.findByIdAndUpdate(req.params.id, req.body.file, function (err, updatedFile) {
         if (err) {
-            console.log("Updating caused an error", err);
+			winston.error(err.message);
+			req.flash('error', err.message);
             res.redirect("/private");
         } else {
 
@@ -169,13 +160,10 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
                 if (req.body.removeAuthorizedUser) {
                     const toRemove = req.body.removeAuthorizedUser.map(id => mongoose.Types.ObjectId(id));
                     for (let i = 0; i < toRemove.length; i++) {
-                        console.log(`removing an authorized user ${toRemove[i]}`);
                         updatedFile.authorized.pull({ _id: toRemove[i] });
                     }
 
-                } else {
-                    console.log('No user to remove from authorized array.');
-                }
+                } 
 
                 // add new users to be authorized to access this file
                 if (req.body.authorizedUser) {
@@ -185,10 +173,8 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
                         return item.split(':')[1].trim();
                     });
 
-                    console.log(`Value for authorized user is ${authorizedUsers}`);
                     authorizedUsers.forEach(toAdd => {
-                        if (!updatedFile.authorized.includes(toAdd)) {
-                            console.log('Authorized user not in the list');
+                        if (!updatedFile.authorized.includes(toAdd)) {                            
                             updatedFile.authorized.push(toAdd);
                         }
                     });
@@ -197,6 +183,7 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
 
 
                 updatedFile.save();
+				winston.info('A file was succesfully updated.');
                 req.flash('success', 'File successfully updated.');
                 res.redirect(`/private/${req.params.id}`);
             }
@@ -213,30 +200,31 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
     User.updateOne({ _id: req.user._id },
         { $pullAll: { files: [req.params.id] } }, { safe: true }, function (err, obj) {
             if (err) {
-                console.log(err);
+                winston.error(err.message);
             } else {
-                console.log(obj);
+                winston.info('A file id in an user s file array was removed.');
             }
         });
 
-    console.log(`Files id : ${req.params.id}`);
-    User.findById(req.user._id, function (err, user) {
-        console.log(user.files);
-    });
+    // User.findById(req.user._id, function (err, user) {
+    //     console.log(user.files);
+    // });
     // remove file from collection files
     File.findByIdAndRemove(req.params.id, function (err, file) {
         if (err) {
-            console.log("ERROR WHEN DELETING FILE ", err);
+            winston.error(err.message);
+			req.flash('error', err.message);
             res.redirect("/private");
         } else {
             if (fs.existsSync(`${dir}/${file.path}`)) {
                 fs.unlink(`${dir}/${file.path}`, (err) => {
                     if (err) {
+						winston.error(err.message);
                         throw err;
                     }
                 });
             }
-
+			winston.info('File deleted from user s profile and folder.');
             req.flash('success', 'File successfully deleted.');
             res.redirect("/private");
         }

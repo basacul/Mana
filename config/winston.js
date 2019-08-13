@@ -10,7 +10,7 @@ const options = {
     json: true,
     maxsize: 5242880, // 5MB
     maxFiles: 5,
-    colorize: false,
+    colorize: false
   },
   errorFile: {
     level: 'error',
@@ -26,12 +26,16 @@ const options = {
     level: 'debug',
     handleExceptions: true,
     json: false,
-    colorize: true,
+    colorize: true
   },
 };
 
 // instantiate a Winston Logger with the settings defined above
 const logger = winston.createLogger({
+  format: winston.format.combine(
+	  winston.format.timestamp(),
+	  winston.format.json()
+  ),
   transports: [
     new winston.transports.File(options.file),
   	new winston.transports.File(options.errorFile),
