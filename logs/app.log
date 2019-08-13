@@ -12,3 +12,7 @@
 {"message":"File ID pushed to corresponding user files array.","level":"info","timestamp":"2019-08-13T17:32:30.073Z"}
 {"message":"A file id in an user s file array was removed.","level":"info","timestamp":"2019-08-13T17:32:43.466Z"}
 {"message":"File deleted from user s profile and folder.","level":"info","timestamp":"2019-08-13T17:32:43.468Z"}
+{"message":"A data request was performed asking for a summary.","level":"info","timestamp":"2019-08-13T17:37:37.941Z"}
+{"message":"A new password has been set by a user.","level":"info","timestamp":"2019-08-13T17:38:53.579Z"}
+{"message":"File downlad was successful but not sure, if user finally wanted to download anyway.","level":"info","timestamp":"2019-08-13T17:39:13.854Z"}
+{"message":"A file was succesfully updated.","level":"info","timestamp":"2019-08-13T17:39:23.258Z"}
