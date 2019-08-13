@@ -82,11 +82,10 @@ router.post('/register', function (req, res) {
 			Privacy.create({user: user._id}, (err, privacy) => {
 				if(err){
 					winston.error(err.message);
-					console.log('Something went wrong when creating a new privacy object.');
+					
 				}else{
 					winston.info('A new privacy object created upon registration.');
-					console.log('Privacy object created with: ');
-					console.log(privacy);
+					
 				}
 			});
 			
@@ -100,7 +99,7 @@ router.post('/register', function (req, res) {
 			
 			// 3. and send email. this function returns a promise
 			mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Verify your account', html);
-			
+			winston.info('Email for finishing the registration process with the verfication token was sent.');
             req.flash('success', 'Please check your email and follow the instructions to input verification token.');
             res.redirect('/verification');
         }
@@ -134,7 +133,7 @@ router.post('/verification', (req, res) => {
 			
 			if(user.active){
 				
-				winston.info('User account was verified.');
+				winston.info('User account was already verified in the verification process.');
 				req.flash('success', 'Your account has already been verified. Please log in.');
 				res.redirect('/');
 				
@@ -143,6 +142,7 @@ router.post('/verification', (req, res) => {
 				if(user.username === req.body.username){
 					user.active = true;
 					user.save();
+					winston.info('User account was verified.');
 					req.flash('success', `Verification successful. You can now log in.`);
 					res.redirect('/');
 				}else{

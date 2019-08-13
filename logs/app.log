@@ -16,3 +16,17 @@
 {"message":"A new password has been set by a user.","level":"info","timestamp":"2019-08-13T17:38:53.579Z"}
 {"message":"File downlad was successful but not sure, if user finally wanted to download anyway.","level":"info","timestamp":"2019-08-13T17:39:13.854Z"}
 {"message":"A file was succesfully updated.","level":"info","timestamp":"2019-08-13T17:39:23.258Z"}
+{"message":"A new password has been set by a user.","level":"info","timestamp":"2019-08-13T17:43:26.996Z"}
+{"message":"A new password has been set by a user.","level":"info","timestamp":"2019-08-13T17:43:39.392Z"}
+{"message":"Privacy settings were updated.","level":"info","timestamp":"2019-08-13T17:43:45.452Z"}
+{"message":"A data request was performed asking for a summary.","level":"info","timestamp":"2019-08-13T17:43:59.790Z"}
+{"message":"Ne file was uploaded by user to its respective folder.","level":"info","timestamp":"2019-08-13T17:44:21.971Z"}
+{"message":"File ID pushed to corresponding user files array.","level":"info","timestamp":"2019-08-13T17:44:21.975Z"}
+{"message":"A file was succesfully updated.","level":"info","timestamp":"2019-08-13T17:44:33.449Z"}
+{"message":"A file id in an user s file array was removed.","level":"info","timestamp":"2019-08-13T17:44:38.358Z"}
+{"message":"File deleted from user s profile and folder.","level":"info","timestamp":"2019-08-13T17:44:38.359Z"}
+{"message":"A new folder created upon registration","level":"info","timestamp":"2019-08-13T17:45:16.349Z"}
+{"message":"A new privacy object created upon registration.","level":"info","timestamp":"2019-08-13T17:45:16.351Z"}
+{"message":"Password change request from auth.js by a user with a valid token.","level":"info","timestamp":"2019-08-13T17:48:44.959Z"}
+{"message":"Password reset succesfully performed by a user.","level":"info","timestamp":"2019-08-13T17:49:16.758Z"}
+{"message":"A user profile was deleted and logged out.","level":"info","timestamp":"2019-08-13T17:49:43.858Z"}

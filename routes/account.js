@@ -137,7 +137,6 @@ router.post('/data', middleware.isLoggedIn, (req,res) => {
 router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 	
 	User.findOneAndRemove({token: req.body.token}, (err, user) => {
-		console.log(user);
 		if (err) {
 			winston.error(err.message);
 			req.flash('error', 'Something went wrong with account.');
