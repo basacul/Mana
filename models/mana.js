@@ -11,7 +11,7 @@ const manaSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    eth: { type: String, default: null } // ethereum address
+    participant: { type: String, default: null } // participant id in hlf
 });
 
 module.exports = mongoose.model('Mana', manaSchema);

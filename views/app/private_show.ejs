@@ -29,7 +29,7 @@
 							id="f-accessible">
 						<% } %>
 						<label class="form-check-label" for="f-accessible">
-							Accessible?
+							Allow access to healthcare providers
 						</label>
 					</div>
 					<div class="form-group">
@@ -38,12 +38,11 @@
 							value="<%=file.fileName%>">
 
 					</div>
-					<div class="form-group mb-2">
+					<!-- <div class="form-group mb-2">
 						<label for="f-file">File</label>
-						<!-- TODO: IMPLEMENT UPLOAD FOR THIS FILE AND UPDATE MONGODB & APP.JS -->
 						<input type="text" class="form-control" name="file[file]" id="f-file" value="<%=file.path%>"
 							readonly>
-					</div>
+					</div> -->
 					<div class="form-group">
 						<label for="f-note">Notes</label>
 						<textarea class="form-control" name="file[note]" id="f-note" rows="3"><%=file.note%></textarea>
@@ -64,10 +63,15 @@
 							<% }) %>
 						</div>
 
-					</div> <% }else{ %>
-					<div class="form-group">
-						<p>Explicit authorization from list not given</p>
 					</div>
+					<% }else{ %>
+					
+					<div class="form-group">
+						<% if(!file.accessible){ %>
+						<p class="text-info">This file is not accessible to other users</p>
+						<% } %>
+					</div>
+					
 					<% } %>
 					<!-- TODO: Multiple users can be chosen through
 							checkbox perhaps -->
@@ -99,7 +103,11 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="card mt-3 bg-dark text-white border-secondary">
+				<% if(file.accessible){ %>
+                	<div class="card mt-3 bg-dark text-white border-danger">
+				<% }else{ %>
+					<div class="card mt-3 bg-dark text-white border-secondary">
+				<% } %>
                     <h5 class="card-header d-flex justify-content-between" style="background: black">
 						<form action='/private/<%= file._id %>' method='POST'>
 							<input type="submit" class="btn btn-info" value="download">
@@ -111,16 +119,15 @@
                     </h5>
                     <div class="card-body">
                         <div class="row d-flex justify-content-around">
-                            <div>
+                            <div class="pl-2">
                                 <h5 class="card-title">
                                     <%=file.fileName%>:
-                                    <% if(file.accessible){ %>
-                                    <span>THIS FILE IS ACCESSIBLE FOR HEALTHCARE PROVIDERS</span>
-                                    <% }else{ %>
-                                    <span>THIS FILE IS ACCESSIBLE ONLY UPON AUTHORIZATION</span>
-                                    <% } %>
-                                </h5>
-                                <p class="card-text"><%= file.note %> <br><span class="float-right mr-2"><a href="/private">go back</a></span></p>
+								 </h5>
+                                <p class="card-text"><%= file.note %></p>
+								<div class="text-center">
+									 <a href="/private" class="btn btn-primary">go back</a>
+								</div>
+								
 								
 								
                             </div>
