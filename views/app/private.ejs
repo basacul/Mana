@@ -18,14 +18,14 @@
                             <option>reimbursement</option>
                         </datalist>
                     </div> -->
-                    <div id="upload">
+                    
                         <label for="f-upload" class="custom-file-upload">
-                            <button type="button" data-toggle="modal" data-target="#myModal">
-                                <span class="glyphicon glyphicon-cloud-upload"></span> Upload File
-                            </button>
+                            <input type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="upload">
+                             
+                          
                         </label>
 
-                    </div>
+                    
                 <!-- </div>
             </fieldset>
         </form> -->
@@ -96,19 +96,23 @@
 </div>
 <article>
     <div class="container">
-        <p>This section stores data not shared on the hyperledger fabric network and for personal purposes yet</p>
+        <p>This section stores data files that can be shared among other users in the web application and 
+			on the hyperledger fabric network</p>
         <% if (files.length > 0) { %>
         <div class="card text-white bg-dark mt-3">
             <div class="card-header d-flex justify-content-between" style="background-color: black">
-                <span>FILENAME</span> <span>ACCESSIBLE</span> <span>DATE</span>
+                <span>FILENAME</span> <span>DATE</span>
             </div>
             <ul class="list-group list-group-flush">
                 <% files.forEach(function(file){ %>
                 <a href="/private/<%=file._id%>">
-                    <li class="list-group-item d-flex justify-content-between bg-dark">
-
-                        <span><%=file.fileName%></span> <span><%=file.accessible%></span>
-                        <span><%=file.date.toDateString() %></span>
+					<% if(file.accessible){ %>
+                    <li class="list-group-item bg-dark border-right border-bottom border-left border-danger">
+					<% }else{ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-secondary">
+					<% } %>
+                        <span><%=file.fileName%></span> 
+                        <span class="float-right"><%=file.date.toDateString() %></span>
 
                     </li>
                 </a>
