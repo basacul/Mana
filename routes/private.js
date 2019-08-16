@@ -8,6 +8,7 @@ const middleware = require('../middleware');
 const winston = require('../config/winston');
 const fs = require('fs');
 const dir = 'encrypted/users';
+const aws = require('../misc/aws');
 
 // TODO: Figure out, if I need to check if all these files are owned by the user
 // as only the files in its db structure are retrieved, I dont think it is necessary
@@ -41,7 +42,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 
 
     const file = req.file;
-    if (!(file &&req.body.file.fileName)) {
+    if (!(file && req.body.file.fileName)) {
         const error = new Error('Provide file and file name.');
 		// commented following two line to get rid of internal error
         //error.httpStatusCode = 400;
@@ -54,45 +55,62 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
             if (err) {
                 winston.error(err.message);
 				req.flash(err.message);
-                res.render("app/private");
+                res.redirect("back");
             } else {
-				// TODO: if empty file name then go back and update error message
-				// TO
-                newFile.owner.id = req.user._id;
-                newFile.owner.username = req.user.username;
-				// TODO: Give a unique file name to store in folder
+				
+				newFile.owner.id = req.user._id;
+				newFile.owner.username = req.user.username;
+				newFile.path = `${req.user.username}/${req.file.filename}`;
 
-			
-                newFile.path = `${req.user.username}/${req.file.filename}`;
-                if (req.body.authorizedUser) {
-                    newFile.authorized = req.body.authorizedUser.map(item => {
-                        return mongoose.Types.ObjectId(item.split(':')[1].trim());
-                    });
-                }
+				const path = `encrypted/users/${newFile.path}`;
+				
+				const uploadObject = aws.s3.putObject(aws.params(path)).promise();
+				
+				uploadObject.then(data => {
+					
+					winston.info('File upload to s3 successful.');
+					
+					newFile.ETag = data.ETag.toString();
+					
 
-                newFile.save();
-				winston.info('Ne file was uploaded by user to its respective folder.');
 
-                User.findById(req.user._id, function (err, user) {
-                    if (err) {
-                        winston.error(err.message);
-                        req.flash('error', err.message);
-                        res.redirect('/');
-                    } else {
-						// in case no user with given id there is simply no error thus null testing
-						if(user){
-					  		user.files.push(newFile);
-							user.save();
-							winston.info('File ID pushed to corresponding user files array.');
-							req.flash('success', 'New file uploaded');
-						}else{
-							winston.error('User account NOT found to push file id to files array.');
-							req.flash('error', 'User not found to push file!');
+					if (req.body.authorizedUser) {
+						newFile.authorized = req.body.authorizedUser.map(item => {
+							return mongoose.Types.ObjectId(item.split(':')[1].trim());
+						});
+					}
+					
+					
+					
+					User.findById(req.user._id, function (errUser, user) {
+						if (errUser) {
+							winston.error(err.message);
+							req.flash('error', err.message);
+							res.redirect('/');
+						} else {
+							// in case no user with given id there is simply no error thus null testing
+							if(user){
+								newFile.save();
+								user.files.push(newFile);
+								user.save();
+								winston.info('File Upload successfully completed.');
+								req.flash('success', 'New file uploaded');
+								
+							}else{
+								winston.error('User account NOT found to push file id to files array.');
+								req.flash('error', 'User not found to push file!');
+							}
+							
+							winston.info('New file was uploaded by user to its respective folder.');
+							res.redirect('/private');
+
 						}
-						res.redirect('/private');
-                      
-                    }
-                });
+					});
+				}).catch(error => {
+					winston.error(error.message);
+					req.flash('error', 'File could not be uploaded on amazon aws S3');
+					res.redirect('back');
+				});
             }
         });
     }
@@ -128,15 +146,38 @@ router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res)
 	
 	File.findById(req.params.id, (error, file) => {
 		// middleware.checkOwnership already checks for error and null
-		const download = `encrypted/users/${file.path}`;
-		res.download(download, err => {
-			if(err){
-				winston.error(err.message);
-				req.flash('error', 'Download not possible.');
-			}else{
-				winston.info('File downlad was successful but not sure, if user finally wanted to download anyway.');
-			}
-		});
+		
+		// =============================================================================
+		// DOWNLOAD FROM AMAZON AWS S3
+		// =============================================================================
+		const key = `encrypted/users/${file.path}`;
+		const downloadObject = aws.s3.getObject(aws.paramsDownload(key)).createReadStream(); 
+		
+		const filename = file.path.split('/')[1];
+
+		// in order to download the file. otherwise file is displayed in the browser
+		// TODO: Check if pdf, jpeg or any form that can be displayed and downloaded form browser
+		// 		 otherwise direct download by adding res.attachement(filename)
+		res.attachment(filename);
+		downloadObject.on('error', err => {
+			winston.error(err.message);
+			req.flash('error', 'File could not be downloaded from amazon aws S3');
+			res.redirect('back');
+		}).pipe(res);
+		
+		
+		// =============================================================================
+		// DOWNLOAD FROM SERVER'S FILE SYSTEM
+		// =============================================================================
+		// const download = `encrypted/users/${file.path}`;
+		// res.download(download, err => {
+		// 	if(err){
+		// 		winston.error(err.message);
+		// 		req.flash('error', 'Download not possible.');
+		// 	}else{
+		// 		winston.info('File downlad was successful but not sure, if user finally wanted to download anyway.');
+		// 	}
+		// });
 	})
 	
 });
@@ -193,7 +234,7 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
     });
 });
 
-// TODO: UPDATE delete to modify user's files array
+// TODO: Delete AWS FILE
 // DELETE ROUTE
 router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
     // remove file from user's array named files
@@ -216,17 +257,51 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
 			req.flash('error', err.message);
             res.redirect("/private");
         } else {
-            if (fs.existsSync(`${dir}/${file.path}`)) {
-                fs.unlink(`${dir}/${file.path}`, (err) => {
-                    if (err) {
-						winston.error(err.message);
-                        throw err;
-                    }
-                });
-            }
-			winston.info('File deleted from user s profile and folder.');
-            req.flash('success', 'File successfully deleted.');
-            res.redirect("/private");
+
+			
+			
+			
+			const key = `encrypted/users/${file.path}`;
+			
+			const deleteObject = aws.s3.deleteObject(aws.paramsRemove(key)).promise();
+				
+			deleteObject.then( data => {
+				if (fs.existsSync(`${dir}/${file.path}`)) {
+					fs.unlink(`${dir}/${file.path}`, (errUnlink) => {
+						if (errUnlink) {
+							winston.error(errUnlink.message);
+						}else{
+							winston.info('File deleted from user s profile and folder.');
+						}
+               		});
+            	}
+				winston.info('File was successfully deleted');
+				
+				// in case all files were removed recreate folder for user
+				if(!fs.existsSync(`${dir}/${file.owner.username}`)){
+					// Create folder for files for the respective user in encrypted/users
+					fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
+						if (err) {
+							winston.error(err.message);
+							req.flash('error', err.message);
+							throw err;
+						}else{
+							winston.info('A folder for an existing user recreated after having deleted all files.');
+						}
+					});
+				}
+					
+					
+				req.flash('success', 'File successfully deleted.');
+				res.redirect("/private");
+			}).catch( error => {
+				winston.error(`File with key ${key} could not be deleted from s3`);
+				req.flash('error', 'File still available on s3.');
+				res.redirect("/private");
+			});
+			
+           
+            
         }
     });
 });

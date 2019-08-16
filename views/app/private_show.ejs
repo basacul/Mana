@@ -71,6 +71,11 @@
 						<p class="text-info">This file is not accessible to other users</p>
 						<% } %>
 					</div>
+					<div class="form-group">
+						<% if(file.ETag){ %>
+						<p class="text-primary">The ETag of this file is <%= file.ETag %></p>
+						<% } %>
+					</div>
 					
 					<% } %>
 					<!-- TODO: Multiple users can be chosen through
