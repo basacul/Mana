@@ -13,6 +13,7 @@ const fileSchema = new mongoose.Schema({
     note: String,
     accessible: { type: Boolean, default: false },
     date: { type: Date, default: Date.now },
+	ETag: {type: String, default: 'not set'},
     authorized: [
         {
             type: mongoose.Schema.Types.ObjectId,
