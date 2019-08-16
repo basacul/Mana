@@ -37,4 +37,14 @@ aws.paramsRemove = function(path){
 	return params;
 };
 
+aws.paramsDownload = function(path){
+	let params = {
+		Bucket: 'mana-user-files',
+		Key: path
+	};
+	
+	return params;
+};
+
+
 module.exports = aws;

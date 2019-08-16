@@ -146,15 +146,38 @@ router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res)
 	
 	File.findById(req.params.id, (error, file) => {
 		// middleware.checkOwnership already checks for error and null
-		const download = `encrypted/users/${file.path}`;
-		res.download(download, err => {
-			if(err){
-				winston.error(err.message);
-				req.flash('error', 'Download not possible.');
-			}else{
-				winston.info('File downlad was successful but not sure, if user finally wanted to download anyway.');
-			}
-		});
+		
+		// =============================================================================
+		// DOWNLOAD FROM AMAZON AWS S3
+		// =============================================================================
+		const key = `encrypted/users/${file.path}`;
+		const downloadObject = aws.s3.getObject(aws.paramsDownload(key)).createReadStream(); 
+		
+		const filename = file.path.split('/')[1];
+
+		// in order to download the file. otherwise file is displayed in the browser
+		// TODO: Check if pdf, jpeg or any form that can be displayed and downloaded form browser
+		// 		 otherwise direct download by adding res.attachement(filename)
+		res.attachment(filename);
+		downloadObject.on('error', err => {
+			winston.error(err.message);
+			req.flash('error', 'File could not be downloaded from amazon aws S3');
+			res.redirect('back');
+		}).pipe(res);
+		
+		
+		// =============================================================================
+		// DOWNLOAD FROM SERVER'S FILE SYSTEM
+		// =============================================================================
+		// const download = `encrypted/users/${file.path}`;
+		// res.download(download, err => {
+		// 	if(err){
+		// 		winston.error(err.message);
+		// 		req.flash('error', 'Download not possible.');
+		// 	}else{
+		// 		winston.info('File downlad was successful but not sure, if user finally wanted to download anyway.');
+		// 	}
+		// });
 	})
 	
 });
@@ -253,6 +276,22 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
                		});
             	}
 				winston.info('File was successfully deleted');
+				
+				// in case all files were removed recreate folder for user
+				if(!fs.existsSync(`${dir}/${file.owner.username}`)){
+					// Create folder for files for the respective user in encrypted/users
+					fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
+						if (err) {
+							winston.error(err.message);
+							req.flash('error', err.message);
+							throw err;
+						}else{
+							winston.info('A folder for an existing user recreated after having deleted all files.');
+						}
+					});
+				}
+					
+					
 				req.flash('success', 'File successfully deleted.');
 				res.redirect("/private");
 			}).catch( error => {
