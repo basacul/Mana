@@ -4,6 +4,7 @@ const middleware = require('../middleware');
 const User = require('../models/user');
 const File = require('../models/file');
 const Privacy = require('../models/privacy');
+const Mana = require('../models/mana');
 const mailer = require('../utils/mailer');
 const template = require('../utils/templates');
 const winston = require('../config/winston');
@@ -109,8 +110,8 @@ router.post('/token', middleware.isLoggedIn, (req, res) => {
 
 	const html = template.token(req.user.username, req.user.email, req.user.token);
 
-	// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your current token', html);
-	mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your current token', html).then(info => {
+	// mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your current token', html);
+	mailer.sendEmail('donotreply@openhealth.care', email_for_dev , 'Your current token', html).then(info => {
 		winston.info('Token request from auth.js by a user.');
 	}).catch(error => {
 		winston.error('Error when sending email for token reset');
@@ -136,8 +137,8 @@ router.post('/data', middleware.isLoggedIn, (req,res) => {
 	
 	const html = template.data(req.user.username, req.user.email, wantsSummary);
 	
-	// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your data request', html);
-	mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your data request', html).then(info => {
+	// mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your data request', html);
+	mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your data request', html).then(info => {
 		winston.info('Data request from account.js by a user.');
 	}).catch(error => {
 		winston.error('Error when sending email for data  request');
@@ -168,6 +169,14 @@ router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 					}
 				});
 				
+				// TODO: Update Hyperledger Fabric
+				Mana.findOneAndRemove({user: user._id}, (err, mana) => {
+					if(err){
+						winston.error(err.message);
+					}
+				});
+				
+				// TODO: Update Hyperledger Fabric
 				File.deleteMany({ owner : {id: user._id, username: user.username} }, function (err) {
 					if(err){
 						winston.error(err.message);

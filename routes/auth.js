@@ -89,8 +89,8 @@ router.post('/register', function (req, res) {
 
 			
 			// 3. and send email. this function returns a promise
-			// mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Verify your account', html);
-			mailer.sendEmail('registration@openhealth.care', user.email, 'Verify your account', html).then(info => {
+			// mailer.sendEmail('registration@openhealth.care', user.email, 'Verify your account', html);
+			mailer.sendEmail('registration@openhealth.care', email_for_dev , 'Verify your account', html).then(info => {
 				winston.info('Email for verification sent.');
 			}).catch(error => {
 				winston.error('Error when sending email for verification.');
@@ -142,8 +142,8 @@ router.post('/verification', (req, res) => {
 					user.save();
 					
 					// TODO: Create participant in Hyperledger Fabric and store the appropriate participant in mana
-					Mana.create({user: user._id}, (err, mana) => {
-						if(err){
+					Mana.create({user: user._id}, (errMana, mana) => {
+						if(errMana){
 							winston.error(err.message);
 							console.log('Something went wrong when creating a new mana object.');
 						}else{
@@ -198,8 +198,8 @@ router.post('/password', (req, res) => {
 				const html = template.reset(user.username, user.email, "");
 
 				// 3. and send email. this function returns a promise
-				// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
-				mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html).then(info => {
+				// mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html);
+				mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html).then(info => {
 					winston.info('Password change request from auth.js by a user with a token.');
 				}).catch(error => {
 					winston.error('Error when sending email for password reset');
@@ -224,8 +224,8 @@ router.post('/password', (req, res) => {
 					user.save();
 					
 					const html = template.reset(user.username, user.email, user.token);
-					// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
-					mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html).then(info => {
+					// mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html);
+					mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html).then(info => {
 						winston.info('Password change request from auth.js by a user without a token.');
 					}).catch(error => {
 						winston.error('Error when sending email for password reset');
