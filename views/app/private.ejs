@@ -54,7 +54,7 @@
                     </div>
                     <div class="form-group">
                         <label for="f-filename" class="sr-only">File Name</label>
-                        <input type="text" class="form-control" name="file[fileName]" id="f-filename"
+                        <input type="text" class="form-control" name="file[filename]" id="f-filename"
                             placeholder="Enter file name" required>
                     </div>
 
@@ -111,7 +111,7 @@
 					<% }else{ %>
 					<li class="list-group-item bg-dark border-right border-bottom border-left border-secondary">
 					<% } %>
-                        <span><%=file.fileName%></span> 
+                        <span><%=file.filename%></span> 
                         <span class="float-right"><%=file.date.toDateString() %></span>
 
                     </li>
@@ -132,8 +132,8 @@
 <script>
     $('input[type="file"]').on('change', function () {
         //get the file name
-        var fileName = $(this).val();
+        var filename = $(this).val();
         //replace the "Choose a file" label
-        $(this).next('.custom-file-label').html(fileName);
+        $(this).next('.custom-file-label').html(filename);
     })
 </script>

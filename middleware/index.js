@@ -9,11 +9,8 @@ const middleware = {};
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // the folder needs to be created beforehand which
-        // is handled by routes/auth.js
-
-        // TODO: fileName duplication, how to handle it
-        cb(null, `encrypted/users/${req.user.username}`);
+        // thefolder temp needs to exist
+        cb(null, 'temp')
     },
     filename: function (req, file, cb) {
 		// a user can now have multiple duplicate files with same file name but stored with a different file path each

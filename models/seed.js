@@ -41,31 +41,31 @@ User.deleteMany({}, function (err) {
 // files
 const files = [
     {
-        fileName: "file29",
+        filename: "file29",
         file: "Receipt3241.pdf",
         note: "Bill for consultation on 2018-11-15 11:00",
         shared: false
     },
     {
-        fileName: "file30",
+        filename: "file30",
         file: "Reimbursement3323.pdf",
         note: "Reimbursment of bill 02031230",
         shared: false
     },
     {
-        fileName: "file31",
+        filename: "file31",
         file: "HealthRecord.pdf",
         note: "Electronic prescription",
         shared: false
     },
     {
-        fileName: "file32",
+        filename: "file32",
         file: "Laboratory3904.pdf",
         note: "Lab results ordered by Ferris, John MD",
         shared: false
     },
     {
-        fileName: "file33",
+        filename: "file33",
         file: "Receipt_0329.pdf",
         note: "Bill for consultation on 2019-03-02 10:15",
         shared: false

@@ -6,12 +6,11 @@ const mongoose = require('mongoose');
  * are performed
  */
 const manaSchema = new mongoose.Schema({
-    publicKey_mana: { type: String, default: null },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    participant: { type: String, default: null } // participant id in hlf
+    participant: { type: String, default: null } // participant id in hlf, but not needed yet
 });
 
 module.exports = mongoose.model('Mana', manaSchema);
