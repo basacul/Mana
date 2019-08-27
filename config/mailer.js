@@ -3,3 +3,8 @@ module.exports = {
 	MAILGUN_PASS: ''
 };
 
+
+// module.exports = {
+// 	DOMAIN: '',
+// 	API_KEY: ''
+// };
