@@ -1,0 +1,1 @@
+This file is here such that the folder temp does not get deleted.

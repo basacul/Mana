@@ -6,9 +6,8 @@ const User = require('../models/user');
 const crypt = require('crypto');
 const middleware = require('../middleware');
 const winston = require('../config/winston');
-const fs = require('fs');
-const dir = 'encrypted/users';
 const aws = require('../misc/aws');
+const fs = require('fs');
 
 // TODO: Figure out, if I need to check if all these files are owned by the user
 // as only the files in its db structure are retrieved, I dont think it is necessary
@@ -61,10 +60,8 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 				newFile.owner.id = req.user._id;
 				newFile.owner.username = req.user.username;
 				newFile.path = `${req.user.username}/${req.file.filename}`;
-
-				const path = `encrypted/users/${newFile.path}`;
 				
-				const uploadObject = aws.s3.putObject(aws.params(path)).promise();
+				const uploadObject = aws.s3.putObject(aws.params(newFile.path)).promise();
 				
 				uploadObject.then(data => {
 					
@@ -110,6 +107,14 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 					winston.error(error.message);
 					req.flash('error', 'File could not be uploaded on amazon aws S3');
 					res.redirect('back');
+				}).finally(function() {
+					fs.unlink(`temp/${file.filename}`, (err) => {
+						if (err) {
+							winston.error(err.message);
+						}else{
+							winston.info('File successfully removed from webserver');
+						}
+					});
 				});
             }
         });
@@ -150,8 +155,7 @@ router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res)
 		// =============================================================================
 		// DOWNLOAD FROM AMAZON AWS S3
 		// =============================================================================
-		const key = `encrypted/users/${file.path}`;
-		const downloadObject = aws.s3.getObject(aws.paramsDownload(key)).createReadStream(); 
+		const downloadObject = aws.s3.getObject(aws.paramsDownload(file.path)).createReadStream(); 
 		
 		const filename = file.path.split('/')[1];
 
@@ -258,44 +262,19 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
             res.redirect("/private");
         } else {
 
-			
-			
-			
-			const key = `encrypted/users/${file.path}`;
-			
-			const deleteObject = aws.s3.deleteObject(aws.paramsRemove(key)).promise();
+			const deleteObject = aws.s3.deleteObject(aws.paramsRemove(file.path)).promise();
 				
 			deleteObject.then( data => {
-				if (fs.existsSync(`${dir}/${file.path}`)) {
-					fs.unlink(`${dir}/${file.path}`, (errUnlink) => {
-						if (errUnlink) {
-							winston.error(errUnlink.message);
-						}else{
-							winston.info('File deleted from user s profile and folder.');
-						}
-               		});
-            	}
-				winston.info('File was successfully deleted');
+			  
+				winston.info('File was successfully deleted from s3');
 				
-				// in case all files were removed recreate folder for user
-				if(!fs.existsSync(`${dir}/${file.owner.username}`)){
-					// Create folder for files for the respective user in encrypted/users
-					fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
-						if (err) {
-							winston.error(err.message);
-							req.flash('error', err.message);
-							throw err;
-						}else{
-							winston.info('A folder for an existing user recreated after having deleted all files.');
-						}
-					});
-				}
+				
 					
 					
-				req.flash('success', 'File successfully deleted.');
+				req.flash('success', 'File successfully deleted from s3.');
 				res.redirect("/private");
 			}).catch( error => {
-				winston.error(`File with key ${key} could not be deleted from s3`);
+				winston.error(`File with key ${file.path} could not be deleted from s3`);
 				req.flash('error', 'File still available on s3.');
 				res.redirect("/private");
 			});

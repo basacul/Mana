@@ -14,8 +14,7 @@ const winston = require('../config/winston');
 const email_for_dev = 'antelo.b.lucas@gmail.com';
 
 // to create the necessary folder structures
-const fs = require('fs');
-const dir = 'encrypted/users';
+const dir = 'temp';
 
 router.get("/", function (req, res) {
     if (req.isAuthenticated()) {
@@ -66,18 +65,7 @@ router.post('/register', function (req, res) {
             
             res.redirect('/register');
         } else {
-			
-			// Create folder for files for the respective user in encrypted/users
-            fs.mkdir(`${dir}/${req.body.username}`, { recursive: true }, (err) => {
-                if (err) {
-					winston.error(err.message);
-                    req.flash('error', err.message);
-                    throw err;
-                }else{
-					winston.info('A new folder created upon registration')
-				}
-            });
-			
+					
 			// Create Privacy DB OBject
 			Privacy.create({user: user._id}, (err, privacy) => {
 				if(err){
