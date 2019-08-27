@@ -6,7 +6,7 @@ const User = require('../models/user');
 const crypt = require('crypto');
 const middleware = require('../middleware');
 const winston = require('../config/winston');
-const aws = require('../misc/aws');
+const aws = require('../util/aws');
 const fs = require('fs');
 
 // TODO: Figure out, if I need to check if all these files are owned by the user

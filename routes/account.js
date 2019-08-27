@@ -4,8 +4,8 @@ const middleware = require('../middleware');
 const User = require('../models/user');
 const File = require('../models/file');
 const Privacy = require('../models/privacy');
-const mailer = require('../misc/mailer');
-const template = require('../misc/templates');
+const mailer = require('../util/mailer');
+const template = require('../util/templates');
 const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet

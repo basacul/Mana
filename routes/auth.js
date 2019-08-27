@@ -3,8 +3,8 @@ const router = express.Router(); // now instead of app, use router
 const passport = require('passport');
 // TODO: replace cryptoRandomString with crypto!!
 const cryptoRandomString = require('crypto-random-string'); // to generate verification token
-const mailer = require('../misc/mailer');
-const template = require('../misc/templates');
+const mailer = require('../util/mailer');
+const template = require('../util/templates');
 const User = require('../models/user');
 const Privacy = require('../models/privacy');
 const middleware = require('../middleware');

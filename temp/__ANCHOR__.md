@@ -1,1 +1,1 @@
-This file is here such that the folder temp does not get deleted.
+This file is here such that the folder temp does not get deleted. The folder temp acts as a pace to store files that get uploaded to s3 and will deleted when successful.

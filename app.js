@@ -79,23 +79,14 @@ const authRoutes = require('./routes/auth'),
     privateRoutes = require('./routes/private'),
     homeRoutes = require('./routes/home'),
     eRecordRoutes = require('./routes/e-record'),
-    toolsRoutes = require('./routes/tools'),
-    documentationRoutes = require('./routes/documentation'),
-    accountRoutes = require('./routes/account'),
-    messageRoutes = require('./routes/messages'),
-    customerServiceRoutes = require('./routes/customer-service'),
-    faqRoutes = require('./routes/faq');
+    accountRoutes = require('./routes/account');
 
 app.use('/', authRoutes);
 app.use('/private', privateRoutes);
 app.use('/home', homeRoutes);
 app.use('/e-record', eRecordRoutes);
-app.use('/tools', toolsRoutes);
-app.use('/documentation', documentationRoutes);
 app.use('/account', accountRoutes);
-app.use('/messages', messageRoutes);
-app.use('/customer-service', customerServiceRoutes);
-app.use('/faq', faqRoutes);
+
 
 // DEFAULT ROUTE IF NOTHING ELSE MATCHES
 app.get('*', function (req, res) {
