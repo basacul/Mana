@@ -6,7 +6,7 @@ const User = require('../models/user');
 const crypt = require('crypto');
 const middleware = require('../middleware');
 const winston = require('../config/winston');
-const aws = require('../util/aws');
+const aws = require('../utils/aws');
 const fs = require('fs');
 
 // TODO: Figure out, if I need to check if all these files are owned by the user
@@ -41,7 +41,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 
 
     const file = req.file;
-    if (!(file && req.body.file.fileName)) {
+    if (!(file && req.body.file.filename)) {
         const error = new Error('Provide file and file name.');
 		// commented following two line to get rid of internal error
         //error.httpStatusCode = 400;
@@ -290,8 +290,8 @@ router.delete("/:id", middleware.isLoggedIn, middleware.checkOwnership, function
 function sanitize_text(req) {
     req.body.file.accessible = req.body.file.accessible ? true : false;
     console.log(`Sanitizing. file.accessible as boolean? : ${req.body.file.accessible}`);
-    // sanitize file.fileName and file.note 
-    req.body.file.fileName = req.sanitize(req.body.file.fileName);
+    // sanitize file.filename and file.note 
+    req.body.file.filename = req.sanitize(req.body.file.filename);
     req.body.file.note = req.sanitize(req.body.file.note);
 }
 

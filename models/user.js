@@ -15,10 +15,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "File"
         }
-    ],
-    publicKey_user: { type: String, default: null }, // TODO: store encrypted with password
-    privateKey_user: { type: String, default: null }, // TODO: store encrypted with password
-    privateKey_mana: { type: String, default: null } // TODO: store encrypted with password
+    ]
 });
 
 // takes the passport-local package and adds a bunch of methods

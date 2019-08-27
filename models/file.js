@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const fileSchema = new mongoose.Schema({
-    fileName: String,
+    filename: String,
     owner: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

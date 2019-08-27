@@ -4,8 +4,8 @@ const middleware = require('../middleware');
 const User = require('../models/user');
 const File = require('../models/file');
 const Privacy = require('../models/privacy');
-const mailer = require('../util/mailer');
-const template = require('../util/templates');
+const mailer = require('../utils/mailer');
+const template = require('../utils/templates');
 const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
@@ -109,7 +109,15 @@ router.post('/token', middleware.isLoggedIn, (req, res) => {
 
 	const html = template.token(req.user.username, req.user.email, req.user.token);
 
-	mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your current token', html);
+	// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your current token', html);
+	mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your current token', html).then(info => {
+		winston.info('Token request from auth.js by a user.');
+	}).catch(error => {
+		winston.error('Error when sending email for token reset');
+		console.log(error.message);
+		req.flash('error', 'Email could not be sent.');
+	});
+	
 	winston.info('The current token was requested by a user.');
 	req.flash('success', `Token sent to ${req.user.email}`);
 	res.redirect('back');	
@@ -128,7 +136,14 @@ router.post('/data', middleware.isLoggedIn, (req,res) => {
 	
 	const html = template.data(req.user.username, req.user.email, wantsSummary);
 	
-	mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your data request', html);
+	// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your data request', html);
+	mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your data request', html).then(info => {
+		winston.info('Data request from account.js by a user.');
+	}).catch(error => {
+		winston.error('Error when sending email for data  request');
+		console.log(error.message);
+		req.flash('error', 'Email could not be sent.');
+	});
 	
 	req.flash('success', 'Your request will be processed.');
 	res.redirect('back');

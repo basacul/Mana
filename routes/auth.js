@@ -3,10 +3,11 @@ const router = express.Router(); // now instead of app, use router
 const passport = require('passport');
 // TODO: replace cryptoRandomString with crypto!!
 const cryptoRandomString = require('crypto-random-string'); // to generate verification token
-const mailer = require('../util/mailer');
-const template = require('../util/templates');
+const mailer = require('../utils/mailer');
+const template = require('../utils/templates');
 const User = require('../models/user');
 const Privacy = require('../models/privacy');
+const Mana = require('../models/mana');
 const middleware = require('../middleware');
 const winston = require('../config/winston');
 
@@ -78,6 +79,7 @@ router.post('/register', function (req, res) {
 				}
 			});
 			
+			
 			// 1. generate secret token 
 			user.token = cryptoRandomString({length: 32, type: 'base64'});
 			user.save();
@@ -87,7 +89,14 @@ router.post('/register', function (req, res) {
 
 			
 			// 3. and send email. this function returns a promise
-			mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Verify your account', html);
+			// mailer.sendEmail('registration@openhealth.care', email_for_dev, 'Verify your account', html);
+			mailer.sendEmail('registration@openhealth.care', user.email, 'Verify your account', html).then(info => {
+				winston.info('Email for verification sent.');
+			}).catch(error => {
+				winston.error('Error when sending email for verification.');
+				console.log(error.message);
+				req.flash('error', 'Email could not be sent.');
+			});
 			
             req.flash('success', 'Please check your email and follow the instructions to input verification token.');
             res.redirect('/verification');
@@ -131,6 +140,19 @@ router.post('/verification', (req, res) => {
 				if(user.username === req.body.username){
 					user.active = true;
 					user.save();
+					
+					// TODO: Create participant in Hyperledger Fabric and store the appropriate participant in mana
+					Mana.create({user: user._id}, (err, mana) => {
+						if(err){
+							winston.error(err.message);
+							console.log('Something went wrong when creating a new mana object.');
+						}else{
+							winston.info('A new mana object created upon registration.');
+							console.log('Privacy object created with: ');
+							console.log(mana);
+						}
+					});
+					
 					req.flash('success', `Verification successful. You can now log in.`);
 					res.redirect('/');
 				}else{
@@ -176,7 +198,15 @@ router.post('/password', (req, res) => {
 				const html = template.reset(user.username, user.email, "");
 
 				// 3. and send email. this function returns a promise
-				mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
+				// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
+				mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html).then(info => {
+					winston.info('Password change request from auth.js by a user with a token.');
+				}).catch(error => {
+					winston.error('Error when sending email for password reset');
+					console.log(error.message);
+					req.flash('error', 'Email could not be sent.');
+				});
+				
 				winston.info('Password change request from auth.js by a user with a valid token.');
 				req.flash('success', 'You will shortly receive an email to set a new password');
 				res.redirect('/reset');
@@ -194,8 +224,15 @@ router.post('/password', (req, res) => {
 					user.save();
 					
 					const html = template.reset(user.username, user.email, user.token);
-					mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
-					winston.info('Password change request from auth.js by a user without a token.');
+					// mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html);
+					mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html).then(info => {
+						winston.info('Password change request from auth.js by a user without a token.');
+					}).catch(error => {
+						winston.error('Error when sending email for password reset');
+						console.log(error.message);
+						req.flash('error', 'Email could not be sent.');
+					});
+					
 					req.flash('success', 'You are account is blocked and you will shortly receive an email with a new verification token to set a new password');
 					res.redirect('/reset');
 				}else{
