@@ -14,6 +14,24 @@
     <div class="container">
         <div class="row">
      		<p>THIS PART IMPLEMENTS SOLUTION BASED ON HYPERLEDGER.</p>
+			<% if(body && body.length > 0){ %>
+				<table>
+					<thead>
+						<tr>
+							<th>MANA ID</th>
+							<th>ROLE</th>
+						</tr>
+					</thead>
+					<tbody>
+				<% body.forEach(user => { %>
+						<tr>
+							<td><%= user.manaId %></td>
+							<td><%= user.role %></td>
+						</tr>
+				<% }) %>
+					</tbody>
+				</table>
+			<% } %>
 		</div>
     </div>
 
