@@ -13,15 +13,58 @@
 -->
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>E-Record</title>
-  <base href="/e-record/">
+	<head>
+		<meta charset="utf-8">
+		<title>Manangular</title>
+		<base href="/manangular/">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="shortcut icon" href="/img/favicon.ico" sizes="32x32">
-</head>
-<body>
-  <app-root>Loading...</app-root>
-<script type="text/javascript" src="/js/angular/inline.bundle.js"></script><script type="text/javascript" src="/js/angular/polyfills.bundle.js"></script><script type="text/javascript" src="/js/angular/scripts.bundle.js"></script><script type="text/javascript" src="/js/angular/styles.bundle.js"></script><script type="text/javascript" src="/js/angular/vendor.bundle.js"></script><script type="text/javascript" src="/js/angular/main.bundle.js"></script></body>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href="/img/favicon.ico" sizes="32x32">
+	</head>
+	<body>
+	
+	<li class="nav-item">
+		<a class="nav-link" href="/account">
+	
+			<%= currentUser.username %>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/e-record">
+		
+			E-Record
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/private">
+			
+			Private
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/angular">
+			 
+			Angular
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="/logout">
+	
+			Logout
+		</a>
+	</li>
+
+
+
+	
+	<app-root>Loading...</app-root>
+	<script type="text/javascript" src="/js/angular/inline.bundle.js"></script>
+	<script type="text/javascript" src="/js/angular/polyfills.bundle.js"></script>
+	<script type="text/javascript" src="/js/angular/scripts.bundle.js"></script>
+	<script type="text/javascript" src="/js/angular/styles.bundle.js"></script>
+	<script type="text/javascript" src="/js/angular/vendor.bundle.js"></script>
+	<script type="text/javascript" src="/js/angular/main.bundle.js"></script>
+	
+	
+	</body>
 </html>
