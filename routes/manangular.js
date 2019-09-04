@@ -4,7 +4,7 @@ const middleware = require('../middleware');
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
 	
-	res.render("app/dist/index");
+	res.render("app/manangular/index");
 
 });
 
