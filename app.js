@@ -79,13 +79,15 @@ const authRoutes = require('./routes/auth'),
     privateRoutes = require('./routes/private'),
     homeRoutes = require('./routes/home'),
     eRecordRoutes = require('./routes/e-record'),
-    accountRoutes = require('./routes/account');
+    accountRoutes = require('./routes/account'),
+	angularRoutes = require('./routes/manangular');
 
 app.use('/', authRoutes);
 app.use('/private', privateRoutes);
 app.use('/home', homeRoutes);
 app.use('/e-record', eRecordRoutes);
 app.use('/account', accountRoutes);
+app.use('/manangular', angularRoutes);
 
 
 // DEFAULT ROUTE IF NOTHING ELSE MATCHES
