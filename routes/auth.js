@@ -9,7 +9,7 @@ const User = require('../models/user');
 const Privacy = require('../models/privacy');
 const Mana = require('../models/mana');
 const middleware = require('../middleware');
-const hyperledger = require('../utils/hyperledger');
+const hlf = require('../utils/hyperledger');
 const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
@@ -151,23 +151,15 @@ router.post('/verification', (req, res) => {
 							winston.error(err.message);
 							console.log('Something went wrong when creating a new mana object.');
 						}else{
-							hyperledger.createUser(hyperledger.namespaces.user, mana._id, 'CLIENT' ).then(data => {
-								winston.info(data);
-							}).catch(error => {
-								console.log(error);
-							});
 							
-							hyperledger.createUser(hyperledger.namespaces.user, mana._id.toString(), 'CLIENT' ).then(response => {
+							hlf.createUser(mana._id.toString(), 'CLIENT' ).then(response => {
 								body = response.data;
-								console.log(body);
 								winston.info('Hyperledger updated with new participant')
 							}).catch(error => {
 								console.log(error);
 								winston.error(error.message);
 							});
-							// 	.finally(() => {
-							// 	res.render("app/e-record", {body: body});
-							// });
+						
 							
 							winston.info('A new mana object created upon registration.');
 							console.log('Privacy object created with: ');

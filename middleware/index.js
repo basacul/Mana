@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
 		// a user can now have multiple duplicate files with same file name but stored with a different file path each
-		const hash = crypto.createHmac('sha256', req.user.username).update(Date.now().toString()).digest('hex') ;
+		const hash = crypto.createHmac('sha256', req.user.username).update(Date.now().toString()).digest('hex');
 		const format = file.originalname.split('.').pop()
         cb(null, `${hash}.${format}`);
     }

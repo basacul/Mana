@@ -1,6 +1,7 @@
 const config = require('../config/hyperledger');
-const https = require('https');
 const axios = require('axios');
+const crypto = require('crypto');
+const Mana = require('../models/mana');
 /**
 * in order to turn off rejections due to self signed certificates
 * such as the hyperledger server 
@@ -24,69 +25,46 @@ hyperledger.namespaces = {
 	association:  `${config.namespace}.Association`,
 }
 
-hyperledger.createUser = function(namespace, manaId, role){
-	return axios.post(`${config.url}/${namespace}`, {
+hyperledger.createUser = function(manaId, role){
+	return axios.post(`${config.url}/${hyperledger.namespaces.user}`, {
 		$class: hyperledger.namespaces.user,
 		manaId: manaId,
 		role: role
 	});
 };
 
-// hyperledger.createUser = function(namespace, manaId,role){
-// 	const postData = JSON.stringify({
-// 	  $class: hyperledger.namespaces.user,
-// 	  manaId: manaId,
-// 	  role: role
-// 	});
+/**
+* Create new association
+* @params association is a Json object that holds the key value pairs 
+* 		  for the post request
+*/
+hyperledger.createAssociation = function(association, manaId){
+	let associationObject = {};
+	associationObject.$class = hyperledger.namespaces.Association;
+	associationObject.to = `${hyperledger.namespaces.user}#${association.to}`;
+	associationObject.message = association.message;
+	if(association.item){
+		associationObject.item = `${hyperledger.namespaces.item}#${association.item}`;
+	}
+	associationObject.associationId = crypto.createHmac('sha256', manaId.toString()).update(Date.now().toString()).digest('hex');
+	associationObject.from = `${hyperledger.namespaces.user}#${manaId.toString()}`;
 	
-// 	const options = {
-// 		hostname: `${config.hostname}`,
-// 		port: config.port,
-// 		path: `api/${namespace}`,
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json; charset=utf-8',
-// 			'Content-Length': Buffer.byteLength(postData),
-// 			'Accept': 'application/json',
-// 			'conncetion': 'Close'
-// 			}
-// 	};
+	return axios.post(`${config.url}/${config.namespace}.CreateAssociation`, associationObject);
 	
-	
-// 	return new Promise((resolve, reject) => {
-// 		const request = https.request(options, (response) => {
-// 			// if(response.statusCode < 200 || response.statusCode > 299){
-// 			// 	reject(new Error('Failed to load page, status code: ' + response.statusCode));
-// 			// }
-// 			// for the body I need to set the respective encoding 
-// 			response.setEncoding('utf8');
-// 			response.on('data', (body) => {
-// 				resolve(JSON.parse(body));
-// 			});
-// 		});
-		
-// 		request.on('error', (err) => reject(err));
-		
-// 		// write data to request body
-// 		request.write(postData);
-// 	});
-// }
-
+}
+/**
+* Somehow not a function
+*/
 hyperledger.getAll = function(namespace){
-	return new Promise((resolve, reject) => {
-		const request = https.get(`${config.url}/${namespace}`, (response) => {
-			if(response.statusCode < 200 || response.statusCode > 299){
-				reject(new Error('Failed to load page, status code: ' + response.statusCode));
-			}
-			// for the body I need to set the respective encoding 
-			response.setEncoding('utf8');
-			response.on('data', (body) => {
-				resolve(JSON.parse(body));
-			});
-		});
-		request.on('error', (err) => reject(err));
-	});
-	
+	return axios.get(`${config.url}/${namespace}`);	
+}
+
+hyperledger.getById = function(namespace, id){
+	return axios.get(`${config.url}/${namespace}/id`)
+}
+
+hyperledger.deleteById = function(namespace, id){
+	return axios.delete(`${config.url}/${namespace}/${id}`);
 }
 
 
