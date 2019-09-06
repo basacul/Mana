@@ -3,6 +3,7 @@ const router = express.Router(); // now instead of app, use router
 const middleware = require('../middleware');
 const hlf = require('../utils/hyperledger');
 const Mana = require('../models/mana');
+const User = require('../models/user');
 const winston = require('../config/winston');
 
 /**
@@ -53,7 +54,6 @@ router.get('/association', middleware.isLoggedIn, (req, res) => {
 						return (item.owner == `resource:${hlf.namespaces.user}#${mana._id}`);
 					});
 				}
-
 			}).catch(error => {
 				console.log(error);
 				res.redirect('back');
@@ -95,6 +95,7 @@ router.get('/association/:associationId', middleware.isLoggedIn, (req, res) => {
 	let users;
 	let items;
 	let manaId;
+	let files;
 	
 	Mana.findOne({user: req.user._id}, (error, mana) => {
 		if(error){
@@ -102,34 +103,55 @@ router.get('/association/:associationId', middleware.isLoggedIn, (req, res) => {
 			req.flash('error', error.message);
 			res.redirect('back');
 		}else{
-			hlf.getAssociationById(req.params.associationId).then(responseAssociation => {
-				association = responseAssociation.data;
-				return hlf.getAll(hlf.namespaces.user);
-			}).then(responseUsers => {
-				users = responseUsers.data;
-				// TODO: filter out the current user
-				users = users.filter(user => user.manaId != `${mana._id}`);
-				return hlf.getAll(hlf.namespaces.item);
-			}).then(responseItems => {
-				items = responseItems.data;
-				// TODO: provide query in hlf to get rid of filtering
-				if(items){
-					items = items.filter(item => {
-						return (item.owner == `resource:${hlf.namespaces.user}#${mana._id}`);
+			User.findById(req.user._id).populate('files').exec(function (err, data) {
+				if (err) {
+					winston.error(err.message);
+					res.redirect('back');
+				} else {
+					hlf.getAssociationById(req.params.associationId).then(responseAssociation => {
+						association = responseAssociation.data;
+						return hlf.getAll(hlf.namespaces.user);
+					}).then(responseUsers => {
+						users = responseUsers.data;
+						// TODO: filter out the current user
+						users = users.filter(user => user.manaId != `${mana._id}`);
+						return hlf.getAll(hlf.namespaces.item);
+					}).then(responseItems => {
+						items = responseItems.data;
+						// TODO: provide query in hlf to get rid of filtering
+						if(items){
+							items = items.filter(item => {
+								return (item.owner == `resource:${hlf.namespaces.user}#${mana._id}`);
+							});
+						}
+
+					}).catch(error => {
+						console.log(error);
+					}).finally(() => {
+						console.log(association);
+						console.log(association.messages);
+						res.render("app/e-record/association_show", {association: association[0], items: items, users: users, manaId: mana._id.toString(), files: data.files});
 					});
 				}
-
-			}).catch(error => {
-				console.log(error);
-			}).finally(() => {
-				console.log(association);
-				console.log(association.messages);
-				res.render("app/e-record/association_show", {association: association[0], items: items, users: users, manaId: mana._id.toString()});
 			});
+			
 		}
 	})
 });
 
+/**
+* Download file for approved association only
+*/
+router.post('/association/:associationId/download', middleware.isLoggedIn, (req, res) => {
+
+});	
+
+/**
+* Grant association
+*/
+router.put('/association/:associationId/grant', middleware.isLoggedIn, (req, res) => {
+	
+});
 
 /**
 * Item Home Page

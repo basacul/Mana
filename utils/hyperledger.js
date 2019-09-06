@@ -34,7 +34,7 @@ hyperledger.createUser = function(manaId, role){
 };
 
 /**
-* Create new association
+* Create new association by performing transaction
 * @params association is a Json object that holds the key value pairs 
 * 		  for the post request
 */
@@ -51,9 +51,10 @@ hyperledger.createAssociation = function(association){
 	associationObject.associationId = crypto.createHmac('sha256', association.from).update(Date.now().toString()).digest('hex');
 	associationObject.from = `${hyperledger.namespaces.user}#${association.from}`;
 	
-	return axios.post(`${config.url}/${config.namespace}.CreateAssociation`, associationObject);
 	
+	return axios.post(`${config.url}/${config.namespace}.CreateAssociation`, associationObject);
 }
+
 /**
 * Somehow not a function
 */
@@ -61,13 +62,31 @@ hyperledger.getAll = function(namespace){
 	return axios.get(`${config.url}/${namespace}`);	
 }
 
+/**
+* Using the REST interface for the respective namespace 
+*/
 hyperledger.getById = function(namespace, id){
 	return axios.get(`${config.url}/${namespace}/${id}`);
 }
 
+/**
+* Using the query interface 
+*/
 hyperledger.getAssociationById = function(id){
 	return axios.get(`${config.url}/queries/selectAssociationById?id=${id}`)
 }
+
+hyperledger.grantAssociation = function(associationId, message, link ){
+	let associationObject = {};
+	associationObject.$class = `${config.namespace}.GrantAssociation`;
+	associationObject.association = `resource:${hyperledger.namespaces.association}#associationId`;
+	associationObject.message = message;
+	
+	// generate link for given file --> new model needed?
+	associationObject.link = link;
+
+	return axios.post(`${config.url}/${config.namespace}.GrantAssociation`, associationObject);
+};
 
 hyperledger.deleteById = function(namespace, id){
 	return axios.delete(`${config.url}/${namespace}/${id}`);

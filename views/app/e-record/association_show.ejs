@@ -23,10 +23,10 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/e-record/association" method="POST">
+            <form action="/e-record/association/<%=association.associationId%>/grant" method="POST">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Request Data Access</h4>
+                    <h4 class="modal-title">Approve Request</h4>
                 </div>
 
                 <!-- Modal body -->
@@ -37,34 +37,31 @@
                         <input type="text" class="form-control" name="association[link]" id="f-link"
                             placeholder="Enter Existing Link (optional)">
                     </div> -->
-					
-					<div class="form-group">
-						<% if(items && items.length > 0){ %>
-							
-							<label class="form-check-label d-block" for="f-authorized">Choose Item:</label>
 
-							<select class="selectpicker bg-dark w-100" name="association[item]">
-								<option value="">None</option>
-								<% items.forEach(function(item){ %>
-								<option value="<%= item.itemId %>"><%= item.itemId %> : <%= item.role %></option>
-								<% }) %>
-							</select>
-
-						<% } %>
-                    </div>
                     <div class="form-group">
                         <label for="f-message" class="sr-only">Message</label>
                         <textarea class="form-control" name="association[message]" id="f-message" rows="3"
                             placeholder="Enter a message" required></textarea>
                     </div>
-					
-                    <% if(users && users.length > 0){ %>
+					<% if(items && items.length > 0){ %>
+					<div class="form-group">
+						<label class="form-check-label d-block" for="f-item">Choose Item:</label>
+
+						<select id="f-item" class="selectpicker bg-dark w-100" name="association[item]">
+							<option value="">None</option>
+							<% items.forEach(function(item){ %>
+							<option value="<%= item.itemId %>"><%= item.itemId %> : <%= item.role %></option>
+							<% }) %>
+						</select>	
+                    </div>
+					<% } %>
+                    <% if(files && files.length > 0){ %>
                     <div class="form-group ">
                         <label class="form-check-label d-block" for="f-authorized">Send Request To:</label>
 
                         <select class="selectpicker bg-dark w-100" name="association[to]">
-                            <% users.forEach(function(user){ %>
-                            <option value="<%= user.manaId %>"><%= user.manaId %> : <%= user.role %></option>
+                            <% files.forEach(function(file){ %>
+                            <option value="<%= file._Id %>"><%= file.filename %></option>
                             <% }) %>
                         </select>
                     </div>
@@ -75,7 +72,7 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Request</button>
+                    <button type="submit" class="btn btn-success">Approve</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -92,36 +89,53 @@
 				<div class="card mt-3 bg-dark text-white border-secondary">
 				<% } %>
                     <h5 class="card-header d-flex justify-content-between" style="background: black">
-						<% if(association.approved){ %>
-						<form action='/e-record/association/<%= association.associationId %>' method='POST'>
+						<div>
+							Messages
+						</div>
+						<% if(association.approved && association.from.split('#')[1] != manaId){ %>
+						<form action='/e-record/association/<%= association.associationId %>/download' method='POST'>
 							<input type="submit" class="btn btn-info" value="download">
 						</form>
-						<% }else{ %>
-						<div>
-						<!-- empty div -->
-						</div>
+						<% }else if(!association.approved && association.to.split('#')[1] == manaId){ %>
+						
+						 <label for="f-upload" class="custom-file-upload">
+                            <input type="button" data-toggle="modal" data-target="#myModal" class="btn btn-success" value="approve">
+                        </label>
+
+						
+						<% }else if(association.approved && association.to.split('#')[1] == manaId) {%>
+						<form action='/e-record/association/<%= association.associationId %>/revoke' method='POST'>
+							<input type="submit" class="btn btn-info" value="revoke">
+						</form>
 						<% } %>
-						<input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#myModal" value="edit">
+						<!-- <input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#myModal" value="edit"> -->
 					
                     </h5>
-                    <div class="card-body">
-                        <div class="row d-flex justify-content-around">
+                    <div class="card-body w-100">
+                        
                             <div class="pl-2">
                                 <h5 class="card-title">
-
+									
 								 </h5>
                                 <p class="card-text">
-									Messages: <br>
+									
 									<% association.messages.forEach(message => { %>
-										<span><%= message.message %></span>
+									<span class="d-block"><%= message.message %></span>
 									<% }) %>
 								</p>
-								<div class="text-center">
-									
-									 <a href="/e-record/association" class="btn btn-primary">go back</a>
+								<form action='/e-record/association/<%= association.associationId %>' method='PUT' class="w-100">
+									<div class="form-group">
+									 <label for="f-message" class="sr-only">Message</label>
+                        			<textarea class="form-control" name="message" id="f-message" rows="3"
+                           			 placeholder="Enter a message" required></textarea>
+									</div>
+								</form>
+								<div class="d-flex justify-content-around">
+									<input type="submit" class="btn btn-info" value="SEND">
+								 	<a href="/e-record/association" class="btn btn-info">go back</a>
 								</div>
                             </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
