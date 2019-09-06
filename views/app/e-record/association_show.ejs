@@ -1,0 +1,131 @@
+<% include ../partials/header %>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark d-block" id="second_navbar">
+    <div class="container d-flex justify-content-end" id="mainNavigation">
+		<div>
+		<!-- empty div in order to float the content below to the right -->
+		</div>
+		
+        <div class="navbar" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/e-record/item">Items</a>
+                </li>
+			 	<li class="nav-item">
+					<a class="nav-link" href="/e-record/association">Associations</a>
+				</li>
+            </ul>
+        </div>
+		
+    </div>
+</nav>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/e-record/association" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Request Data Access</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+<!-- When creating an association we do not need to provide a link otherwise an item is created -->
+                    <!-- <div class="form-group">
+                        <label for="f-link" class="sr-only">Link</label>
+                        <input type="text" class="form-control" name="association[link]" id="f-link"
+                            placeholder="Enter Existing Link (optional)">
+                    </div> -->
+					
+					<div class="form-group">
+						<% if(items && items.length > 0){ %>
+							
+							<label class="form-check-label d-block" for="f-authorized">Choose Item:</label>
+
+							<select class="selectpicker bg-dark w-100" name="association[item]">
+								<option value="">None</option>
+								<% items.forEach(function(item){ %>
+								<option value="<%= item.itemId %>"><%= item.itemId %> : <%= item.role %></option>
+								<% }) %>
+							</select>
+
+						<% } %>
+                    </div>
+                    <div class="form-group">
+                        <label for="f-message" class="sr-only">Message</label>
+                        <textarea class="form-control" name="association[message]" id="f-message" rows="3"
+                            placeholder="Enter a message" required></textarea>
+                    </div>
+					
+                    <% if(users && users.length > 0){ %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-authorized">Send Request To:</label>
+
+                        <select class="selectpicker bg-dark w-100" name="association[to]">
+                            <% users.forEach(function(user){ %>
+                            <option value="<%= user.manaId %>"><%= user.manaId %> : <%= user.role %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <% } %>
+
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Request</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+				<% if(!association.approved){ %>
+				<div class="card mt-3 bg-dark text-white border-danger">
+				<% }else{ %>
+				<div class="card mt-3 bg-dark text-white border-secondary">
+				<% } %>
+                    <h5 class="card-header d-flex justify-content-between" style="background: black">
+						<% if(association.approved){ %>
+						<form action='/e-record/association/<%= association.associationId %>' method='POST'>
+							<input type="submit" class="btn btn-info" value="download">
+						</form>
+						<% }else{ %>
+						<div>
+						<!-- empty div -->
+						</div>
+						<% } %>
+						<input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#myModal" value="edit">
+					
+                    </h5>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-around">
+                            <div class="pl-2">
+                                <h5 class="card-title">
+
+								 </h5>
+                                <p class="card-text">
+									Messages: <br>
+									<% association.messages.forEach(message => { %>
+										<span><%= message.message %></span>
+									<% }) %>
+								</p>
+								<div class="text-center">
+									
+									 <a href="/e-record/association" class="btn btn-primary">go back</a>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<% include ../partials/footer %>

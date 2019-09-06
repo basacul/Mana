@@ -1,10 +1,10 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark d-block" id="second_navbar">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" id="second_navbar">
     <div class="container" id="mainNavigation">
 
 		<label for="f-association" class="custom-file-upload pull-left">
-			<input id="f-association" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="association">
+			<input id="f-association" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="item">
 		</label>
 
         <div class="navbar" id="navbarSupportedContent">
@@ -24,7 +24,7 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/e-record/association" method="POST">
+            <form action="/e-recored/association" method="POST">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Request Data Access</h4>
@@ -32,39 +32,48 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-<!-- When creating an association we do not need to provide a link otherwise an item is created -->
-                    <!-- <div class="form-group">
+
+
+                    <div class="form-group">
+                        <label for="f-associationId" class="sr-only">AssociationId</label>
+                        <input type="text" class="form-control" name="association[associationId]" id="f-associationId"
+                            placeholder="Enter AssociationId" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="association[approved]" value="true"
+                            id="f-accessible">
+                        <label class="form-check-label" for="f-accessible">
+                            Approved?
+                        </label>
+                    </div>
+                    <div class="form-group">
                         <label for="f-link" class="sr-only">Link</label>
                         <input type="text" class="form-control" name="association[link]" id="f-link"
-                            placeholder="Enter Existing Link (optional)">
-                    </div> -->
-					<div class="form-group">
-						<% if(items && items.length > 0){ %>
-							
-							<label class="form-check-label d-block" for="f-authorized">Choose Item:</label>
-
-							<select class="selectpicker bg-dark w-100" name="association[item]">
-								<option value="">None</option>
-								<% items.forEach(function(item){ %>
-								<option value="<%= item.itemId %>"><%= item.itemId %> : <%= item.role %></option>
-								<% }) %>
-							</select>
-
-						<% } %>
+                            placeholder="Enter Link" required>
                     </div>
                     <div class="form-group">
                         <label for="f-message" class="sr-only">Message</label>
                         <textarea class="form-control" name="association[message]" id="f-message" rows="3"
-                            placeholder="Enter a message" required></textarea>
+                            placeholder="Enter a message"></textarea>
                     </div>
-
+                    <div class="form-group">
+                        <label for="f-from" class="sr-only">From</label>
+                        <input type="text" class="form-control" name="association[from]" id="f-from"
+                            placeholder="Enter From" required>
+                    </div>
+					<div class="form-group">
+                        <label for="f-to" class="sr-only">To</label>
+                        <input type="text" class="form-control" name="association[to]" id="f-to"
+                            placeholder="Enter To" required>
+                    </div>
+                    <!-- TODO: Multiple users can be chosen through checkbox perhaps -->
                     <% if(users && users.length > 0){ %>
                     <div class="form-group ">
-                        <label class="form-check-label d-block" for="f-authorized">Send Request To:</label>
+                        <label class="form-check-label d-block" for="f-authorized">Request Access To:</label>
 
-                        <select class="selectpicker bg-dark w-100" name="association[to]">
+                        <select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
                             <% users.forEach(function(user){ %>
-                            <option value="<%= user.manaId %>"><%= user.manaId %> : <%= user.role %></option>
+                            <option><%= user.manaId %> : <%= user.role %></option>
                             <% }) %>
                         </select>
                     </div>
@@ -121,4 +130,4 @@
 </article>
 <script type="text/javascript" src="js/hyperledger.js"></script>
 
-<% include partials/footer %>
+<% include ../partials/footer %>

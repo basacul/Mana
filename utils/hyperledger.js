@@ -38,16 +38,18 @@ hyperledger.createUser = function(manaId, role){
 * @params association is a Json object that holds the key value pairs 
 * 		  for the post request
 */
-hyperledger.createAssociation = function(association, manaId){
+hyperledger.createAssociation = function(association){
 	let associationObject = {};
+	
+	// initialize values for the post request of a new association
 	associationObject.$class = hyperledger.namespaces.Association;
 	associationObject.to = `${hyperledger.namespaces.user}#${association.to}`;
 	associationObject.message = association.message;
 	if(association.item){
 		associationObject.item = `${hyperledger.namespaces.item}#${association.item}`;
 	}
-	associationObject.associationId = crypto.createHmac('sha256', manaId.toString()).update(Date.now().toString()).digest('hex');
-	associationObject.from = `${hyperledger.namespaces.user}#${manaId.toString()}`;
+	associationObject.associationId = crypto.createHmac('sha256', association.from).update(Date.now().toString()).digest('hex');
+	associationObject.from = `${hyperledger.namespaces.user}#${association.from}`;
 	
 	return axios.post(`${config.url}/${config.namespace}.CreateAssociation`, associationObject);
 	
@@ -60,7 +62,11 @@ hyperledger.getAll = function(namespace){
 }
 
 hyperledger.getById = function(namespace, id){
-	return axios.get(`${config.url}/${namespace}/id`)
+	return axios.get(`${config.url}/${namespace}/${id}`);
+}
+
+hyperledger.getAssociationById = function(id){
+	return axios.get(`${config.url}/queries/selectAssociationById?id=${id}`)
 }
 
 hyperledger.deleteById = function(namespace, id){
