@@ -19,7 +19,47 @@
 		
     </div>
 </nav>
-<!-- The Modal -->
+	
+<!-- --------------------- -->
+<!-- START OF REVOKE MODAL -->
+<!-- --------------------- -->
+<div class="modal" id="revokeModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/e-record/association/<%=association.associationId%>/revoke?_method=PUT" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Revoke Request</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+					<% if(association.link){ %>
+					<input type="hidden" name="association[fileId]" value="<%= association.link.split('files/')[1] %>">
+					<% } %>
+                    <div class="form-group">
+                        <label for="f-message" class="sr-only">Message</label>
+                        <textarea class="form-control" name="association[message]" id="f-message" rows="3"
+                            placeholder="Enter a message" required></textarea>
+                    </div>
+                </div>
+				
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">REVOKE</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ------------------- -->
+<!-- END OF REVOKE MODAL -->
+<!-- ------------------- -->
+
+<!-- -------------------- -->
+<!-- START OF GRANT MODAL -->
+<!-- -------------------- -->
 <div class="modal" id="grantModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -31,12 +71,7 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-<!-- When creating an association we do not need to provide a link otherwise an item is created -->
-                    <!-- <div class="form-group">
-                        <label for="f-link" class="sr-only">Link</label>
-                        <input type="text" class="form-control" name="association[link]" id="f-link"
-                            placeholder="Enter Existing Link (optional)">
-                    </div> -->
+					
 					<input type="hidden" name="association[from]" value="<%= association.from.split('#')[1] %>">
 					
                     <div class="form-group">
@@ -80,6 +115,9 @@
         </div>
     </div>
 </div>
+<!-- ------------------ -->
+<!-- END OF GRANT MODAL -->
+<!-- ------------------ -->
 <article>
     <div class="container">
         <div class="row">
@@ -105,9 +143,10 @@
 
 						
 						<% }else if(association.approved && association.to.split('#')[1] == manaId) {%>
-						<form action='/e-record/association/<%= association.associationId %>/revoke' method='POST'>
-							<input type="submit" class="btn btn-info" value="revoke">
-						</form>
+						 <label for="f-upload" class="custom-file-upload">
+                            <input type="button" data-toggle="modal" data-target="#revokeModal" class="btn btn-danger" value="revoke">
+                        </label>
+
 						<% } %>
 						<!-- <input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#grantModal" value="edit"> -->
 					
@@ -121,20 +160,21 @@
                                 <p class="card-text">
 									
 									<% association.messages.reverse().forEach(message => { %>
-									<span class="d-block"><%= message.message %></span>
+									<span class="d-block">> <%= message.message %></span>
 									<% }) %>
 								</p>
-								<form action='/e-record/association/<%= association.associationId %>' method='PUT' class="w-100">
+								<form action='/e-record/association/<%= association.associationId %>?_method=PUT' method='POST' class="w-100">
 									<div class="form-group">
 									 <label for="f-message" class="sr-only">Message</label>
                         			<textarea class="form-control" name="message" id="f-message" rows="3"
                            			 placeholder="Enter a message" required></textarea>
 									</div>
+								
+									<div class="d-flex justify-content-around">
+										<input type="submit" class="btn btn-info" value="SEND">
+										<a href="/e-record/association" class="btn btn-info">go back</a>
+									</div>
 								</form>
-								<div class="d-flex justify-content-around">
-									<input type="submit" class="btn btn-info" value="SEND">
-								 	<a href="/e-record/association" class="btn btn-info">go back</a>
-								</div>
                             </div>
                        
                     </div>

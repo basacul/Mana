@@ -25,6 +25,9 @@ hyperledger.namespaces = {
 	association:  `${config.namespace}.Association`,
 }
 
+//=====================================================================================
+// USER RELATED
+//=====================================================================================
 hyperledger.createUser = function(manaId, role){
 	return axios.post(`${config.url}/${hyperledger.namespaces.user}`, {
 		$class: hyperledger.namespaces.user,
@@ -33,6 +36,10 @@ hyperledger.createUser = function(manaId, role){
 	});
 };
 
+
+//=====================================================================================
+// ASSOCIATION RELATED
+//=====================================================================================
 /**
 * Create new association by performing transaction
 * @params association is a Json object that holds the key value pairs 
@@ -55,19 +62,6 @@ hyperledger.createAssociation = function(association){
 	return axios.post(`${config.url}/${config.namespace}.CreateAssociation`, associationObject);
 }
 
-/**
-* Somehow not a function
-*/
-hyperledger.getAll = function(namespace){
-	return axios.get(`${config.url}/${namespace}`);	
-}
-
-/**
-* Using the REST interface for the respective namespace 
-*/
-hyperledger.getById = function(namespace, id){
-	return axios.get(`${config.url}/${namespace}/${id}`);
-}
 
 /**
 * Using the query interface 
@@ -76,6 +70,9 @@ hyperledger.getAssociationById = function(id){
 	return axios.get(`${config.url}/queries/selectAssociationById?id=${id}`)
 }
 
+/**
+* Grant association by invoking GrantAssociation transaction
+*/
 hyperledger.grantAssociation = function(associationId, message, link){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.GrantAssociation`;
@@ -89,10 +86,55 @@ hyperledger.grantAssociation = function(associationId, message, link){
 	return axios.post(`${config.url}/${config.namespace}.GrantAssociation`, associationObject);
 };
 
+/**
+* Revoke association by invoking RevokeAssociation transaction
+*/
+hyperledger.revokeAssociation = function(associationId, message){
+	let associationObject = {};
+	associationObject.$class = `${config.namespace}.RevokeAssociation`;
+	associationObject.association = `resource:${hyperledger.namespaces.association}#${associationId}`;
+	associationObject.message = message;
+	
+	return axios.post(`${config.url}/${config.namespace}.RevokeAssociation`, associationObject);
+};
+
+/**
+* Send message for respective Association through UpdateAssociation transaction
+* optional parameters such as item and link are excluded
+*/
+hyperledger.sendMessageAssociation = function(associationId, message){
+	let associationObject = {};
+	associationObject.$class = `${config.namespace}.UpdateAssociation`;
+	associationObject.association = `resource:${hyperledger.namespaces.association}#${associationId}`;
+	associationObject.message = message;
+	
+	return axios.post(`${config.url}/${config.namespace}.UpdateAssociation`, associationObject);
+}
+
+//=====================================================================================
+// ITEM RELATED
+//=====================================================================================
+
+
+//=====================================================================================
+// GENERAL FUNCTIONS FOR ALL NAMESPACES
+//=====================================================================================
+/**
+* Return all items from respective namespace such as User, Association and Item
+*/
+hyperledger.getAll = function(namespace){
+	return axios.get(`${config.url}/${namespace}`);	
+}
+
+/**
+* Using the REST interface for the respective namespace 
+*/
+hyperledger.getById = function(namespace, id){
+	return axios.get(`${config.url}/${namespace}/${id}`);
+}
+
 hyperledger.deleteById = function(namespace, id){
 	return axios.delete(`${config.url}/${namespace}/${id}`);
 }
-
-
 
 module.exports = hyperledger;

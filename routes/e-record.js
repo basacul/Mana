@@ -140,6 +140,21 @@ router.get('/association/:associationId', middleware.isLoggedIn, (req, res) => {
 });
 
 /**
+* Send message for respective Association
+*/
+router.put('/association/:associationId', middleware.isLoggedIn, (req,res) => {
+	hlf.sendMessageAssociation(req.params.associationId, req.body.message).then(responeAssociation => {
+		winston.info('Message sent for respective Association');
+		req.flash('success', 'Message successfully sent');
+	}).catch(error => {
+		winston.error(error.message);
+		req.flash('error', 'Message NOT sent!');
+	}).finally(()=>{
+		res.redirect('back');
+	})
+});
+
+/**
 * Download file for approved association only
 */
 router.post('/association/:associationId/download', middleware.isLoggedIn, (req, res) => {
@@ -164,7 +179,7 @@ router.put('/association/:associationId/grant', middleware.isLoggedIn, (req, res
 			file.accessible = true;
 			file.save();
 			
-			const link = `${download.url}/${req.body.association.fileId}`;
+			const link = `${download.url}/${file._id}`;
 			
 			// grant association on hlf
 			hlf.grantAssociation(req.params.associationId, req.body.association.message, link).then(responseGrant => {
@@ -176,8 +191,36 @@ router.put('/association/:associationId/grant', middleware.isLoggedIn, (req, res
 			});
 		}
 	});
-	
 });
+
+/**
+* Download file for approved association only
+*/
+router.put('/association/:associationId/revoke', middleware.isLoggedIn, (req, res) => {
+	// 1. Retrieve file
+	const fileId = mongoose.Types.ObjectId(req.body.association.fileId);
+	File.findById(fileId, (error, file) => {
+		if(error){
+			winston.error(error.message);
+			req.flash('error', 'File not found to update');
+			res.redirect('back');
+		}else{
+			file.authorized.pull(mongoose.Types.ObjectId(req.body.association.fileId));
+			file.save();
+			
+			hlf.revokeAssociation(req.params.associationId, req.body.association.message).then(responseRevoke => {
+				console.log(responseRevoke.data);
+				winston.info('Association access revoked.');
+				req.flash('success', 'Successfully updated hlf.');
+			}).catch(error => {
+				winston.error(error.message);
+				req.flash('error', 'Could not perform revoke on hlf');
+			}).finally(() => {
+				res.redirect('back');
+			})
+		}
+	});
+});	
 
 /**
 * Item Home Page
