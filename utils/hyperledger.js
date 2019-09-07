@@ -76,13 +76,14 @@ hyperledger.getAssociationById = function(id){
 	return axios.get(`${config.url}/queries/selectAssociationById?id=${id}`)
 }
 
-hyperledger.grantAssociation = function(associationId, message, link ){
+hyperledger.grantAssociation = function(associationId, message, link){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.GrantAssociation`;
-	associationObject.association = `resource:${hyperledger.namespaces.association}#associationId`;
+	associationObject.association = `resource:${hyperledger.namespaces.association}#${associationId}`;
 	associationObject.message = message;
 	
-	// generate link for given file --> new model needed?
+	// generate link for given file: https://mana.openhealth.care/files/fileID
+	// for testing https://
 	associationObject.link = link;
 
 	return axios.post(`${config.url}/${config.namespace}.GrantAssociation`, associationObject);

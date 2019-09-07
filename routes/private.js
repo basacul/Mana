@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const router = express.Router(); // now instead of app, use router
 const File = require('../models/file');
 const User = require('../models/user');
+const Mana = require('../models/mana');
 const crypt = require('crypto');
 const middleware = require('../middleware');
 const winston = require('../config/winston');
 const aws = require('../utils/aws');
 const fs = require('fs');
+const hlf = require('../utils/hyperledger');
 
 // TODO: Figure out, if I need to check if all these files are owned by the user
 // as only the files in its db structure are retrieved, I dont think it is necessary
@@ -18,21 +20,27 @@ router.get("/", middleware.isLoggedIn, function (req, res) {
 			winston.error(err.message);
             res.redirect('/');
         } else {
-            User.find({}, function (error, users) {
-                if (error) {
-					winston.error(error.message);
-                    res.flash('error', error.message);
-                    res.redirect('back');
-                } else {
-                    // TODO: the users array should only contain the usernames and further necessary identifiable infos
-                    res.render("app/private", { files: data.files, users: onlyOtherUsers(users, req.user._id) });
-                }
-            });
-        }
-    });
-
-
-
+			let users;
+			hlf.getAll(hlf.namespaces.user).then(responseUsers => {
+				users = responseUsers.data;
+			}).catch(error => {
+				winston.error(error.message);
+				req.flash('error', 'Could not retrieve users on HLF.');
+			}).finally(() => {
+				Mana.findOne({user: req.user._id}, (error, mana) => {
+					if (error) {
+						winston.error(error.message);
+						res.flash('error', error.message);
+						res.redirect('back');
+					} else {
+						// TODO: the users array should only contain the usernames and further necessary identifiable infos
+						res.render("app/private", { files: data.files, users: onlyOtherUsers(users, mana._id.toString()) });
+					}
+				});
+			});
+		}
+	});
+		
 });
 
 // CREATE ROUTE
@@ -73,7 +81,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 
 					if (req.body.authorizedUser) {
 						newFile.authorized = req.body.authorizedUser.map(item => {
-							return mongoose.Types.ObjectId(item.split(':')[1].trim());
+							return mongoose.Types.ObjectId(item.split(':')[0].trim());
 						});
 					}
 					
@@ -133,14 +141,32 @@ router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
             res.redirect("/private");
 		// if foundFile not null
         } else {
-            User.find({}, function (error, users) {
-                if (error) {
-                    winston.error(error.message);
-                    res.redirect('back');
-                } else {
-                    res.render("app/private_show", { file: foundFile, users: onlyOtherUsers(users, req.user._id) });
-                }
-            });
+			let users;
+			hlf.getAll(hlf.namespaces.user).then(responseUsers => {
+				users = responseUsers.data;
+			}).catch(error => {
+				winston.error(error.message);
+				req.flash('error', 'Could not retrieve users on HLF.');
+			}).finally(() => {
+				Mana.findOne({user: req.user._id}, (error, mana) => {
+					if (error) {
+						winston.error(error.message);
+						res.flash('error', error.message);
+						res.redirect('back');
+					} else {
+						// TODO: the users array should only contain the usernames and further necessary identifiable infos
+						res.render("app/private_show", { file: foundFile, users: onlyOtherUsers(users, mana._id.toString()) });
+					}
+				});
+			});
+            // User.find({}, function (error, users) {
+            //     if (error) {
+            //         winston.error(error.message);
+            //         res.redirect('back');
+            //     } else {
+            //         res.render("app/private_show", { file: foundFile, users: onlyOtherUsers(users, req.user._id) });
+            //     }
+            // });
 
         }
     });
@@ -215,7 +241,7 @@ router.put("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (r
 
                     // retrieve ObjectId from the chosen user
                     const authorizedUsers = req.body.authorizedUser.map(item => {
-                        return item.split(':')[1].trim();
+                        return item.split(':')[0].trim();
                     });
 
                     authorizedUsers.forEach(toAdd => {
@@ -297,12 +323,12 @@ function sanitize_text(req) {
 
 
 // removes the currently logged in user from the array users
-function onlyOtherUsers(users, id){
+function onlyOtherUsers(hlfUsers, id){
 	let list = [];
-	if(users){
-		users.forEach(user => {
-		if(!user._id.equals(id)){
-			list.push({username: user.username, _id: user._id});
+	if(hlfUsers){
+		hlfUsers.forEach(user => {
+		if(user.manaId != id){
+			list.push({manaId: user.manaId, role: user.role});
 		}
 	});
 	}

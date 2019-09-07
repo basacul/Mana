@@ -20,10 +20,10 @@
     </div>
 </nav>
 <!-- The Modal -->
-<div class="modal" id="myModal">
+<div class="modal" id="grantModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/e-record/association/<%=association.associationId%>/grant" method="POST">
+            <form action="/e-record/association/<%=association.associationId%>/grant?_method=PUT" method="POST">
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Approve Request</h4>
@@ -37,7 +37,8 @@
                         <input type="text" class="form-control" name="association[link]" id="f-link"
                             placeholder="Enter Existing Link (optional)">
                     </div> -->
-
+					<input type="hidden" name="association[from]" value="<%= association.from.split('#')[1] %>">
+					
                     <div class="form-group">
                         <label for="f-message" class="sr-only">Message</label>
                         <textarea class="form-control" name="association[message]" id="f-message" rows="3"
@@ -57,11 +58,11 @@
 					<% } %>
                     <% if(files && files.length > 0){ %>
                     <div class="form-group ">
-                        <label class="form-check-label d-block" for="f-authorized">Send Request To:</label>
+                        <label class="form-check-label d-block" for="f-authorized">Allow access to file:</label>
 
-                        <select class="selectpicker bg-dark w-100" name="association[to]">
+                        <select class="selectpicker bg-dark w-100" name="association[fileId]">
                             <% files.forEach(function(file){ %>
-                            <option value="<%= file._Id %>"><%= file.filename %></option>
+                            <option value="<%= file._id %>"><%= file.filename %></option>
                             <% }) %>
                         </select>
                     </div>
@@ -86,20 +87,20 @@
 				<% if(!association.approved){ %>
 				<div class="card mt-3 bg-dark text-white border-danger">
 				<% }else{ %>
-				<div class="card mt-3 bg-dark text-white border-secondary">
+				<div class="card mt-3 bg-dark text-white border-success">
 				<% } %>
                     <h5 class="card-header d-flex justify-content-between" style="background: black">
 						<div>
 							Messages
 						</div>
-						<% if(association.approved && association.from.split('#')[1] != manaId){ %>
+						<% if(association.approved && association.from.split('#')[1] == manaId){ %>
 						<form action='/e-record/association/<%= association.associationId %>/download' method='POST'>
 							<input type="submit" class="btn btn-info" value="download">
 						</form>
 						<% }else if(!association.approved && association.to.split('#')[1] == manaId){ %>
 						
 						 <label for="f-upload" class="custom-file-upload">
-                            <input type="button" data-toggle="modal" data-target="#myModal" class="btn btn-success" value="approve">
+                            <input type="button" data-toggle="modal" data-target="#grantModal" class="btn btn-success" value="approve">
                         </label>
 
 						
@@ -108,7 +109,7 @@
 							<input type="submit" class="btn btn-info" value="revoke">
 						</form>
 						<% } %>
-						<!-- <input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#myModal" value="edit"> -->
+						<!-- <input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#grantModal" value="edit"> -->
 					
                     </h5>
                     <div class="card-body w-100">
@@ -119,7 +120,7 @@
 								 </h5>
                                 <p class="card-text">
 									
-									<% association.messages.forEach(message => { %>
+									<% association.messages.reverse().forEach(message => { %>
 									<span class="d-block"><%= message.message %></span>
 									<% }) %>
 								</p>

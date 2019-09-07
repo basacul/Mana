@@ -85,7 +85,7 @@
 						<label class="form-check-label d-block" for="f-authorized">Authorize for</label>
 						<select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
 							<% users.forEach(function(user){ %>
-							<option><%= user.username %> : <%= user._id %></option>
+							<option><%= user.manaId %> : <%= user.role %></option>
 							<% }) %>
 						</select>
 					</div>
@@ -108,8 +108,8 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-				<% if(file.accessible){ %>
-                	<div class="card mt-3 bg-dark text-white border-danger">
+				<% if(file.accessible || file.authorized.length > 0){ %>
+                	<div class="card mt-3 bg-dark text-white border-success">
 				<% }else{ %>
 					<div class="card mt-3 bg-dark text-white border-secondary">
 				<% } %>

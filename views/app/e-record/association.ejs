@@ -101,13 +101,13 @@
 				<% if(association.from.split('#')[1] == manaId){ %>
 				<a href="/e-record/association/<%=association.associationId %>">
 					<% if(association.approved){ %>
-					<li class="list-group-item bg-dark border-right border-bottom border-left border-secondary  d-flex justify-content-between">
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
 					<% }else{ %>
 					<li class="list-group-item bg-dark border-right border-bottom border-left border-danger  d-flex justify-content-between">
 					<% } %>
 						
 							<div class="col-6"><%=association.to.split('#')[1] %></div><br>
-							<div class="col-6"><%=association.messages[association.messages.length - 1].message %></div>
+							<div class="col-6"><%=association.messages[0].message %></div>
 						
 					</li>
 				</a>
@@ -129,13 +129,13 @@
 				<% if(association.to.split('#')[1] == manaId){ %>
 				<a href="/e-record/association/<%=association.associationId %>">
 					<% if(association.approved){ %>
-					<li class="list-group-item bg-dark border-right border-bottom border-left border-secondary  d-flex justify-content-between">
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
 					<% }else{ %>
 					<li class="list-group-item bg-dark border-right border-bottom border-left border-danger  d-flex justify-content-between">
 					<% } %>
 						
 							<div class="col-6"><%=association.from.split('#')[1] %></div><br>
-							<div class="col-6"><%=association.messages[association.messages.length - 1].message %></div>
+							<div class="col-6"><%=association.messages[0].message %></div>
 						
 					</li>
 				</a>

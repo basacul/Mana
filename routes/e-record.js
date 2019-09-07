@@ -1,11 +1,13 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router(); // now instead of app, use router
 const middleware = require('../middleware');
 const hlf = require('../utils/hyperledger');
 const Mana = require('../models/mana');
+const File = require('../models/file');
 const User = require('../models/user');
 const winston = require('../config/winston');
-
+const download = require('../config/download');
 /**
 * E-Record Home 
 */
@@ -69,7 +71,7 @@ router.get('/association', middleware.isLoggedIn, (req, res) => {
 * Create new Association through transaction
 */
 router.post('/association', middleware.isLoggedIn,(req, res) => {
-		console.log(req.body.association.from);
+
 		if(!req.body.association.from){
 			winston.error("No manaId given for posting a new association");
 			req.flash('error', "ManaId is missing on association.ejs");
@@ -126,10 +128,8 @@ router.get('/association/:associationId', middleware.isLoggedIn, (req, res) => {
 						}
 
 					}).catch(error => {
-						console.log(error);
+						winston.error(error.message);
 					}).finally(() => {
-						console.log(association);
-						console.log(association.messages);
 						res.render("app/e-record/association_show", {association: association[0], items: items, users: users, manaId: mana._id.toString(), files: data.files});
 					});
 				}
@@ -150,6 +150,32 @@ router.post('/association/:associationId/download', middleware.isLoggedIn, (req,
 * Grant association
 */
 router.put('/association/:associationId/grant', middleware.isLoggedIn, (req, res) => {
+	// 1. Retrieve file
+	const fileId = mongoose.Types.ObjectId(req.body.association.fileId);
+	File.findById(fileId, (error, file) => {
+		if(error){
+			winston.error(error.message);
+			req.flash('error', 'File not found to update');
+			res.redirect('back');
+		}else{
+			// 2. Update authorized with new manaId in 
+			console.log(req.body.association);
+			file.authorized.push(mongoose.Types.ObjectId(req.body.association.from));
+			file.accessible = true;
+			file.save();
+			
+			const link = `${download.url}/${req.body.association.fileId}`;
+			
+			// grant association on hlf
+			hlf.grantAssociation(req.params.associationId, req.body.association.message, link).then(responseGrant => {
+				console.log(responseGrant.data);
+			}).catch(error => {
+				console.log(error);
+			}).finally(() => {
+				res.redirect('back')
+			});
+		}
+	});
 	
 });
 
