@@ -42,6 +42,7 @@
                         <textarea class="form-control" name="association[message]" id="f-message" rows="3"
                             placeholder="Enter a message" required></textarea>
                     </div>
+					<input type="hidden" name="manaId" value="<%= manaId %>" >
                 </div>
 				
                 <!-- Modal footer -->
@@ -73,7 +74,7 @@
                 <div class="modal-body">
 					
 					<input type="hidden" name="association[from]" value="<%= association.from.split('#')[1] %>">
-					
+					<input type="hidden" name="manaId" value="<%= manaId %>" >
                     <div class="form-group">
                         <label for="f-message" class="sr-only">Message</label>
                         <textarea class="form-control" name="association[message]" id="f-message" rows="3"
@@ -154,21 +155,27 @@
                     <div class="card-body w-100">
                         
                             <div class="pl-2">
-                                <h5 class="card-title">
-									
-								 </h5>
-                                <p class="card-text">
+                                <div class="card-text">
 									
 									<% association.messages.reverse().forEach(message => { %>
-									<span class="d-block">> <%= message.message %></span>
+										<% if(message.from == manaId){ %>
+											<div class="col-8 alert alert-info float-right">
+												<p class="col-12 text-right"> <%= message.message %></span>
+											</div>
+										<% }else{ %>
+											<div class="col-8 alert alert-dark float-left">
+												<p class="col-12 text-left"> <%= message.message %></span>
+											</div>
+										<% } %>
 									<% }) %>
-								</p>
+								</div>
 								<form action='/e-record/association/<%= association.associationId %>?_method=PUT' method='POST' class="w-100">
 									<div class="form-group">
 									 <label for="f-message" class="sr-only">Message</label>
                         			<textarea class="form-control" name="message" id="f-message" rows="3"
                            			 placeholder="Enter a message" required></textarea>
 									</div>
+									<input type="hidden" name="manaId" value="<%= manaId %>" >
 								
 									<div class="d-flex justify-content-around">
 										<input type="submit" class="btn btn-info" value="SEND">

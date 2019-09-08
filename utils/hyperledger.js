@@ -62,21 +62,33 @@ hyperledger.createAssociation = function(association){
 	return axios.post(`${config.url}/${config.namespace}.CreateAssociation`, associationObject);
 }
 
+/**
+* Get all associations where the user is in to or from. Performs a query
+*/
+hyperledger.selectConcernedAssociation = function(manaId){
+	console.log('==========================================')
+	console.log('selectConcernedAssociation');
+	console.log(`Mana ID: ${manaId}`);
+	console.log('==========================================')
+	return axios.get(`${config.url}/queries/selectConcernedAssociation?user=resource%3A${hyperledger.namespaces.user}%23${manaId}`);
+};
 
 /**
 * Using the query interface 
 */
 hyperledger.getAssociationById = function(id){
 	return axios.get(`${config.url}/queries/selectAssociationById?id=${id}`)
-}
+};
 
 /**
 * Grant association by invoking GrantAssociation transaction
 */
-hyperledger.grantAssociation = function(associationId, message, link){
+// TODO ADD from string as manaId
+hyperledger.grantAssociation = function(associationId, message, manaId, link){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.GrantAssociation`;
 	associationObject.association = `resource:${hyperledger.namespaces.association}#${associationId}`;
+	associationObject.from = manaId;
 	associationObject.message = message;
 	
 	// generate link for given file: https://mana.openhealth.care/files/fileID
@@ -89,10 +101,12 @@ hyperledger.grantAssociation = function(associationId, message, link){
 /**
 * Revoke association by invoking RevokeAssociation transaction
 */
-hyperledger.revokeAssociation = function(associationId, message){
+// TODO ADD from string as manaId
+hyperledger.revokeAssociation = function(associationId, message, manaId){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.RevokeAssociation`;
 	associationObject.association = `resource:${hyperledger.namespaces.association}#${associationId}`;
+	associationObject.from = manaId;
 	associationObject.message = message;
 	
 	return axios.post(`${config.url}/${config.namespace}.RevokeAssociation`, associationObject);
@@ -102,19 +116,33 @@ hyperledger.revokeAssociation = function(associationId, message){
 * Send message for respective Association through UpdateAssociation transaction
 * optional parameters such as item and link are excluded
 */
-hyperledger.sendMessageAssociation = function(associationId, message){
+hyperledger.sendMessageAssociation = function(associationId, message, manaId){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.UpdateAssociation`;
 	associationObject.association = `resource:${hyperledger.namespaces.association}#${associationId}`;
+	associationObject.from = manaId;
 	associationObject.message = message;
 	
 	return axios.post(`${config.url}/${config.namespace}.UpdateAssociation`, associationObject);
 }
 
-//=====================================================================================
+//====================================================================================
 // ITEM RELATED
 //=====================================================================================
+/**
+* Using the query interface 
+*/
+hyperledger.selectItemByRole = function(role){
+	console.log('==========================================')
+	console.log('selectItemByRole');
+	console.log(`Role: ${role}`);
+	console.log('==========================================')
+	return axios.get(`${config.url}/queries/selectItemByRole?role=${role}`)
+};
 
+hyperledger.selectOwnedItem = function(manaId){
+	return axios.get(`${config.url}/queries/selectOwnedItem?user=$resource%3A${hyperledger.namespaces.user}%23${manaId}`)
+}
 
 //=====================================================================================
 // GENERAL FUNCTIONS FOR ALL NAMESPACES

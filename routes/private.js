@@ -194,21 +194,7 @@ router.post('/:id', middleware.isLoggedIn, middleware.checkOwnership, (req, res)
 			req.flash('error', 'File could not be downloaded from amazon aws S3');
 			res.redirect('back');
 		}).pipe(res);
-		
-		
-		// =============================================================================
-		// DOWNLOAD FROM SERVER'S FILE SYSTEM
-		// =============================================================================
-		// const download = `encrypted/users/${file.path}`;
-		// res.download(download, err => {
-		// 	if(err){
-		// 		winston.error(err.message);
-		// 		req.flash('error', 'Download not possible.');
-		// 	}else{
-		// 		winston.info('File downlad was successful but not sure, if user finally wanted to download anyway.');
-		// 	}
-		// });
-	})
+	});
 	
 });
 
