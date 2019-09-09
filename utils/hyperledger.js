@@ -203,6 +203,14 @@ hyperledger.selectOwnedItem = function(manaId){
 };
 
 /**
+* Gets the item
+* @param itemId: The ID of the item 
+*/
+hyperledger.selectItemById = function(itemId){
+	return axios.get(`${config.url}/queries/selectItemById?id=${itemId}`);
+};
+
+/**
 * Create new item
 * @param item json object with values for owner, role, description and link
 */
@@ -211,6 +219,25 @@ hyperledger.createItem = function(item){
 	return axios.post(`${config.url}/${config.namespace}.CreateItem`, item);
 };
 
+/**
+* Update item on HLF
+* @param item: Json object with itemId, $class, role, description, link, owner
+*/
+hyperledger.updateItem = function(item){
+	return axios.post(`${config.url}/${config.namespace}.UpdateItem`, item);
+};
+
+/**
+* Delete Item on HLF
+* @param itemId String representing the respective item ID
+*/
+hyperledger.deleteItem = function(itemId){
+	let itemObject = {};
+	itemObject.$class = `${config.namespace}.DeleteItem`;
+	itemObject.item = `${hyperledger.namespaces.item}#${itemId}`;
+	
+	return axios.post(`${config.url}/${config.namespace}.DeleteItem`, itemObject );
+}
 //=====================================================================================
 // GENERAL FUNCTIONS FOR ALL NAMESPACES
 //=====================================================================================

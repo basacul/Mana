@@ -174,7 +174,7 @@ router.put('/association/:associationId', middleware.isLoggedIn, (req,res) => {
 
 router.delete('/association/:associationId', middleware.isLoggedIn, (req, res) => {
 	hlf.deleteAssociation(req.params.associationId, req.user._id);
-	res.redirect('/association');
+	res.redirect('/e-record/association');
 });
 
 /**
@@ -298,7 +298,7 @@ router.get('/item', middleware.isLoggedIn, (req, res) => {
 				}	
 			});
 		}
-	})
+	});
 	
 });
 
@@ -337,18 +337,124 @@ router.post('/item', middleware.isLoggedIn, (req, res) => {
 * Item detail/show page
 */
 router.get('/item/:itemId', middleware.isLoggedIn, (req, res) => {
-	res.send("Item detail page");
+	let item;
+	let files;
+	
+	Mana.findOne({user: req.user._id}, (error, mana) => {
+		if(error){
+			winston.error(error.message);
+			req.flash('error', 'Could not find ManaId');
+			res.redirect('/home');
+		}else{
+		 	User.findById(req.user._id).populate('files').exec((errorFiles, data) => {
+				if(errorFiles){
+					winston.error(errorFiles.message);
+					req.flash('error', 'Could not retrieve the files.');
+				}else{
+					// console.log(`Mana ID: ${mana._id}`);
+					hlf.selectItemById(req.params.itemId).then(itemData => {
+						item = itemData.data[0];
+						// console.log("===================================");
+						// console.log(item);
+						// console.log("===================================");
+						return hlf.getAll(hlf.namespaces.user);
+					}).catch(error => {
+						winston.error(error.message);
+						req.flash('error', 'Item: went wrong.');
+					}).finally(() => {
+						res.render("app/e-record/item_show", {item: item, files: data.files,  manaId: mana._id.toString()});
+					});	
+				}	
+			});
+		}
+	});
+	
 });
 
 /**
 * Update item
 */
 router.put('/item/:itemId', middleware.isLoggedIn, (req, res) => {
-	res.send("Update item");
+
+	if(req.body.item.role === "NO"){
+		req.body.item.role = req.body.role;
+	};
+	
+	const newLink = `${download.url}/${req.body.item.link}`;
+	
+	// if file did not change perform update otherwise update respective files and then update
+	if(req.body.item.link === newLink){
+		
+		hlf.updateItem(req.body.item).then(responseItem => {
+			console.log("Anwer after updating item");
+			console.log(responseItem.data)
+		}).catch(error => {
+			winston.error(error.message);
+			req.flash('error', 'Update went wrong');
+		}).finally(() => {
+			res.redirect('back');
+		});		
+			
+	}else{
+		const manaId = req.body.item.
+		File.findById(req.body.fileId, (oldError, oldFile) => {
+			if(oldError){
+				winston.error(error.message);
+			}else{
+				
+				// if there are not authorized users then set accessible to false
+				if(oldFile.authorized.length === 0){
+					oldFile.accessible = false;
+				}
+				oldFile.save();
+				
+				File.findById(req.body.item.link, (newError, newFile) => {
+					if(newError){
+						winston.error(error.message);
+					}else{
+						newFile.accessible = true;						
+						newFile.save();
+						
+						// now update link
+						req.body.item.link = newLink;
+						
+						hlf.updateItem(req.body.item).then(responseItem => {
+							console.log("Anwer after updating item");
+							console.log(responseItem.data)
+						}).catch(error => {
+							winston.error(error.message);
+							req.flash('error', 'Update went wrong');
+						}).finally(() => {
+							res.redirect('back');
+						});
+					}
+				});
+			}
+		});	
+	}
 });
 
 router.delete('/item/:itemId', middleware.isLoggedIn, (req, res) => {
-	res.send("Item deleted");
+	File.findById(req.body.fileId, (error, file) => {
+		if(error){
+			winston.error(error.message);
+			req.flash('error', 'Deletion failed');
+			res.redirect('back');
+		}else{
+			
+			// if there are not authorized users then set accessible to false
+			if(file.authorized.length === 0){
+				file.accessible = false;
+			}
+			file.save();
+			
+			hlf.deleteItem(req.params.itemId).then(() => {
+				res.redirect('/e-record/item');
+			});
+			
+		}
+	})
+	
 });
 
 
