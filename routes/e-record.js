@@ -269,34 +269,87 @@ router.put('/association/:associationId/revoke', middleware.isLoggedIn, (req, re
 */
 router.get('/item', middleware.isLoggedIn, (req, res) => {
 	let items;
-	let users;
+	let files;
+	
 	Mana.findOne({user: req.user._id}, (error, mana) => {
 		if(error){
 			winston.error(error.message);
 			req.flash('error', 'Could not find ManaId');
 			res.redirect('/home');
 		}else{
-			hlf.getById(hlf.namespaces.user, mana._id.toString()).then(responseUser => {
-				return hlf.selectOwnedItem(responseUser.data.role);
-			}).then(itemData => {
-				items = itemData;
-				return hlf.getAll(hlf.namespaces.user);
-			}).then(userData => {
-				users = userData;
-			}).catch(error => {
-				winston.error(error.message);
-				req.flash('error', 'Item: went wrong.');
-			}).finally(() => {
-				res.render("app/e-record/item", {items: items, users: users});
+		 	User.findById(req.user._id).populate('files').exec((errorFiles, data) => {
+				if(errorFiles){
+					winston.error(errorFiles.message);
+					req.flash('error', 'Could not retrieve the files.');
+				}else{
+					console.log(`Mana ID: ${mana._id}`);
+					hlf.selectOwnedItem(mana._id.toString()).then(itemData => {
+						items = itemData.data;
+						console.log("===================================");
+						console.log(items);
+						console.log("===================================");
+						return hlf.getAll(hlf.namespaces.user);
+					}).catch(error => {
+						winston.error(error.message);
+						req.flash('error', 'Item: went wrong.');
+					}).finally(() => {
+						res.render("app/e-record/item", {items: items, files: data.files,  manaId: mana._id.toString()});
+					});	
+				}	
 			});
-			
-			
 		}
 	})
 	
-})
+});
 
 
+/**
+* Create new item
+*/
+router.post('/item', middleware.isLoggedIn, (req, res) => {
+	let item;
+	console.log(req.body.item);
+	File.findById(mongoose.Types.ObjectId(req.body.item.link), (error, file) => {
+		if(error){
+			winston.error(error.message);
+			req.flash('error', 'File not found');
+		}else{
+			file.accessible = true;
+			file.save();
+			req.body.item.link = `${download.url}/${file._id}`;
+			hlf.createItem(req.body.item).then(responseItem => {
+				console.log(responseItem.data);
+				item = responseItem.data;
+				req.flash('success', 'Item created');
+			}).catch(error => {
+				winston.error(error.message);
+				req.flash('error', 'No item created');
+			}).finally(() => {
+				res.redirect('back');
+				//res.render('app/e-record/item_show', {item: item});
+			})
+			
+		}
+	});
+});
+
+/**
+* Item detail/show page
+*/
+router.get('/item/:itemId', middleware.isLoggedIn, (req, res) => {
+	res.send("Item detail page");
+});
+
+/**
+* Update item
+*/
+router.put('/item/:itemId', middleware.isLoggedIn, (req, res) => {
+	res.send("Update item");
+});
+
+router.delete('/item/:itemId', middleware.isLoggedIn, (req, res) => {
+	res.send("Item deleted");
+});
 
 
 

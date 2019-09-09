@@ -24,67 +24,48 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/e-recored/association" method="POST">
+            <form action="/e-record/item" method="POST">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Request Data Access</h4>
+                    <h4 class="modal-title">Create New Item</h4>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-
-
+					<input type="hidden" name="item[$class]" value="care.openhealth.mana.CreateItem">
+					<input type="hidden" name="item[owner]" value="care.openhealth.mana.User#<%=manaId%>">
                     <div class="form-group">
-                        <label for="f-associationId" class="sr-only">AssociationId</label>
-                        <input type="text" class="form-control" name="association[associationId]" id="f-associationId"
-                            placeholder="Enter AssociationId" required>
+                        <label for="f-description" class="sr-only">Description</label>
+                        <textarea class="form-control" name="item[description]" id="f-description" rows="3"
+                            placeholder="Describe your item..."></textarea>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" name="association[approved]" value="true"
-                            id="f-accessible">
-                        <label class="form-check-label" for="f-accessible">
-                            Approved?
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="f-link" class="sr-only">Link</label>
-                        <input type="text" class="form-control" name="association[link]" id="f-link"
-                            placeholder="Enter Link" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="f-message" class="sr-only">Message</label>
-                        <textarea class="form-control" name="association[message]" id="f-message" rows="3"
-                            placeholder="Enter a message"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="f-from" class="sr-only">From</label>
-                        <input type="text" class="form-control" name="association[from]" id="f-from"
-                            placeholder="Enter From" required>
-                    </div>
-					<div class="form-group">
-                        <label for="f-to" class="sr-only">To</label>
-                        <input type="text" class="form-control" name="association[to]" id="f-to"
-                            placeholder="Enter To" required>
-                    </div>
-                    <!-- TODO: Multiple users can be chosen through checkbox perhaps -->
-                    <% if(users && users.length > 0){ %>
+					<% if(files && files.length > 0){ %>
                     <div class="form-group ">
-                        <label class="form-check-label d-block" for="f-authorized">Request Access To:</label>
+                        <label class="form-check-label d-block" for="f-file">Allow access to file:</label>
 
-                        <select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
-                            <% users.forEach(function(user){ %>
-                            <option><%= user.manaId %> : <%= user.role %></option>
+                        <select class="selectpicker bg-dark w-100" name="item[link]">
+                            <% files.forEach(function(file){ %>
+                            <option value="<%= file._id %>"><%= file.filename %></option>
                             <% }) %>
                         </select>
                     </div>
                     <% } %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-authorized">Allow Access To:</label>
 
-
+                        <select class="selectpicker bg-dark w-100" data-live-search="true" name="item[role]">
+                            
+                            <option value="CLIENT">For all clients</option>
+							<option value="PROVIDER">For all healthcare service providers</option>
+							<option value="INSURANCE">For respective insurance company</option>
+                   
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Request</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -96,23 +77,23 @@
     <div class="container">
       
 		<p>THIS PART IMPLEMENTS SOLUTION BASED ON HYPERLEDGER.</p>
-		<% if (associations && associations.length > 0) { %>
+		<% if (items && items.length > 0) { %>
 		<div class="card text-white bg-dark mt-3">
 			<div class="card-header d-flex justify-content-between" style="background-color: black">
-				<span>FROM</span> <span>TO</span> <span>LINK</span>
+				<span>OWNER</span> <span>DESCRIPTION</span> <span>LINK</span>
 			</div>
 			<ul class="list-group list-group-flush">
-				<% associations.forEach(function(association){ %>
-				<a href="e-record/association/<%=association.associationId %>">
-					<% if(association.approved){ %>
+				<% items.forEach(function(item){ %>
+				<a href="/e-record/item/<%=item.itemId %>">
+					<% if(item.approved){ %>
 					<li class="list-group-item bg-dark border-right border-bottom border-left border-danger  d-flex justify-content-between">
 					<% }else{ %>
-					<li class="list-group-item bg-dark border-right border-bottom border-left border-secondary  d-flex justify-content-between">
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
 					<% } %>
-						<span><%=association.from.split('#')[1] %></span> 
-						<span><%=association.to.split('#')[1] %></span> 
-						<% if(association.link){ %>
-						<span class="float-right"><%=association.link %></span>
+						<span><%=item.owner.split('#')[1] %></span> 
+						<span><%=item.description %></span> 
+						<% if(item.link){ %>
+						<span class="float-right"><%=item.link %></span>
 						<% }else{ %>
 						<span class="float-right">NO LINK</span>
 						<% } %>

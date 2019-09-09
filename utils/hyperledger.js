@@ -195,9 +195,21 @@ hyperledger.selectItemByRole = function(role){
 	return axios.get(`${config.url}/queries/selectItemByRole?role=${role}`)
 };
 
+/**
+* Get all items that belong to the logged in user
+*/
 hyperledger.selectOwnedItem = function(manaId){
-	return axios.get(`${config.url}/queries/selectOwnedItem?user=$resource%3A${hyperledger.namespaces.user}%23${manaId}`)
-}
+	return axios.get(`${config.url}/queries/selectOwnedItem?user=resource%3A${hyperledger.namespaces.user}%23${manaId}`)
+};
+
+/**
+* Create new item
+* @param item json object with values for owner, role, description and link
+*/
+hyperledger.createItem = function(item){
+	item.itemId = crypto.createHmac('sha256', item.link).update(Date.now().toString()).digest('hex');
+	return axios.post(`${config.url}/${config.namespace}.CreateItem`, item);
+};
 
 //=====================================================================================
 // GENERAL FUNCTIONS FOR ALL NAMESPACES
