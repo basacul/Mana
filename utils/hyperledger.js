@@ -2,6 +2,9 @@ const config = require('../config/hyperledger');
 const axios = require('axios');
 const crypto = require('crypto');
 const Mana = require('../models/mana');
+const File = require('../models/file');
+const mongoose = require('mongoose');
+
 /**
 * in order to turn off rejections due to self signed certificates
 * such as the hyperledger server 
@@ -44,6 +47,7 @@ hyperledger.createUser = function(manaId, role){
 * Create new association by performing transaction
 * @params association is a Json object that holds the key value pairs 
 * 		  for the post request
+* @return A Promise that returns the response. The required data is in response.data as JSON object
 */
 hyperledger.createAssociation = function(association){
 	let associationObject = {};
@@ -83,7 +87,6 @@ hyperledger.getAssociationById = function(id){
 /**
 * Grant association by invoking GrantAssociation transaction
 */
-// TODO ADD from string as manaId
 hyperledger.grantAssociation = function(associationId, message, manaId, link){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.GrantAssociation`;
@@ -101,7 +104,6 @@ hyperledger.grantAssociation = function(associationId, message, manaId, link){
 /**
 * Revoke association by invoking RevokeAssociation transaction
 */
-// TODO ADD from string as manaId
 hyperledger.revokeAssociation = function(associationId, message, manaId){
 	let associationObject = {};
 	associationObject.$class = `${config.namespace}.RevokeAssociation`;
@@ -124,6 +126,59 @@ hyperledger.sendMessageAssociation = function(associationId, message, manaId){
 	associationObject.message = message;
 	
 	return axios.post(`${config.url}/${config.namespace}.UpdateAssociation`, associationObject);
+}
+
+/**
+* Delete association with given association Id
+* @param associationId A string representing the association ID in hlf
+* @param userId An ObjectId of the schema User
+*/
+hyperledger.deleteAssociation = function(associationId, userId){
+	Mana.findOne({user: userId}, (error, mana) => {
+		if(error){
+			winston.error(error.message);
+			req.flash('error', 'Cannot delete association now.');
+		}else{
+			hyperledger.getAssociationById(associationId).then(responseAssociation => {
+				const associationHLF = responseAssociation.data[0];
+				if(associationHLF.from == `resource:${hyperledger.namespaces.user}#${mana._id.toString()}`){
+					let associationObject = {};
+					associationObject.$class = `${config.namespace}.DeleteAssociation`;
+					associationObject.association = `${hyperledger.namespaces.association}#${associationId}`;
+					
+					// pull user with mana._id from authorized array
+					console.log("============================================================");
+					console.log("delete Association with the following values");
+					console.log(associationHLF);
+					console.log(`Link: ${associationHLF.link.split('files/')[1]}`);
+					console.log("============================================================");
+					if(associationHLF.link){
+						
+						// THIS IS NOT THE APPROPRIATE SOLUTION. RESPECTIVE USER SHOULD CHECK ITSELF IF STILL SHARED
+						const fileId = mongoose.Types.ObjectId(associationHLF.link.split('files/')[1]);
+						
+						File.findOne(fileId, (errorFile, file) => {
+							if(errorFile){
+								winston.error(errorFile.message);
+								req.flash('error', 'Could not update respective file');
+							}else{
+								console.log(file);
+								file.authorized.pull({ _id: mana._id });
+								file.save();
+							}
+						});
+					}
+					
+				
+					
+					axios.post(`${config.url}/${config.namespace}.DeleteAssociation`, associationObject);
+					
+				}else{
+					req.flash('error', 'Denied.');
+				}
+			});
+		}
+	})
 }
 
 //====================================================================================

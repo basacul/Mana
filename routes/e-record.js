@@ -161,7 +161,7 @@ router.get('/association/:associationId', middleware.isLoggedIn, (req, res) => {
 */
 router.put('/association/:associationId', middleware.isLoggedIn, (req,res) => {
 
-	hlf.sendMessageAssociation(req.params.associationId, req.body.message, req.body.manaId).then(responeAssociation => {
+	hlf.sendMessageAssociation(req.params.associationId, req.body.message, req.body.manaId).then(responseAssociation => {
 		winston.info('Message sent for respective Association');
 		req.flash('success', 'Message successfully sent');
 	}).catch(error => {
@@ -170,9 +170,11 @@ router.put('/association/:associationId', middleware.isLoggedIn, (req,res) => {
 	}).finally(()=>{
 		res.redirect('back');
 	});
-	
+});
 
-	
+router.delete('/association/:associationId', middleware.isLoggedIn, (req, res) => {
+	hlf.deleteAssociation(req.params.associationId, req.user._id);
+	res.redirect('/association');
 });
 
 /**

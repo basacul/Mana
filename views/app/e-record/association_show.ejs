@@ -129,9 +129,15 @@
 				<div class="card mt-3 bg-dark text-white border-success">
 				<% } %>
                     <h5 class="card-header d-flex justify-content-between" style="background: black">
+						<% if(association.from.split('#')[1] == manaId){ %> 
+						<form action='/e-record/association/<%= association.associationId %>?_method=DELETE' method='POST'>
+							<input type="submit" class="btn btn-danger" value="delete">
+						</form>
+						<% }else{ %>
 						<div>
 							Messages
 						</div>
+						<% } %>
 						<% if(association.approved && association.from.split('#')[1] == manaId){ %>
 						<form action='/e-record/association/<%= association.associationId %>/download' method='POST'>
 							<input type="submit" class="btn btn-info" value="download">
