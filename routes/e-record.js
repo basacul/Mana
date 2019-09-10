@@ -180,9 +180,8 @@ router.delete('/association/:associationId', middleware.isLoggedIn, (req, res) =
 /**
 * Download file for approved association only
 */
-router.post('/association/:associationId/download', middleware.isLoggedIn, middleware.checkIfAuthorized, (req, res) => {
+router.post('/association/:associationId/download', middleware.isLoggedIn, middleware.checkIfAuthorizedAssociation, (req, res) => {
 	// request includes req.filePath in order to retrieve the respective file added in middleware.checkIfAuthorized
-	
 	const downloadObject = aws.s3.getObject(aws.paramsDownload(req.filePath)).createReadStream(); 
 	const filename = req.filePath.split('/')[1];
 	
@@ -237,7 +236,7 @@ router.put('/association/:associationId/grant', middleware.isLoggedIn, (req, res
 });
 
 /**
-* Download file for approved association only
+* Revoke association and update file for approved association only
 */
 router.put('/association/:associationId/revoke', middleware.isLoggedIn, (req, res) => {
 	// 1. Retrieve file
@@ -434,6 +433,7 @@ router.put('/item/:itemId', middleware.isLoggedIn, (req, res) => {
 	}
 });
 
+
 router.delete('/item/:itemId', middleware.isLoggedIn, (req, res) => {
 	File.findById(req.body.fileId, (error, file) => {
 		if(error){
@@ -457,6 +457,22 @@ router.delete('/item/:itemId', middleware.isLoggedIn, (req, res) => {
 	
 });
 
-
+router.post('/item/:itemId/download', middleware.isLoggedIn, middleware.checkIfAuthorizedItem, (req, res) => {
+	// request includes req.filePath in order to retrieve the respective file added in middleware.checkIfAuthorizedItem
+	const downloadObject = aws.s3.getObject(aws.paramsDownload(req.filePath)).createReadStream(); 
+	const filename = req.filePath.split('/')[1];
+	
+	// in order to download the file. otherwise file is displayed in the browser
+	// TODO: Check if pdf, jpeg or any form that can be displayed and downloaded form browser
+	// 		 otherwise direct download by adding res.attachement(filename)
+	res.attachment(filename);
+	downloadObject.on('error', err => {
+		winston.error(err.message);
+		req.flash('error', 'File could not be downloaded from amazon aws S3');
+		res.redirect('back');
+	}).pipe(res);
+	
+	
+});
 
 module.exports = router;

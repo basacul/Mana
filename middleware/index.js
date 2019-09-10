@@ -99,7 +99,7 @@ middleware.isVerified = function(req, res, next){
 	});
 };
 
-middleware.checkIfAuthorized = function (req, res, next) {
+middleware.checkIfAuthorizedAssociation = function (req, res, next) {
 	let association;
 	
     //retrieve respective association from HLF
@@ -166,5 +166,53 @@ middleware.checkIfAuthorized = function (req, res, next) {
 		
 	});  
 };
+
+middleware.checkIfAuthorizedItem = function(req, res, next){
+	let item;
+	
+	hlf.selectItemById(req.params.itemId).then(responseItem => {
+		item = responseItem.data[0];
+		
+		// create file Id in order to retrieve the respective file object
+		const fileId = mongoose.Types.ObjectId(item.link.split('files/')[1]);
+		
+		Mana.findOne({user: req.user._id}, (errorMana, mana) => {
+			if(errorMana){
+				
+				winston.error(errorMana.message);
+				req.flash('error', 'Could not find Mana');
+				res.redirect('back');
+				
+			}else{
+				
+				hlf.getById(hlf.namespaces.user, mana._id.toString()).then(responseUser => {
+					const user = responseUser.data;
+					if(user.role === item.role){
+						File.findById(fileId, (errorFile, file) =>{
+							if(errorFile){
+								winston.error(errorFile.message);
+								req.flash('error', 'File not found');
+								res.redirect('back');
+							}else if(!file.accessible){
+								winston.error('The file associated to the item is not accessible.');
+								req.flash('error', 'File is not accessible.');
+								res.redirect('back');
+							}else{
+								// otherwise user is authorized : next
+								// pass file path to call aws method. Done via request body
+								req.filePath = file.path;
+								next();
+							}
+						});
+					}else{
+						winston.error('User is not authorized to access file.');
+						req.flash('error', 'You are not authorized.');
+						res.redirect('back');
+					}
+				})
+			}
+		});
+	});
+}
 
 module.exports = middleware;
