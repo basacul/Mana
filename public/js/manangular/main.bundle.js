@@ -3855,7 +3855,7 @@ var DataService = (function () {
     function DataService(http) {
         this.http = http;
         this.resolveSuffix = '?resolve=true';
-        this.actionUrl = 'https://195.48.32.162:3000/api/';
+        this.actionUrl = 'http://195.48.32.162:3000/api/';
         this.headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
