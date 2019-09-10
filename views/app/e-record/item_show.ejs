@@ -1,0 +1,137 @@
+<% include ../partials/header %>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+			
+			<!-- Modal Header -->
+			<div class="modal-header d-flex justify-content-between">
+				<h4 class="modal-title">Edit Item</h4>
+				
+				<div>
+					<form action="/e-record/item/<%= item.itemId %>?_method=DELETE" method="POST">
+						<input type="hidden" name="fileId" value="<%= item.link.split('files/')[1]%>" >
+						<input type="hidden" name="manaId" value="<%= manaId %>" >
+						<input type="submit" class="btn btn-danger" value="delete">
+					</form>
+				</div>
+
+			</div>
+			<form action="/e-record/item/<%=item.itemId%>?_method=PUT" method="POST">
+
+
+				<!-- Modal body -->
+				<div class="modal-body">
+
+					<input type="hidden" name="item[$class]" value="care.openhealth.mana.UpdateItem">
+					<input type="hidden" name="item[owner]" value="care.openhealth.mana.User#<%=manaId%>">
+					<input type="hidden" name="item[item]" value="care.openhealth.mana.Item#<%=item.itemId%>">
+					<input type="hidden" name="fileId" value="<%= item.link.split('files/')[1]%>" >
+                    <input type="hidden" name="role" value="<%=item.role%>">
+
+					
+					<div class="form-group">
+                        <label for="f-description" class="sr-only">Description</label>
+                        <textarea class="form-control" name="item[description]" id="f-description" rows="3"
+                            placeholder="Describe your item..."><%=item.description%></textarea>
+                    </div>
+
+					
+					
+					
+					<% if(files && files.length > 0){ %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-file">Allow access to file:</label>
+
+                        <select class="selectpicker bg-dark w-100" name="item[link]">
+                            <% files.forEach(function(file){ %>
+								<% if(file._id.toString() === item.link.split('files/')[1]){ %>
+									<option value="<%= file._id %>" selected><%= file.filename %></option>
+								<% }else{ %>
+									<option value="<%= file._id %>"><%= file.filename %></option>
+								<% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <% } %>
+                    <div class="form-group ">
+						<p class="text-primary">
+							Link:<br> <small><%= item.link %></small>
+						</p>
+						<p class="text-success">
+							Access currently allowed for <%= item.role %>
+						</p>
+
+                        <label class="form-check-label d-block" for="f-authorized">Change Access To:</label>
+
+                        <select class="selectpicker bg-dark w-100" data-live-search="true" name="item[role]">
+                            <option value="NO">Do not change</option>
+                            <option value="CLIENT">For all clients</option>
+							<option value="PROVIDER">For all healthcare service providers</option>
+							<option value="INSURANCE">For respective insurance company</option>
+                   
+                        </select>
+                    </div>
+          
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer d-flex justify-content-around">
+					<button type="submit" class="btn btn-primary">Update</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
+			</form>
+		
+			
+        </div>
+    </div>
+</div>
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+				<% if(item.link){ %>
+                	<div class="card mt-3 bg-dark text-white border-success">
+				<% }else{ %>
+					<div class="card mt-3 bg-dark text-white border-secondary">
+				<% } %>
+                    <h5 class="card-header d-flex justify-content-between" style="background: black">
+						<form action='/e-record/item/<%= item.itemId %>/download' method='POST'>
+							<input type="submit" class="btn btn-info" value="download">
+						</form>
+					
+						
+						<input class="btn btn-info" type="button" data-toggle="modal" data-target="#myModal" value="edit">
+					
+                    </h5>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-around">
+                            <div class="pl-2">
+                                <h5 class="card-title">
+                                   Authorized to: <%=item.role%>
+								 </h5>
+                                <p class="card-text">
+									Description: <strong><%= item.description %></strong><br>
+									by <%= item.owner.split('#')[1] %>
+								</p>
+								<div class="text-center">
+									 <a href="/e-record/item" class="btn btn-primary">go back</a>
+								</div>
+								
+								
+								
+                            </div>
+                           
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<% include ../partials/footer %>

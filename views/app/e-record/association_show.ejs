@@ -1,0 +1,199 @@
+<% include ../partials/header %>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark d-block" id="second_navbar">
+    <div class="container d-flex justify-content-end" id="mainNavigation">
+		<div>
+		<!-- empty div in order to float the content below to the right -->
+		</div>
+		
+        <div class="navbar" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/e-record/item">Items</a>
+                </li>
+			 	<li class="nav-item">
+					<a class="nav-link" href="/e-record/association">Associations</a>
+				</li>
+            </ul>
+        </div>
+		
+    </div>
+</nav>
+	
+<!-- --------------------- -->
+<!-- START OF REVOKE MODAL -->
+<!-- --------------------- -->
+<div class="modal" id="revokeModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/e-record/association/<%=association.associationId%>/revoke?_method=PUT" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Revoke Request</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+					<% if(association.link){ %>
+					<input type="hidden" name="association[fileId]" value="<%= association.link.split('files/')[1] %>">
+					<% } %>
+                    <div class="form-group">
+                        <label for="f-message" class="sr-only">Message</label>
+                        <textarea class="form-control" name="association[message]" id="f-message" rows="3"
+                            placeholder="Enter a message" required></textarea>
+                    </div>
+					<input type="hidden" name="manaId" value="<%= manaId %>" >
+                </div>
+				
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">REVOKE</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ------------------- -->
+<!-- END OF REVOKE MODAL -->
+<!-- ------------------- -->
+
+<!-- -------------------- -->
+<!-- START OF GRANT MODAL -->
+<!-- -------------------- -->
+<div class="modal" id="grantModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/e-record/association/<%=association.associationId%>/grant?_method=PUT" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Approve Request</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+					
+					<input type="hidden" name="association[from]" value="<%= association.from.split('#')[1] %>">
+					<input type="hidden" name="manaId" value="<%= manaId %>" >
+                    <div class="form-group">
+                        <label for="f-message" class="sr-only">Message</label>
+                        <textarea class="form-control" name="association[message]" id="f-message" rows="3"
+                            placeholder="Enter a message" required></textarea>
+                    </div>
+					<% if(items && items.length > 0){ %>
+					<div class="form-group">
+						<label class="form-check-label d-block" for="f-item">Choose Item:</label>
+
+						<select id="f-item" class="selectpicker bg-dark w-100" name="association[item]">
+							<option value="">None</option>
+							<% items.forEach(function(item){ %>
+							<option value="<%= item.itemId %>"><%= item.itemId %> : <%= item.role %></option>
+							<% }) %>
+						</select>	
+                    </div>
+					<% } %>
+                    <% if(files && files.length > 0){ %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-authorized">Allow access to file:</label>
+
+                        <select class="selectpicker bg-dark w-100" name="association[fileId]">
+                            <% files.forEach(function(file){ %>
+                            <option value="<%= file._id %>"><%= file.filename %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <% } %>
+
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Approve</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ------------------ -->
+<!-- END OF GRANT MODAL -->
+<!-- ------------------ -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+				<% if(!association.approved){ %>
+				<div class="card mt-3 bg-dark text-white border-danger">
+				<% }else{ %>
+				<div class="card mt-3 bg-dark text-white border-success">
+				<% } %>
+                    <h5 class="card-header d-flex justify-content-between" style="background: black">
+						<% if(association.from.split('#')[1] == manaId){ %> 
+						<form action='/e-record/association/<%= association.associationId %>?_method=DELETE' method='POST'>
+							<input type="submit" class="btn btn-danger" value="delete">
+						</form>
+						<% }else{ %>
+						<div>
+							Messages
+						</div>
+						<% } %>
+						<% if(association.approved && association.from.split('#')[1] == manaId){ %>
+						<form action='/e-record/association/<%= association.associationId %>/download' method='POST'>
+							<input type="submit" class="btn btn-info" value="download">
+						</form>
+						<% }else if(!association.approved && association.to.split('#')[1] == manaId){ %>
+						
+						 <label for="f-upload" class="custom-file-upload">
+                            <input type="button" data-toggle="modal" data-target="#grantModal" class="btn btn-success" value="approve">
+                        </label>
+
+						
+						<% }else if(association.approved && association.to.split('#')[1] == manaId) {%>
+						 <label for="f-upload" class="custom-file-upload">
+                            <input type="button" data-toggle="modal" data-target="#revokeModal" class="btn btn-danger" value="revoke">
+                        </label>
+
+						<% } %>
+						<!-- <input class="btn btn-info float-right" type="button" data-toggle="modal" data-target="#grantModal" value="edit"> -->
+					
+                    </h5>
+                    <div class="card-body w-100">
+                        
+                            <div class="pl-2">
+                                <div class="card-text">
+									
+									<% association.messages.reverse().forEach(message => { %>
+										<% if(message.from == manaId){ %>
+											<div class="col-8 alert alert-info float-right">
+												<p class="col-12 text-right"> <%= message.message %></span>
+											</div>
+										<% }else{ %>
+											<div class="col-8 alert alert-dark float-left">
+												<p class="col-12 text-left"> <%= message.message %></span>
+											</div>
+										<% } %>
+									<% }) %>
+								</div>
+								<form action='/e-record/association/<%= association.associationId %>?_method=PUT' method='POST' class="w-100">
+									<div class="form-group">
+									 <label for="f-message" class="sr-only">Message</label>
+                        			<textarea class="form-control" name="message" id="f-message" rows="3"
+                           			 placeholder="Enter a message" required></textarea>
+									</div>
+									<input type="hidden" name="manaId" value="<%= manaId %>" >
+								
+									<div class="d-flex justify-content-around">
+										<input type="submit" class="btn btn-info" value="SEND">
+										<a href="/e-record/association" class="btn btn-info">go back</a>
+									</div>
+								</form>
+                            </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+<% include ../partials/footer %>

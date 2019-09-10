@@ -1,0 +1,147 @@
+<% include ../partials/header %>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark d-block" id="second_navbar">
+    <div class="container" id="mainNavigation">
+
+		<label for="f-association" class="custom-file-upload pull-left">
+			<input id="f-association" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="association">
+		</label>
+
+        <div class="navbar" id="navbarSupportedContent">
+            <ul class="navbar-nav float-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="/e-record/item">Items</a>
+                </li>
+			 	<li class="nav-item">
+					<a class="nav-link" href="/e-record/association">Associations</a>
+				</li>
+            </ul>
+        </div>
+		
+    </div>
+</nav>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/e-record/association" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Request Data Access</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+					<input type="hidden" id="manaId" name="association[from]" value="<%= manaId %>">
+					<div class="form-group">
+						<% if(items && items.length > 0){ %>
+							
+							<label class="form-check-label d-block" for="f-authorized">Choose Item:</label>
+
+							<select class="selectpicker bg-dark w-100" name="association[item]">
+								<option value="">None</option>
+								<% items.forEach(function(item){ %>
+								<option value="<%= item.itemId %>"><%= item.itemId %> : <%= item.role %></option>
+								<% }) %>
+							</select>
+
+						<% } %>
+                    </div>
+                    <div class="form-group">
+                        <label for="f-message" class="sr-only">Message</label>
+                        <textarea class="form-control" name="association[message]" id="f-message" rows="3"
+                            placeholder="Enter a message" required></textarea>
+                    </div>
+					
+                    <% if(users && users.length > 0){ %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-authorized">Send Request To:</label>
+
+                        <select class="selectpicker bg-dark w-100" name="association[to]">
+                            <% users.forEach(function(user){ %>
+                            <option value="<%= user.manaId %>"><%= user.manaId %> : <%= user.role %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <% } %>
+
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-secondary">Request</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<article>
+
+    <div class="container">
+		<h3 class="mt-3">
+			Associations
+		</h3>
+		<p>Request from <%= currentUser.username %> with ID: <%= manaId %> </p>
+		<% if (associations && associations.length > 0) { %>
+		<div class="card text-white bg-dark mt-3 mb-3">
+			<div class="card-header d-flex justify-content-between" style="background-color: black">
+				<div class="col-6 ml-1">TO</div> 
+				<div class="col-6">RECENT MESSAGE</div>
+			</div>
+			<ul class="list-group list-group-flush">
+				<% associations.forEach(function(association){ %>
+				<% if(association.from.split('#')[1] == manaId){ %>
+				<a href="/e-record/association/<%=association.associationId %>">
+					<% if(association.approved){ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
+					<% }else{ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-danger  d-flex justify-content-between">
+					<% } %>
+						
+							<div class="col-6"><%=association.to.split('#')[1] %></div><br>
+							<div class="col-6"><%=association.messages[0].message %></div>
+						
+					</li>
+				</a>
+				<% } %>
+				<% }) %>
+
+			</ul>
+		</div>
+		<% } %>
+		<p>Requests to <%= currentUser.username %> with ID: <%= manaId %> </p>
+		<% if (associations && associations.length > 0) { %>
+		<div class="card text-white bg-dark mt-3">
+			<div class="card-header d-flex justify-content-between" style="background-color: black">
+				<div class="col-6 ml-1">FROM</div> 
+				<div class="col-6">RECENT MESSAGE</div>
+			</div>
+			<ul class="list-group list-group-flush">
+				<% associations.forEach(function(association){ %>
+				<% if(association.to.split('#')[1] == manaId){ %>
+				<a href="/e-record/association/<%=association.associationId %>">
+					<% if(association.approved){ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
+					<% }else{ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-danger  d-flex justify-content-between">
+					<% } %>
+						
+							<div class="col-6"><%=association.from.split('#')[1] %></div><br>
+							<div class="col-6"><%=association.messages[0].message %></div>
+						
+					</li>
+				</a>
+				<% } %>
+				<% }) %>
+
+			</ul>
+		</div>
+		<% } %>
+			
+    </div>
+
+</article>
+
+<% include ../partials/footer %>

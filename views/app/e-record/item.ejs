@@ -1,0 +1,114 @@
+<% include ../partials/header %>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" id="second_navbar">
+    <div class="container" id="mainNavigation">
+
+		<label for="f-association" class="custom-file-upload pull-left">
+			<input id="f-association" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="item">
+		</label>
+
+        <div class="navbar" id="navbarSupportedContent">
+            <ul class="navbar-nav float-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="/e-record/item">Items</a>
+                </li>
+			 	<li class="nav-item">
+					<a class="nav-link" href="/e-record/association">Associations</a>
+				</li>
+            </ul>
+        </div>
+		
+    </div>
+</nav>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/e-record/item" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Create New Item</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+					<input type="hidden" name="item[$class]" value="care.openhealth.mana.CreateItem">
+					<input type="hidden" name="item[owner]" value="care.openhealth.mana.User#<%=manaId%>">
+                    <div class="form-group">
+                        <label for="f-description" class="sr-only">Description</label>
+                        <textarea class="form-control" name="item[description]" id="f-description" rows="3"
+                            placeholder="Describe your item..."></textarea>
+                    </div>
+					<% if(files && files.length > 0){ %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-file">Allow access to file:</label>
+
+                        <select class="selectpicker bg-dark w-100" name="item[link]">
+                            <% files.forEach(function(file){ %>
+                            <option value="<%= file._id %>"><%= file.filename %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <% } %>
+                    <div class="form-group ">
+                        <label class="form-check-label d-block" for="f-authorized">Allow Access To:</label>
+
+                        <select class="selectpicker bg-dark w-100" data-live-search="true" name="item[role]">
+                            
+                            <option value="CLIENT">For all clients</option>
+							<option value="PROVIDER">For all healthcare service providers</option>
+							<option value="INSURANCE">For respective insurance company</option>
+                   
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<article>
+
+    <div class="container">
+      
+		<p>ITEMS OWNED BY THE CURRENT USER.</p>
+		<% if (items && items.length > 0) { %>
+		<div class="card text-white bg-dark mt-3">
+			<div class="card-header d-flex justify-content-between" style="background-color: black">
+				<span>OWNER</span> <span>DESCRIPTION</span> <span>LINK</span>
+			</div>
+			<ul class="list-group list-group-flush">
+				<% items.forEach(function(item){ %>
+				<a href="/e-record/item/<%=item.itemId %>">
+					<% if(item.approved){ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-danger  d-flex justify-content-between">
+					<% }else{ %>
+					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
+					<% } %>
+						<span><%=item.owner.split('#')[1] %></span> 
+						<span><%=item.description %></span> 
+						<% if(item.link){ %>
+						<span class="float-right"><%=item.link %></span>
+						<% }else{ %>
+						<span class="float-right">NO LINK</span>
+						<% } %>
+					</li>
+				</a>
+				<% }) %>
+
+			</ul>
+		</div>
+		<% } %>
+			
+			
+    </div>
+
+</article>
+<script type="text/javascript" src="js/hyperledger.js"></script>
+
+<% include ../partials/footer %>

@@ -76,7 +76,7 @@
 
                         <select class="selectpicker bg-dark w-100" multiple data-live-search="true" name="authorizedUser[]">
                             <% users.forEach(function(user){ %>
-                            <option><%= user.username %> : <%= user._id %></option>
+                            <option><%= user.manaId %> : <%= user.role %></option>
                             <% }) %>
                         </select>
                     </div>
@@ -106,8 +106,8 @@
             <ul class="list-group list-group-flush">
                 <% files.forEach(function(file){ %>
                 <a href="/private/<%=file._id%>">
-					<% if(file.accessible){ %>
-                    <li class="list-group-item bg-dark border-right border-bottom border-left border-danger">
+					<% if(file.accessible || file.authorized.length > 0){ %>
+                    <li class="list-group-item bg-dark border-right border-bottom border-left border-success">
 					<% }else{ %>
 					<li class="list-group-item bg-dark border-right border-bottom border-left border-secondary">
 					<% } %>

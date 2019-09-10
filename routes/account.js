@@ -5,6 +5,7 @@ const User = require('../models/user');
 const File = require('../models/file');
 const Privacy = require('../models/privacy');
 const Mana = require('../models/mana');
+const hlf = require('../utils/hyperledger');
 const mailer = require('../utils/mailer');
 const template = require('../utils/templates');
 const winston = require('../config/winston');
@@ -166,6 +167,7 @@ router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 					if(err){
 						winston.error(err.message);
 					}
+					winston.info("Removed respective privacy object in mongodb.");
 				});
 				
 				// TODO: Update Hyperledger Fabric
@@ -173,7 +175,26 @@ router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 					if(err){
 						winston.error(err.message);
 					}
+					winston.info("Removed respective mana object in mongodb.");
+					
+					// TODO: delete all items by the user and remove authorization and links form all associations
+					hlf.deleteById(hlf.namespaces.user, mana._id).then(response => {
+						if(response.status >= 200 && response.status < 300){
+							// TODO: Remove all associated items and associations by this user
+							winston.info("Removed respective participant in hlf");
+							console.log(response.status);
+							console.log('successfully removed participant in hlf');
+						}else{
+							console.log(response.status);
+							console.log('not succesful in removing participant in hlf');
+						}
+					}).catch(error => {
+						winston.error(error.message);
+						console.log('not succesful in removing participant in hlf');
+					})
 				});
+				
+				
 				
 				// TODO: Update Hyperledger Fabric
 				File.deleteMany({ owner : {id: user._id, username: user.username} }, function (err) {
