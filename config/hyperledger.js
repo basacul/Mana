@@ -1,5 +1,5 @@
 const hostname = '195.48.32.162';
-const baseUrl = `https://${hostname}`;
+const baseUrl = `http://${hostname}`;
 const port = 3000;
 const url = `${baseUrl}:${port}/api`;
 const namespace = 'care.openhealth.mana';
