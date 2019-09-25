@@ -1,10 +1,13 @@
 <% include ../partials/header %>
 
 <nav class="navbar navbar-expand navbar-dark bg-dark d-block " id="second_navbar">
-    <div class="container d-flex justify-content-end" id="mainNavigation">
+    <div class="container" id="mainNavigation">
 
+		<label for="f-association" class="custom-file-upload float-left">
+			<input id="f-association" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="item">
+		</label>
         <div class="navbar" id="navbarSupportedContent">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav float-right">
                 <li class="nav-item">
                     <a class="nav-link" href="/e-record/item">Items</a>
                 </li>
