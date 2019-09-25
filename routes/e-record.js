@@ -268,6 +268,7 @@ router.put('/association/:associationId/revoke', middleware.isLoggedIn, (req, re
 */
 router.get('/item', middleware.isLoggedIn, (req, res) => {
 	let items;
+	let itemsByRole;
 	let files;
 	
 	Mana.findOne({user: req.user._id}, (error, mana) => {
@@ -287,12 +288,19 @@ router.get('/item', middleware.isLoggedIn, (req, res) => {
 						console.log("===================================");
 						console.log(items);
 						console.log("===================================");
-						return hlf.getAll(hlf.namespaces.user);
+						return hlf.getById(hlf.namespaces.user, mana._id.toString())
+					}).then(responseUser => {
+						userHLF = responseUser.data;
+						console.log(userHLF.role);
+						return hlf.selectItemByRole(userHLF.role);
+					}).then(responseItems => {
+						itemsByRole = responseItems.data;
+						console.log(`MANA ID : ${mana._id}`)
 					}).catch(error => {
 						winston.error(error.message);
 						req.flash('error', 'Item: went wrong.');
 					}).finally(() => {
-						res.render("app/e-record/item", {items: items, files: data.files,  manaId: mana._id.toString()});
+						res.render("app/e-record/item", {items: items, availableItems: itemsByRole, files: data.files,  manaId: mana._id.toString()});
 					});	
 				}	
 			});

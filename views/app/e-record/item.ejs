@@ -1,25 +1,21 @@
 <% include ../partials/header %>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" id="second_navbar">
-    <div class="container" id="mainNavigation">
-
-		<label for="f-association" class="custom-file-upload pull-left">
-			<input id="f-association" type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="item">
-		</label>
+<nav class="navbar navbar-expand navbar-dark bg-dark d-block " id="second_navbar">
+    <div class="container d-flex justify-content-end" id="mainNavigation">
 
         <div class="navbar" id="navbarSupportedContent">
-            <ul class="navbar-nav float-right">
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="/e-record/item">Items</a>
                 </li>
-			 	<li class="nav-item">
+                <li class="nav-item">
 					<a class="nav-link" href="/e-record/association">Associations</a>
-				</li>
+                </li>
             </ul>
         </div>
-		
     </div>
 </nav>
+
 <!-- The Modal -->
 <div class="modal" id="myModal">
     <div class="modal-dialog">
@@ -75,8 +71,10 @@
 <article>
 
     <div class="container">
-      
-		<p>ITEMS OWNED BY THE CURRENT USER.</p>
+      	
+		<h4>
+			Owned Items
+		</h4>
 		<% if (items && items.length > 0) { %>
 		<div class="card text-white bg-dark mt-3">
 			<div class="card-header d-flex justify-content-between" style="background-color: black">
@@ -103,9 +101,37 @@
 
 			</ul>
 		</div>
+		<% }else{ %>
+		<p>
+			No files are publicly shared
+		</p>
 		<% } %>
-			
-			
+		
+		<h4>
+			Available Items
+		</h4>
+		<% if (availableItems && availableItems.length > 0) { %>
+		<div class="card text-white bg-dark mt-3 mb-3">
+			<div class="card-header d-flex justify-content-between" style="background-color: black">
+				<div class="col-4 ml-1">Owner</div>
+				<div class="col-6">Description</div>
+			</div>
+			<ul class="list-group list-group-flush">
+				<% availableItems.forEach(function(item){ %>
+
+					<a href="/e-record/item/<%=item.itemId %>">
+						<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
+							<div class="col-6"><%=item.owner.split('#')[1] %></div><br>
+							<div class="col-6"><%=item.description %></div>
+						</li>
+				</a>
+				<% }) %>
+			</ul>
+		</div>
+		<% }else{ %>
+		<p>There are no items available for you.</p>
+		<% } %>
+
     </div>
 
 </article>
