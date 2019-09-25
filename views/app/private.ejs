@@ -96,8 +96,7 @@
 </div>
 <article>
     <div class="container">
-        <p>This section stores data files that can be shared among other users in the web application and 
-			on the hyperledger fabric network</p>
+        
         <% if (files.length > 0) { %>
         <div class="card text-white bg-dark mt-3">
             <div class="card-header d-flex justify-content-between" style="background-color: black">
@@ -120,7 +119,10 @@
 
             </ul>
         </div>
-        <% } %>
+        <% }else{ %>
+		<p>Here you can upload your files. Just click the upload button to get started!</p>
+		<% } %>
+		
     </div>
 </article>
 
