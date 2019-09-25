@@ -81,7 +81,8 @@
 		<% if (items && items.length > 0) { %>
 		<div class="card text-white bg-dark mt-3">
 			<div class="card-header d-flex justify-content-between" style="background-color: black">
-				<span>OWNER</span> <span>DESCRIPTION</span> 
+				<div class="col-4 ml-1">Owner</div>
+				<div class="col-6">Description</div>
 			</div>
 			<ul class="list-group list-group-flush">
 				<% items.forEach(function(item){ %>
