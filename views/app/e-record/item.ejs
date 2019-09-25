@@ -81,7 +81,7 @@
 		<% if (items && items.length > 0) { %>
 		<div class="card text-white bg-dark mt-3">
 			<div class="card-header d-flex justify-content-between" style="background-color: black">
-				<span>OWNER</span> <span>DESCRIPTION</span> <span>LINK</span>
+				<span>OWNER</span> <span>DESCRIPTION</span> 
 			</div>
 			<ul class="list-group list-group-flush">
 				<% items.forEach(function(item){ %>
@@ -91,13 +91,8 @@
 					<% }else{ %>
 					<li class="list-group-item bg-dark border-right border-bottom border-left border-success  d-flex justify-content-between">
 					<% } %>
-						<span><%=item.owner.split('#')[1] %></span> 
-						<span><%=item.description %></span> 
-						<% if(item.link){ %>
-						<span class="float-right"><%=item.link %></span>
-						<% }else{ %>
-						<span class="float-right">NO LINK</span>
-						<% } %>
+						<div class="col-6"><span><%=item.owner.split('#')[1] %></span></div>
+						<div class="col-6"><span><%=item.description %></span></div>
 					</li>
 				</a>
 				<% }) %>
