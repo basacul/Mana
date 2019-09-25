@@ -1,6 +1,7 @@
 <% include ../partials/header %>
 
 <!-- The Modal -->
+<% if(item.owner.split('#')[1] == manaId){ %>
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -87,6 +88,7 @@
         </div>
     </div>
 </div>
+<% } %>
 <article>
     <div class="container">
         <div class="row">
@@ -97,13 +99,14 @@
 					<div class="card mt-3 bg-dark text-white border-secondary">
 				<% } %>
                     <h5 class="card-header d-flex justify-content-between" style="background: black">
+						<% if(item.owner.split('#')[1] == manaId){ %>
 						<form action='/e-record/item/<%= item.itemId %>/download' method='POST'>
 							<input type="submit" class="btn btn-info" value="download">
 						</form>
 					
 						
 						<input class="btn btn-info" type="button" data-toggle="modal" data-target="#myModal" value="edit">
-					
+						<% } %>
                     </h5>
                     <div class="card-body">
                         <div class="row d-flex justify-content-around">
