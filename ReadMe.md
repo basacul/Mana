@@ -60,7 +60,7 @@ This views are organized accordingly in the subfolders views and routes, that st
 
 Please make sure, that you have Node.js istalled on your system, which you can download at their site [Node.js](https://nodejs.org/en/download/). With Node.js istalled you automatically have access to the command __npm__. This web app runs and is tested on nodejs version 12.2.0.
 
-If __git__ is not available on your system, you can download this repository as a zip file and unpack it on your system. In the *terminal*/*command line* go to ../../../Mana/dapp and run __node app.js__.  Otherwise clone the repository with git.
+If __git__ is not available on your system, you can download this repository as a zip file and unpack it on your system. In the terminal go to ../../../Mana/dapp and run __node app.js__.  Otherwise clone the repository with git.
 
 Check app.js to see how the web application is currently organized and the separate ejs sites. By following this steps you can already test the application on your local machine at localhost:3000.
 
