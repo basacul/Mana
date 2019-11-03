@@ -13,52 +13,16 @@ This application uses Bootstrap, Node.js, Express, Nodemailer, EJS, MongoDB, AWS
 
 The [synopsis](https://github.com/basacul/Mana/blob/master/documents/Secure_Data_Exchange_Using_Distributed_Ledger_Technologies_Version_0_10.pdf) of my bachelor thesis explains my personal motivation, related systems and works as well as the schedule for this project. The core technology was switched to Hyperledger Fabric as it is more suitable for this project than Ethereum.
 
+The final version of the [Bachelor Thesis](https://github.com/basacul/Mana/blob/master/documents/Bachelor_Thesis_Final_Version.pdf) shows a possible implementation for a secure data exchange solution in the healthcare industry. The thesis introduces the reader to my personal motivation and the technology. In addition, an analysis of the current situation in the German healthcare system showcases the current procedures and requirements, that are implemented in the prototype. The results show, that a secure data exchange is possible using distributed ledger technologies, but due to the complexity of the healthcare sector with a stringent budget plan not feasible for a forseeable future.
+
 The name for this project will be Mana coming from the Polynesian belief, that Mana is an impersonal supernatural power which can be transmitted or inherited. The prototype is live at [Openhealth](http://mana.openhealth.care).
 
-## Task Schedule
-The bachelor thesis started on August 4, 2019, and takes twelve weeks to complete. The tasks are scheduled along these twelve weeks ending on October 25, 2019.
-
-
-| Task           | Week 1 | Week 2 | Week 3 | Week 4 | Week 5 | Week 6 |
-| -------------- | ------ | ------ | ------ | ------ | ------ | ------ |
-| Research       | YES    | YES    | YES    | YES    | no     | no     |
-| Analysis       | no     | YES    | YES    | YES    | YES    | YES    |
-| Design Concept | no     | no     | YES    | YES    | YES    | YES    |
-| Implementation | no     | no     | no     | YES    | YES    | YES    |
-| Evaluation     | no     | no     | no     | no     | YES    | YES    |
-| Writing        | YES    | YES    | YES    | YES    | YES    | YES    |
-
-
-| Task           | Week 7 | Week 8 | Week 9 | Week 10 | Week 11 | Week 12 |
-| -------------- | ------ | ------ | ------ | ------- | ------- | ------- |
-| Research       | no     | no     | no     | no      | no      | no      |
-| Analysis       | no     | no     | no     | no      | no      | no      |
-| Design Concept | YES    | YES    | no     | no      | no      | no      |
-| Implementation | YES    | YES    | YES    | YES     | YES     | no      |
-| Evaluation     | YES    | no     | YES    | YES     | YES     | no      |
-| Writing        | YES    | YES    | YES    | YES     | YES     | YES     |
-
-## Structure
-The web application uses ejs to generate the following views that are accessible from the navigation bar at the top. Starting with the logo from left to right the views are:
-
-* __Home__ represented by the *Logo* :   
-    View welcomes the user that is rendered only by clicking the Mana logo
-* __Account__ represented by the *Username* :  
-    View manages the account settings.
-* __Private__ :  
-    View manages the data storage
-* __E-Record__ :   
-    View manages the data available through the hyperledger fabric network 
-* __Manangular__ :  
-    Angular application generated with Yeoman and used for testing and development purposes.
-* __Logout__:   
-    Logs the user out and sends the user back to the login page
-
-This views are organized accordingly in the subfolders views and routes, that store the embedded javascript template files and the routes handled by express, respectively. This web application is accessible at [Openhealth.care](http://mana.openhealth.care/). 
 
 ## How to use
 
-Please make sure, that you have Node.js istalled on your system, which you can download at their site [Node.js](https://nodejs.org/en/download/). With Node.js istalled you automatically have access to the command __npm__. This web app runs and is tested on nodejs version 12.2.0.
+You need to install Hyperledger Fabric on a server and set the respective ip address for the variable __hostname__ managed in the config file __hyperledger.js__ in the folder __config__ of this (Mana) repository. After the successful installation, you need to install the business network application file of the repository [HLF-Mana](https://github.com/basacul/HLF-Mana) in Hyperledger Fabric and run a rest server using Hyperledger Composer (deprecated as of 29/08/2019).
+
+Next, you need to install this repository in a system of your choice and please make sure, that you have Node.js istalled, which you can download at their site [Node.js](https://nodejs.org/en/download/). With Node.js istalled you automatically have access to the command __npm__. This web app runs and is tested on nodejs version 12.2.0.
 
 If __git__ is not available on your system, you can download this repository as a zip file and unpack it on your system. In the terminal go to ../../../Mana and run __node app.js__.  Otherwise clone the repository with git.
 
