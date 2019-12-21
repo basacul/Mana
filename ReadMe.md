@@ -39,4 +39,3 @@ start mongo.exe
 exit
 ```
 
-You can have a feeling for this project by visiting the website http://mana.openhealth.care, that hosts this project.
