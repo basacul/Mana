@@ -1,4 +1,4 @@
-# Mana
+# Mana (Deprecated and not maintained since end of 2019)
 This web application is developed on top of the hyperledger fabric technology stack and represents the prototype for the bachelor thesis with the title __Secure Data Exchange using Distributed Ledger Technologies__.
 
 Mana is a web application for the healthcare system that allows healthcare service providers, patients and insurance companies to securely exchange and manage data in the Mana ecosystem. Mana runs on top of Hyperledger Fabric version 1.2.1 and uses chaincode to handle the logic on how data is accessed and exchanged based on the authorization given by the data owner. The source code for the Hyperledger Fabric application are accessible at [HLF-Mana](https://github.com/basacul/HLF-Mana). 
